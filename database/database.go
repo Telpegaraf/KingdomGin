@@ -1,0 +1,35 @@
+package database
+
+import (
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"kingdom/auth/password"
+	"kingdom/model"
+)
+
+func New(dsn, defaultUser, defaultPass string, strength int, createDefaultUserIfNotExist bool) (*GormDatabase, error) {
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+
+	if err := db.AutoMigrate(new(model.User)); err != nil {
+		return nil, err
+	}
+
+	userCount := int64(0)
+	db.Find(new(model.User)).Count(&userCount)
+	if createDefaultUserIfNotExist && userCount == 0 {
+		db.Create(&model.User{Username: defaultUser, Password: password.CreatePassword(defaultPass, strength), Admin: true})
+	}
+
+	return &GormDatabase{DB: db}, nil
+}
+
+type GormDatabase struct {
+	DB *gorm.DB
+}
+
+//func (d *GormDatabase) Close() {
+//	d.DB.Close()
+//}
