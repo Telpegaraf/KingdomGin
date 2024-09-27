@@ -9,7 +9,8 @@ type User struct {
 	Username string  `gorm:"unique"`
 	Email    *string `gorm:"unique;type:varchar(100)"`
 	Password []byte
-	Admin    bool `gorm:"default:false"`
+	Admin    bool   `gorm:"default:false"`
+	Token    string `gorm:"type:varchar(180);unique_index" json:"token"`
 }
 
 type UserExternal struct {

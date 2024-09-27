@@ -7,7 +7,7 @@ import (
 	"kingdom/model"
 )
 
-func New(dsn, defaultUser, defaultPass string, strength int, createDefaultUserIfNotExist bool) (*GormDatabase, error) {
+func New(dsn, defaultUser string, defaultPass string, defaultEmail *string, strength int, createDefaultUserIfNotExist bool) (*GormDatabase, error) {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
@@ -20,7 +20,11 @@ func New(dsn, defaultUser, defaultPass string, strength int, createDefaultUserIf
 	userCount := int64(0)
 	db.Find(new(model.User)).Count(&userCount)
 	if createDefaultUserIfNotExist && userCount == 0 {
-		db.Create(&model.User{Username: defaultUser, Password: password.CreatePassword(defaultPass, strength), Admin: true})
+		db.Create(&model.User{
+			Username: defaultUser,
+			Password: password.CreatePassword(defaultPass, strength),
+			Email:    defaultEmail,
+			Admin:    true})
 	}
 
 	return &GormDatabase{DB: db}, nil

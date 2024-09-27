@@ -64,3 +64,16 @@ func (d *GormDatabase) UpdateUser(user *model.User) error {
 func (d *GormDatabase) CreateUser(user *model.User) error {
 	return d.DB.Create(user).Error
 }
+
+// GetUserByToken returns the user for the given token or nil.
+func (d *GormDatabase) GetUserByToken(token string) (*model.User, error) {
+	user := new(model.User)
+	err := d.DB.Where("token = ?", token).Find(user).Error
+	if err == gorm.ErrRecordNotFound {
+		err = nil
+	}
+	if user.Token == token {
+		return user, err
+	}
+	return nil, err
+}

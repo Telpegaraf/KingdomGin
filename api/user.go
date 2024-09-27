@@ -71,6 +71,20 @@ func (a *UserApi) GetUsers(ctx *gin.Context) {
 	ctx.JSON(200, resp)
 }
 
+func (a *UserApi) GetUserByID(ctx *gin.Context) {
+	withID(ctx, "id", func(id uint) {
+		user, err := a.DB.GetUserByID(id)
+		if success := SuccessOrAbort(ctx, 500, err); !success {
+			return
+		}
+		if user != nil {
+			ctx.JSON(200, toExternalUser(user))
+		} else {
+			ctx.JSON(404, errors.New("User not found"))
+		}
+	})
+}
+
 func (a *UserApi) CreateUser(ctx *gin.Context) {
 	user := model.CreateUser{}
 	if err := ctx.Bind(&user); err != nil {
@@ -122,6 +136,32 @@ func (a *UserApi) CreateUser(ctx *gin.Context) {
 			ctx.AbortWithError(400, errors.New("user already exists"))
 		}
 	}
+}
+
+func (a *UserApi) DeleteUserByID(ctx *gin.Context) {
+	withID(ctx, "id", func(id uint) {
+		user, err := a.DB.GetUserByID(id)
+		if success := SuccessOrAbort(ctx, 500, err); !success {
+			return
+		}
+		if user != nil {
+			adminCount, err := a.DB.CountUser(&model.User{Admin: true})
+			if success := SuccessOrAbort(ctx, 500, err); !success {
+				return
+			}
+			if user.Admin && adminCount == 1 {
+				ctx.AbortWithError(400, errors.New("can't delete last admin"))
+				return
+			}
+			if err := a.UserChangeNotifier.fireUserDeleted(id); err != nil {
+				ctx.AbortWithError(http.StatusInternalServerError, err)
+				return
+			}
+			SuccessOrAbort(ctx, 500, a.DB.DeleteUserByID(id))
+		} else {
+			ctx.AbortWithError(400, errors.New("user doesn't exist"))
+		}
+	})
 }
 
 func toExternalUser(internal *model.User) *model.UserExternal {
