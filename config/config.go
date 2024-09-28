@@ -4,7 +4,7 @@ type Configuration struct {
 	Server struct {
 		KeepAlivePeriodSeconds int
 		ListenAddr             string `default:""`
-		Port                   int    `default:"80"`
+		Port                   int    `default:"8080"`
 
 		SSL struct {
 			Enabled         *bool  `default:"false"`

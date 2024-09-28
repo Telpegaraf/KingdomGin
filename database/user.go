@@ -72,8 +72,8 @@ func (d *GormDatabase) GetUserByToken(token string) (*model.User, error) {
 	if err == gorm.ErrRecordNotFound {
 		err = nil
 	}
-	if user.Token == token {
-		return user, err
-	}
+	//if user.Token == token {
+	//	return user, err
+	//}
 	return nil, err
 }

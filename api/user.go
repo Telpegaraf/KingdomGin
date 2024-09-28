@@ -2,9 +2,7 @@ package api
 
 import (
 	"errors"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"kingdom/auth"
 	"kingdom/auth/password"
 	"kingdom/model"
 	"net/http"
@@ -58,6 +56,16 @@ type UserApi struct {
 	Registration       bool
 }
 
+// GetUsers godoc
+//
+// @Summary Returns all users
+// @Description Returns all users
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.UserExternal "User list"
+// @Failure 500
+// @Router /user [get]
 func (a *UserApi) GetUsers(ctx *gin.Context) {
 	users, err := a.DB.GetUsers()
 	if success := SuccessOrAbort(ctx, 500, err); !success {
@@ -71,6 +79,17 @@ func (a *UserApi) GetUsers(ctx *gin.Context) {
 	ctx.JSON(200, resp)
 }
 
+// GetUserByID godoc
+//
+// @Summary returns User by ID
+// @Description Retrieve User details using its ID
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path int true "User id"
+// @Success 200 {object} model.UserExternal "user details"
+// @Failure 404 {string} string "User not found"
+// @Router /user/{id} [get]
 func (a *UserApi) GetUserByID(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		user, err := a.DB.GetUserByID(id)
@@ -85,9 +104,32 @@ func (a *UserApi) GetUserByID(ctx *gin.Context) {
 	})
 }
 
+func (a *UserApi) GetUserByUsername(ctx *gin.Context) {
+	user, err := a.DB.GetUserByUsername("username")
+	if success := SuccessOrAbort(ctx, 500, err); !success {
+		return
+	}
+	if user != nil {
+		ctx.JSON(200, toExternalUser(user))
+	} else {
+		ctx.JSON(404, errors.New("User not found"))
+	}
+}
+
+// CreateUser godoc
+//
+// @Summary Create and returns user or nil
+// @Description Create new user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body model.CreateUser true "User data"
+// @Success 200 {object} model.UserExternal "user details"
+// @Failure 404 {string} string "User already exist"
+// @Router /user [post]
 func (a *UserApi) CreateUser(ctx *gin.Context) {
 	user := model.CreateUser{}
-	if err := ctx.Bind(&user); err != nil {
+	if err := ctx.Bind(&user); err == nil {
 		internal := &model.User{
 			Username: user.Username,
 			Admin:    user.Admin,
@@ -98,30 +140,30 @@ func (a *UserApi) CreateUser(ctx *gin.Context) {
 			return
 		}
 
-		var requestedBy *model.User
-		uid := auth.TryGetUserID(ctx)
-		if uid != nil {
-			requestedBy, err = a.DB.GetUserByID(*uid)
-			if err != nil {
-				ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("could not get user: %s", err))
-				return
-			}
-		}
+		//var requestedBy *model.User
+		//uid := auth.TryGetUserID(ctx)
+		//if uid != nil {
+		//	requestedBy, err = a.DB.GetUserByID(*uid)
+		//	if err != nil {
+		//		ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("could not get user: %s", err))
+		//		return
+		//	}
+		//}
 
-		if requestedBy == nil || !requestedBy.Admin {
-			status := http.StatusUnauthorized
-			if requestedBy != nil {
-				status = http.StatusForbidden
-			}
-			if !a.Registration {
-				ctx.AbortWithError(status, errors.New("you are not allowed to access this api"))
-				return
-			}
-			if internal.Admin {
-				ctx.AbortWithError(http.StatusUnauthorized, errors.New("you are not allowed to create an admin user"))
-				return
-			}
-		}
+		//if requestedBy == nil || !requestedBy.Admin {
+		//	status := http.StatusUnauthorized
+		//	if requestedBy != nil {
+		//		status = http.StatusForbidden
+		//	}
+		//	if !a.Registration {
+		//		ctx.AbortWithError(status, errors.New("you are not allowed to access this api"))
+		//		return
+		//	}
+		//	if internal.Admin {
+		//		ctx.AbortWithError(http.StatusUnauthorized, errors.New("you are not allowed to create an admin user"))
+		//		return
+		//	}
+		//}
 
 		if existingUser == nil {
 			if success := SuccessOrAbort(ctx, 500, a.DB.CreateUser(internal)); !success {

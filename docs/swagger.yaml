@@ -1,0 +1,135 @@
+definitions:
+  model.CreateUser:
+    properties:
+      admin:
+        type: boolean
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  model.UserExternal:
+    properties:
+      admin:
+        type: boolean
+      id:
+        type: integer
+      username:
+        type: string
+    required:
+    - username
+    type: object
+  model.UserLogin:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+info:
+  contact: {}
+  description: Api for Pet Project
+  title: Kingdom Api
+  version: 0.1.0
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Авторизация пользователя по логину и паролю
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Login user for token
+      tags:
+      - auth
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Returns all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User list
+          schema:
+            $ref: '#/definitions/model.UserExternal'
+        "500":
+          description: Internal Server Error
+      summary: Returns all users
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Create new user
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user details
+          schema:
+            $ref: '#/definitions/model.UserExternal'
+        "404":
+          description: User already exist
+          schema:
+            type: string
+      summary: Create and returns user or nil
+      tags:
+      - User
+  /user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve User details using its ID
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user details
+          schema:
+            $ref: '#/definitions/model.UserExternal'
+        "404":
+          description: User not found
+          schema:
+            type: string
+      summary: returns User by ID
+      tags:
+      - User
+schemes:
+- http
+- https
+swagger: "2.0"

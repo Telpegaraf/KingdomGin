@@ -2,9 +2,13 @@ package auth
 
 import (
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"kingdom/auth/password"
 	"kingdom/model"
+	"net/http"
+	"os"
 	"strings"
 )
 
@@ -136,4 +140,30 @@ func (a *Auth) Optional() gin.HandlerFunc {
 		RegisterAuthentication(ctx, nil, 0, "")
 		ctx.Next()
 	}
+}
+
+func (a *Auth) RequireJWT(c *gin.Context) {
+	tokenString, err := c.Cookie("Authorization")
+
+	if err != nil || tokenString == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "No authorization token"})
+		c.Abort()
+		return
+	}
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(os.Getenv("TOKEN_SECRET")), nil
+	})
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		c.Set("userID", claims["sub"])
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		c.Abort()
+		return
+	}
+	c.Next()
 }
