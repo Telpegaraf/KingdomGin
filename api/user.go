@@ -140,31 +140,6 @@ func (a *UserApi) CreateUser(ctx *gin.Context) {
 			return
 		}
 
-		//var requestedBy *model.User
-		//uid := auth.TryGetUserID(ctx)
-		//if uid != nil {
-		//	requestedBy, err = a.DB.GetUserByID(*uid)
-		//	if err != nil {
-		//		ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("could not get user: %s", err))
-		//		return
-		//	}
-		//}
-
-		//if requestedBy == nil || !requestedBy.Admin {
-		//	status := http.StatusUnauthorized
-		//	if requestedBy != nil {
-		//		status = http.StatusForbidden
-		//	}
-		//	if !a.Registration {
-		//		ctx.AbortWithError(status, errors.New("you are not allowed to access this api"))
-		//		return
-		//	}
-		//	if internal.Admin {
-		//		ctx.AbortWithError(http.StatusUnauthorized, errors.New("you are not allowed to create an admin user"))
-		//		return
-		//	}
-		//}
-
 		if existingUser == nil {
 			if success := SuccessOrAbort(ctx, 500, a.DB.CreateUser(internal)); !success {
 				return
@@ -180,6 +155,18 @@ func (a *UserApi) CreateUser(ctx *gin.Context) {
 	}
 }
 
+// DeleteUserByID godoc
+//
+// @Summary Returns and delete User by ID if you're admin
+// @Description Delete User
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path int true "User id"
+// @Success 201 {string} string "Ok"
+// @Failure 400 {string} string "User doesn't exist"
+// @Failure 401 {string} string "You need to provide a valid access token or user credentials to access this api"
+// @Router /user/{id} [delete]
 func (a *UserApi) DeleteUserByID(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		user, err := a.DB.GetUserByID(id)

@@ -17,6 +17,11 @@ import (
 // @version 0.1.0
 // @description Api for Pet Project
 // @schemes http https
+//
+//	@securityDefinitions.apiKey  JWT
+//	@in                          header
+//	@name                        Authorization
+//	@description                 JWT security accessToken. Please add it in the format "Bearer {AccessToken}" to authorize your requests.
 func main() {
 	err := godotenv.Load()
 	if err != nil {
