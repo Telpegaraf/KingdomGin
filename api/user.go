@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"kingdom/auth/password"
@@ -95,7 +94,6 @@ func (a *UserApi) GetUsers(ctx *gin.Context) {
 func (a *UserApi) GetUserByID(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		user, err := a.DB.GetUserByID(id)
-		fmt.Println(err)
 		if success := SuccessOrAbort(ctx, 500, err); !success {
 			ctx.JSON(404, gin.H{"error": "User not found"})
 		}
