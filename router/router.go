@@ -58,6 +58,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	characterGroup := g.Group("/character").Use(authentication.RequireJWT)
 	{
 		characterGroup.GET("/:id", characterHandler.GetCharacterByID)
+		characterGroup.POST("", characterHandler.CreateCharacter)
 	}
 	return g, func() {}
 }

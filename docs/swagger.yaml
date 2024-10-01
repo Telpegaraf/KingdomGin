@@ -1,5 +1,33 @@
 definitions:
+  model.Character:
+    properties:
+      alias:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      name:
+        type: string
+      userID:
+        type: integer
+    type: object
   model.CharacterExternal:
+    properties:
+      alias:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      name:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - name
+    type: object
+  model.CreateCharacter:
     properties:
       alias:
         type: string
@@ -26,6 +54,10 @@ definitions:
     properties:
       admin:
         type: boolean
+      characters:
+        items:
+          $ref: '#/definitions/model.Character'
+        type: array
       id:
         type: integer
       username:
@@ -49,6 +81,32 @@ info:
   title: Kingdom Api
   version: 0.1.0
 paths:
+  /character:
+    post:
+      consumes:
+      - application/json
+      description: Create new character
+      parameters:
+      - description: Character data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateCharacter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Character details
+          schema:
+            $ref: '#/definitions/model.CharacterExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Create and returns character or nil
+      tags:
+      - Character
   /character/{id}:
     get:
       consumes:

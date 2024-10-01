@@ -9,7 +9,7 @@ import (
 func (d *GormDatabase) GetUserByUsername(name string) (*model.User, error) {
 	user := new(model.User)
 	err := d.DB.Where("username = ?", name).Find(user).Error
-	if err == gorm.ErrRecordNotFound {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = nil
 	}
 	if user.Username == name {
@@ -21,7 +21,7 @@ func (d *GormDatabase) GetUserByUsername(name string) (*model.User, error) {
 // GetUserByID returns the user by the given id or nil.
 func (d *GormDatabase) GetUserByID(id uint) (*model.User, error) {
 	user := new(model.User)
-	err := d.DB.Find(user, id).Error
+	err := d.DB.Preload("Characters").Find(user, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = nil
 	}
@@ -47,7 +47,7 @@ func (d *GormDatabase) CountUser(condition ...interface{}) (int, error) {
 // GetUsers returns all users.
 func (d *GormDatabase) GetUsers() ([]*model.User, error) {
 	var users []*model.User
-	err := d.DB.Find(&users).Error
+	err := d.DB.Preload("Characters").Find(&users).Error
 	return users, err
 }
 
@@ -70,7 +70,7 @@ func (d *GormDatabase) CreateUser(user *model.User) error {
 func (d *GormDatabase) GetUserByToken(token string) (*model.User, error) {
 	user := new(model.User)
 	err := d.DB.Where("token = ?", token).Find(user).Error
-	if err == gorm.ErrRecordNotFound {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = nil
 	}
 	//if user.Token == token {

@@ -11,6 +11,46 @@
         "version": "0.1.0"
     },
     "paths": {
+        "/character": {
+            "post": {
+                "description": "Create new character",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character"
+                ],
+                "summary": "Create and returns character or nil",
+                "parameters": [
+                    {
+                        "description": "Character data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateCharacter"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Character details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/character/{id}": {
             "get": {
                 "description": "Retrieve Character details using its ID",
@@ -232,7 +272,50 @@
         }
     },
     "definitions": {
+        "model.Character": {
+            "type": "object",
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.CharacterExternal": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.CreateCharacter": {
             "type": "object",
             "required": [
                 "name"
@@ -275,6 +358,12 @@
             "properties": {
                 "admin": {
                     "type": "boolean"
+                },
+                "characters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Character"
+                    }
                 },
                 "id": {
                     "type": "integer"

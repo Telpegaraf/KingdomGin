@@ -9,6 +9,7 @@ import (
 
 type CharacterDatabase interface {
 	GetCharacterByID(id uint) (*model.Character, error)
+	CreateCharacter(character *model.Character) error
 }
 
 type CharacterApi struct {
@@ -40,10 +41,51 @@ func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 	})
 }
 
+// CreateCharacter godoc
+//
+// @Summary Create and returns character or nil
+// @Description Create new character
+// @Tags Character
+// @Accept json
+// @Produce json
+// @Param user body model.CreateCharacter true "Character data"
+// @Success 200 {object} model.CharacterExternal "Character details"
+// @Failure 401 {string} string "Unauthorized"
+// @Router /character [post]
+func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
+	userID, exists := ctx.Get("userID")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	userIDFloat64, ok := userID.(float64)
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid userID type"})
+		return
+	}
+	userIDInt := uint(userIDFloat64)
+
+	character := &model.Character{}
+	if err := ctx.Bind(character); err == nil {
+		internal := &model.Character{
+			Name:     character.Name,
+			Alias:    character.Alias,
+			LastName: character.LastName,
+			UserID:   userIDInt,
+		}
+		if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacter(internal)); !success {
+			return
+		}
+	}
+}
+
 func ToExternalCharacter(internal *model.Character) *model.CharacterExternal {
 	return &model.CharacterExternal{
+		ID:       internal.ID,
 		Name:     internal.Name,
 		Alias:    internal.Alias,
 		LastName: internal.LastName,
+		UserID:   internal.UserID,
 	}
 }

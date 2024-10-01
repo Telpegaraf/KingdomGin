@@ -195,8 +195,9 @@ func (a *UserApi) DeleteUserByID(ctx *gin.Context) {
 
 func toExternalUser(internal *model.User) *model.UserExternal {
 	return &model.UserExternal{
-		Username: internal.Username,
-		Admin:    internal.Admin,
-		ID:       internal.ID,
+		Username:   internal.Username,
+		Admin:      internal.Admin,
+		ID:         internal.ID,
+		Characters: internal.Characters,
 	}
 }
