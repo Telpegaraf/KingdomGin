@@ -48,6 +48,48 @@ definitions:
     - password
     - username
     type: object
+  model.Domain:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.God:
+    properties:
+      alias:
+        type: string
+      alignment:
+        type: string
+      anathema:
+        type: string
+      areasOfInterest:
+        type: string
+      chosenWeapon:
+        type: string
+      description:
+        type: string
+      domains:
+        items:
+          $ref: '#/definitions/model.Domain'
+        type: array
+      edict:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      sacredAnimals:
+        type: string
+      sacredColors:
+        type: string
+      temples:
+        type: string
+      worships:
+        type: string
+    type: object
   model.UserExternal:
     properties:
       admin:
@@ -130,6 +172,31 @@ paths:
       summary: returns Character by id
       tags:
       - Character
+  /god/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve God details using its ID
+      parameters:
+      - description: god id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: God details
+          schema:
+            $ref: '#/definitions/model.God'
+        "404":
+          description: God not found
+          schema:
+            type: string
+      summary: returns God by id
+      tags:
+      - God
   /login:
     post:
       consumes:

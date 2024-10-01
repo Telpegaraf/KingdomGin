@@ -93,6 +93,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/god/{id}": {
+            "get": {
+                "description": "Retrieve God details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "God"
+                ],
+                "summary": "returns God by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "god id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "God details",
+                        "schema": {
+                            "$ref": "#/definitions/model.God"
+                        }
+                    },
+                    "404": {
+                        "description": "God not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "Авторизация пользователя по логину и паролю",
@@ -347,6 +385,70 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Domain": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.God": {
+            "type": "object",
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "alignment": {
+                    "type": "string"
+                },
+                "anathema": {
+                    "type": "string"
+                },
+                "areasOfInterest": {
+                    "type": "string"
+                },
+                "chosenWeapon": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "domains": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Domain"
+                    }
+                },
+                "edict": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sacredAnimals": {
+                    "type": "string"
+                },
+                "sacredColors": {
+                    "type": "string"
+                },
+                "temples": {
+                    "type": "string"
+                },
+                "worships": {
                     "type": "string"
                 }
             }

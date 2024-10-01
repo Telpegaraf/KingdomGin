@@ -19,6 +19,7 @@ func (d *GormDatabase) GetCharacterByID(id uint) (*model.Character, error) {
 	return nil, err
 }
 
+// CreateCharacter create and returns new Character
 func (d *GormDatabase) CreateCharacter(character *model.Character) error {
 	return d.DB.Create(character).Error
 }

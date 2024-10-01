@@ -36,6 +36,8 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		DB: db,
 	}
 
+	godHandler := api.GodApi{DB: db}
+
 	authHandler := api.Controller{DB: db}
 
 	g.NoRoute(gerror.NotFound())
@@ -59,6 +61,10 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	{
 		characterGroup.GET("/:id", characterHandler.GetCharacterByID)
 		characterGroup.POST("", characterHandler.CreateCharacter)
+	}
+	godGroup := g.Group("/god").Use(authentication.RequireJWT)
+	{
+		godGroup.GET("/:id", godHandler.GetGodById)
 	}
 	return g, func() {}
 }
