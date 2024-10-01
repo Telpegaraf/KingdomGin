@@ -65,6 +65,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	godGroup := g.Group("/god").Use(authentication.RequireJWT)
 	{
 		godGroup.GET("/:id", godHandler.GetGodById)
+		godGroup.POST("", godHandler.CreateGod)
 	}
 	return g, func() {}
 }

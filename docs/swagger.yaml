@@ -136,7 +136,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
+        "201":
           description: Character details
           schema:
             $ref: '#/definitions/model.CharacterExternal'
@@ -172,6 +172,32 @@ paths:
       summary: returns Character by id
       tags:
       - Character
+  /god:
+    post:
+      consumes:
+      - application/json
+      description: Create new God
+      parameters:
+      - description: God data
+        in: body
+        name: god
+        required: true
+        schema:
+          $ref: '#/definitions/model.God'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: God details
+          schema:
+            $ref: '#/definitions/model.God'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Create and returns new God or nil
+      tags:
+      - God
   /god/{id}:
     get:
       consumes:

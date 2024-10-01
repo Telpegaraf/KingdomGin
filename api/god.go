@@ -39,3 +39,38 @@ func (a *GodApi) GetGodById(ctx *gin.Context) {
 		}
 	})
 }
+
+// CreateGod godoc
+//
+// @Summary Create and returns new God or nil
+// @Description Create new God
+// @Tags God
+// @Accept json
+// @Produce json
+// @Param god body model.God true "God data"
+// @Success 201 {object} model.God "God details"
+// @Failure 401 {string} string "Unauthorized"
+// @Router /god [post]
+func (a *GodApi) CreateGod(ctx *gin.Context) {
+	god := &model.God{}
+	if err := ctx.Bind(god); err == nil {
+		internal := &model.God{
+			Name:            god.Name,
+			Alias:           god.Alias,
+			Edict:           god.Edict,
+			Anathema:        god.Anathema,
+			AreasOfInterest: god.AreasOfInterest,
+			Temples:         god.Temples,
+			Worships:        god.Worships,
+			SacredAnimals:   god.SacredAnimals,
+			SacredColors:    god.SacredColors,
+			ChosenWeapon:    god.ChosenWeapon,
+			Alignment:       god.Alignment,
+			Description:     god.Description,
+			Domains:         god.Domains,
+		}
+		if success := SuccessOrAbort(ctx, 500, a.DB.CreateGod(internal)); !success {
+			return
+		}
+	}
+}

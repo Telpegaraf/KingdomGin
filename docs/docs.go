@@ -40,7 +40,7 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Character details",
                         "schema": {
                             "$ref": "#/definitions/model.CharacterExternal"
@@ -86,6 +86,46 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Character not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/god": {
+            "post": {
+                "description": "Create new God",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "God"
+                ],
+                "summary": "Create and returns new God or nil",
+                "parameters": [
+                    {
+                        "description": "God data",
+                        "name": "god",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.God"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "God details",
+                        "schema": {
+                            "$ref": "#/definitions/model.God"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }

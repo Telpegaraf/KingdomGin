@@ -14,5 +14,5 @@ type God struct {
 	ChosenWeapon    string   `gorm:"type:varchar(255)"`
 	Alignment       string   `gorm:"type:varchar(255)"`
 	Description     string   `gorm:"type:text"`
-	Domains         []Domain `gorm:"many2many:god_domains"`
+	Domains         []Domain `gorm:"many2many:god_domains;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

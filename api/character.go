@@ -48,7 +48,7 @@ func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param user body model.CreateCharacter true "Character data"
-// @Success 200 {object} model.CharacterExternal "Character details"
+// @Success 201 {object} model.CharacterExternal "Character details"
 // @Failure 401 {string} string "Unauthorized"
 // @Router /character [post]
 func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
