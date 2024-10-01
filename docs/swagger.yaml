@@ -1,4 +1,15 @@
 definitions:
+  model.CharacterExternal:
+    properties:
+      alias:
+        type: string
+      last_name:
+        type: string
+      name:
+        type: string
+    required:
+    - name
+    type: object
   model.CreateUser:
     properties:
       admin:
@@ -38,6 +49,31 @@ info:
   title: Kingdom Api
   version: 0.1.0
 paths:
+  /character/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Character details using its ID
+      parameters:
+      - description: character id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: character details
+          schema:
+            $ref: '#/definitions/model.CharacterExternal'
+        "404":
+          description: Character not found
+          schema:
+            type: string
+      summary: returns Character by id
+      tags:
+      - Character
   /login:
     post:
       consumes:

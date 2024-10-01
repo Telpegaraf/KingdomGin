@@ -32,6 +32,10 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		UserChangeNotifier: userChangeNotifier,
 		Registration:       conf.Registration}
 
+	characterHandler := api.CharacterApi{
+		DB: db,
+	}
+
 	authHandler := api.Controller{DB: db}
 
 	g.NoRoute(gerror.NotFound())
@@ -50,6 +54,10 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		userGroup.GET("", userHandler.GetUsers)
 		userGroup.GET("/:id", userHandler.GetUserByID)
 		userGroup.DELETE("/:id", userHandler.DeleteUserByID)
+	}
+	characterGroup := g.Group("/character").Use(authentication.RequireJWT)
+	{
+		characterGroup.GET("/:id", characterHandler.GetCharacterByID)
 	}
 	return g, func() {}
 }

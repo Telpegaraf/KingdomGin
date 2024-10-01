@@ -13,7 +13,7 @@ func New(dsn, defaultUser string, defaultPass string, defaultEmail *string, stre
 		return nil, err
 	}
 
-	if err := db.AutoMigrate(new(model.User)); err != nil {
+	if err := db.AutoMigrate(new(model.User), new(model.Character)); err != nil {
 		return nil, err
 	}
 

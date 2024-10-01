@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"gorm.io/gorm"
 	"kingdom/model"
 )
@@ -21,7 +22,7 @@ func (d *GormDatabase) GetUserByUsername(name string) (*model.User, error) {
 func (d *GormDatabase) GetUserByID(id uint) (*model.User, error) {
 	user := new(model.User)
 	err := d.DB.Find(user, id).Error
-	if err == gorm.ErrRecordNotFound {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = nil
 	}
 	if user.ID == id {

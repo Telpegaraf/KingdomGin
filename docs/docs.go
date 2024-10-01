@@ -15,6 +15,44 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/character/{id}": {
+            "get": {
+                "description": "Retrieve Character details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character"
+                ],
+                "summary": "returns Character by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "character id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "character details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterExternal"
+                        }
+                    },
+                    "404": {
+                        "description": "Character not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "Авторизация пользователя по логину и паролю",
@@ -198,6 +236,23 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.CharacterExternal": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "model.CreateUser": {
             "type": "object",
             "required": [
