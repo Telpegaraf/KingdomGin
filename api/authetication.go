@@ -44,15 +44,15 @@ func (a *Controller) Login(ctx *gin.Context) {
 		return
 	}
 
-	user, _ := a.DB.GetUserByUsername(body.Username)
-
-	if user.ID == 0 {
+	user, err := a.DB.GetUserByUsername(body.Username)
+	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"error": "Invalid username or password",
 		})
 		return
 	}
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

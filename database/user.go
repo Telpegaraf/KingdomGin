@@ -6,11 +6,12 @@ import (
 	"kingdom/model"
 )
 
+// GetUserByUsername returns the user by the given name or nil.
 func (d *GormDatabase) GetUserByUsername(name string) (*model.User, error) {
 	user := new(model.User)
-	err := d.DB.Where("username = ?", name).Find(user).Error
+	err := d.DB.Where("username = ?", name).First(user).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		err = nil
+		return nil, err
 	}
 	if user.Username == name {
 		return user, err
@@ -23,7 +24,7 @@ func (d *GormDatabase) GetUserByID(id uint) (*model.User, error) {
 	user := new(model.User)
 	err := d.DB.Preload("Characters").Find(user, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		err = nil
+		return nil, err
 	}
 	if user.ID == id {
 		return user, err

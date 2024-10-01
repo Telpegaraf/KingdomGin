@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"github.com/gin-gonic/gin"
 	"kingdom/model"
 	"net/http"
@@ -36,7 +35,7 @@ func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 		if character != nil {
 			ctx.JSON(http.StatusOK, ToExternalCharacter(character))
 		} else {
-			ctx.JSON(404, errors.New("Character Not Found"))
+			ctx.JSON(404, gin.H{"error": "Character not found"})
 		}
 	})
 }
