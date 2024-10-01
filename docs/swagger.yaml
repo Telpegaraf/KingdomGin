@@ -40,8 +40,6 @@ definitions:
     type: object
   model.CreateUser:
     properties:
-      admin:
-        type: boolean
       password:
         type: string
       username:

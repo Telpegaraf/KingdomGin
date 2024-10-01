@@ -343,9 +343,6 @@ const docTemplate = `{
                 "username"
             ],
             "properties": {
-                "admin": {
-                    "type": "boolean"
-                },
                 "password": {
                     "type": "string"
                 },

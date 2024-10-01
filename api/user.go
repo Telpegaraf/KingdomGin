@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"kingdom/auth/password"
 	"kingdom/model"
 	"net/http"
@@ -134,14 +135,15 @@ func (a *UserApi) CreateUser(ctx *gin.Context) {
 	if err := ctx.Bind(&user); err == nil {
 		internal := &model.User{
 			Username: user.Username,
-			Admin:    user.Admin,
 			Password: password.CreatePassword(user.Password, a.PasswordStrength),
 		}
 		existingUser, err := a.DB.GetUserByUsername(internal.Username)
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = nil
+		}
 		if success := SuccessOrAbort(ctx, 500, err); !success {
 			return
 		}
-
 		if existingUser == nil {
 			if success := SuccessOrAbort(ctx, 500, a.DB.CreateUser(internal)); !success {
 				return
@@ -150,7 +152,8 @@ func (a *UserApi) CreateUser(ctx *gin.Context) {
 				ctx.AbortWithError(http.StatusInternalServerError, err)
 				return
 			}
-			ctx.JSON(200, toExternalUser(internal))
+			ctx.JSON(201, toExternalUser(internal))
+			return
 		} else {
 			ctx.AbortWithError(400, errors.New("user already exists"))
 		}

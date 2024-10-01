@@ -45,7 +45,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	docs.SwaggerInfo.BasePath = ""
 	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	g.POST("", userHandler.CreateUser)
+	g.POST("/user", userHandler.CreateUser)
 	g.POST("/login", authHandler.Login)
 	g.GET("/validate", authHandler.Validate)
 
