@@ -7,13 +7,19 @@ import (
 	"kingdom/model"
 )
 
-func New(dsn, defaultUser string, defaultPass string, defaultEmail *string, strength int, createDefaultUserIfNotExist bool) (*GormDatabase, error) {
+func New(
+	dsn,
+	defaultUser string,
+	defaultPass string,
+	defaultEmail *string,
+	strength int,
+	createDefaultUserIfNotExist bool) (*GormDatabase, error) {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
-	if err := db.AutoMigrate(new(model.User), new(model.Character)); err != nil {
+	if err := db.AutoMigrate(new(model.User), new(model.Character), new(model.Domain), new(model.God)); err != nil {
 		return nil, err
 	}
 
