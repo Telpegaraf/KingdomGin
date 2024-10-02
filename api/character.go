@@ -113,6 +113,13 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 // @Failure 400 {string} string "Character doesn't exist"
 // @Router /character/{id} [patch]
 func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
+	userID, exists := ctx.Get("userID")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+	user, _ := a.DB.GetUserByID(userID.(uint))
+
 	withID(ctx, "id", func(id uint) {
 		var character *model.CharacterUpdateExternal
 		if err := ctx.ShouldBindJSON(&character); err == nil {
@@ -121,6 +128,10 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 				return
 			}
 			if oldCharacter != nil {
+				if oldCharacter.ID != user.ID && !user.Admin {
+					ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
+					return
+				}
 				internal := &model.Character{
 					ID:       oldCharacter.ID,
 					Name:     character.Name,
@@ -158,7 +169,6 @@ func (a *CharacterApi) DeleteCharacter(ctx *gin.Context) {
 		return
 	}
 	user, _ := a.DB.GetUserByID(userID.(uint))
-	isAdmin := user.Admin
 
 	withID(ctx, "id", func(id uint) {
 		character, err := a.DB.GetCharacterByID(id)
@@ -166,7 +176,7 @@ func (a *CharacterApi) DeleteCharacter(ctx *gin.Context) {
 			return
 		}
 		if character != nil {
-			if character.UserID != userID.(uint) && !isAdmin {
+			if character.UserID != userID.(uint) && !user.Admin {
 				ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
 				return
 			}
