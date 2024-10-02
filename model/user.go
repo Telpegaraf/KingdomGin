@@ -6,13 +6,13 @@ import (
 )
 
 type User struct {
-	ID         uint    `gorm:"primaryKey"`
-	Username   string  `gorm:"unique;not null"`
-	Email      *string `gorm:"unique;type:varchar(100)"`
-	Password   []byte  `gorm:"not null"`
-	Admin      bool    `gorm:"default:false"`
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
+	ID         uint           `gorm:"primaryKey"`
+	Username   string         `gorm:"unique;not null"`
+	Email      *string        `gorm:"unique;type:varchar(100)"`
+	Password   []byte         `gorm:"not null"`
+	Admin      bool           `gorm:"default:false"`
+	CreatedAt  time.Time      `gorm:"<-:create"`
+	UpdatedAt  time.Time      `gorm:"<-:update"`
 	DeletedAt  gorm.DeletedAt `gorm:"index"`
 	Characters []Character    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 }
@@ -32,4 +32,13 @@ type CreateUser struct {
 type UserLogin struct {
 	Username string `binding:"required" json:"username" query:"username" form:"username"`
 	Password string `binding:"required" json:"password,omitempty" query:"password" form:"password" binding:"required"`
+}
+
+type UserUpdateExternal struct {
+	Username string  `json:"username" query:"username" form:"username"`
+	Email    *string `json:"email" query:"email" form:"email"`
+}
+
+type UserPasswordUpdate struct {
+	Password string `json:"password,omitempty" query:"password" form:"password" binding:"required"`
 }

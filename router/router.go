@@ -56,6 +56,8 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		userGroup.GET("", userHandler.GetUsers)
 		userGroup.GET("/:id", userHandler.GetUserByID)
 		userGroup.DELETE("/:id", userHandler.DeleteUserByID)
+		userGroup.PATCH("/:id", userHandler.UpdateUser)
+		userGroup.PATCH("/password", userHandler.ChangePassword)
 	}
 	characterGroup := g.Group("/character").Use(authentication.RequireJWT)
 	{

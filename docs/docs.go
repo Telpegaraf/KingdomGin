@@ -120,7 +120,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Deletes Character by ID for current user or admin",
+                "description": "Permissions for Character's User or Admin",
                 "consumes": [
                     "application/json"
                 ],
@@ -144,14 +144,14 @@ const docTemplate = `{
                     "204": {
                         "description": "No Content"
                     },
-                    "400": {
-                        "description": "Character doesn't exist",
+                    "403": {
+                        "description": "You can't access for this API",
                         "schema": {
                             "type": "string"
                         }
                     },
-                    "403": {
-                        "description": "You can't access for this API",
+                    "404": {
+                        "description": "Character doesn't exist",
                         "schema": {
                             "type": "string"
                         }
@@ -159,7 +159,7 @@ const docTemplate = `{
                 }
             },
             "patch": {
-                "description": "Updates Character",
+                "description": "Permissions for Character's User or Admin",
                 "consumes": [
                     "application/json"
                 ],
@@ -195,7 +195,7 @@ const docTemplate = `{
                             "$ref": "#/definitions/model.CharacterExternal"
                         }
                     },
-                    "400": {
+                    "404": {
                         "description": "Character doesn't exist",
                         "schema": {
                             "type": "string"
@@ -383,6 +383,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/password": {
+            "patch": {
+                "description": "Permissions: Current User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Changes User's password",
+                "parameters": [
+                    {
+                        "description": "User password data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserPasswordUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "User doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "You need to provide a valid access token or user credentials to access this api",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/{id}": {
             "get": {
                 "description": "Retrieve User details using its ID",
@@ -439,6 +485,57 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "User doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "You need to provide a valid access token or user credentials to access this api",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin and current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserUpdateExternal"
+                        }
                     }
                 ],
                 "responses": {
@@ -655,6 +752,28 @@ const docTemplate = `{
             ],
             "properties": {
                 "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserPasswordUpdate": {
+            "type": "object",
+            "required": [
+                "password"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserUpdateExternal": {
+            "type": "object",
+            "properties": {
+                "email": {
                     "type": "string"
                 },
                 "username": {

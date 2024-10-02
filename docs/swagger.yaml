@@ -128,6 +128,20 @@ definitions:
     - password
     - username
     type: object
+  model.UserPasswordUpdate:
+    properties:
+      password:
+        type: string
+    required:
+    - password
+    type: object
+  model.UserUpdateExternal:
+    properties:
+      email:
+        type: string
+      username:
+        type: string
+    type: object
 info:
   contact: {}
   description: Api for Pet Project
@@ -182,7 +196,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: Deletes Character by ID for current user or admin
+      description: Permissions for Character's User or Admin
       parameters:
       - description: Character id
         in: path
@@ -194,12 +208,12 @@ paths:
       responses:
         "204":
           description: No Content
-        "400":
-          description: Character doesn't exist
-          schema:
-            type: string
         "403":
           description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Character doesn't exist
           schema:
             type: string
       summary: Deletes Character by ID or returns nil
@@ -232,7 +246,7 @@ paths:
     patch:
       consumes:
       - application/json
-      description: Updates Character
+      description: Permissions for Character's User or Admin
       parameters:
       - description: Character id
         in: path
@@ -252,7 +266,7 @@ paths:
           description: Character details
           schema:
             $ref: '#/definitions/model.CharacterExternal'
-        "400":
+        "404":
           description: Character doesn't exist
           schema:
             type: string
@@ -428,6 +442,72 @@ paths:
           schema:
             type: string
       summary: returns User by ID
+      tags:
+      - User
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin and current user
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserUpdateExternal'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Ok
+          schema:
+            type: string
+        "400":
+          description: User doesn't exist
+          schema:
+            type: string
+        "401":
+          description: You need to provide a valid access token or user credentials
+            to access this api
+          schema:
+            type: string
+      summary: Update User
+      tags:
+      - User
+  /user/password:
+    patch:
+      consumes:
+      - application/json
+      description: 'Permissions: Current User'
+      parameters:
+      - description: User password data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserPasswordUpdate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Ok
+          schema:
+            type: string
+        "400":
+          description: User doesn't exist
+          schema:
+            type: string
+        "401":
+          description: You need to provide a valid access token or user credentials
+            to access this api
+          schema:
+            type: string
+      summary: Changes User's password
       tags:
       - User
 schemes:

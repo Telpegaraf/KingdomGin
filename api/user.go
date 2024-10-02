@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"kingdom/auth"
 	"kingdom/auth/password"
 	"kingdom/model"
 	"net/http"
@@ -158,6 +159,62 @@ func (a *UserApi) CreateUser(ctx *gin.Context) {
 	}
 }
 
+// UpdateUser godoc
+//
+// @Summary Update User
+// @Description Permissions for Admin and current user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path int true "User id"
+// @Param user body model.UserUpdateExternal true "User data"
+// @Success 201 {string} string "Ok"
+// @Failure 400 {string} string "User doesn't exist"
+// @Failure 401 {string} string "You need to provide a valid access token or user credentials to access this api"
+// @Router /user/{id} [patch]
+func (a *UserApi) UpdateUser(ctx *gin.Context) {
+	currentUserID, exists := ctx.Get("userID")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+	currentUser, _ := a.DB.GetUserByID(currentUserID.(uint))
+	if !currentUser.Admin {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
+		return
+	}
+
+	withID(ctx, "id", func(id uint) {
+		var user *model.UserUpdateExternal
+		if err := ctx.Bind(&user); err == nil {
+			oldUser, err := a.DB.GetUserByID(id)
+			if success := SuccessOrAbort(ctx, 500, err); !success {
+				return
+			}
+			if oldUser != nil {
+				if oldUser.ID != currentUserID && !currentUser.Admin {
+					ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
+					return
+				}
+				internal := &model.User{
+					ID:         oldUser.ID,
+					Username:   user.Username,
+					Email:      user.Email,
+					Characters: oldUser.Characters,
+					Password:   oldUser.Password,
+					Admin:      oldUser.Admin,
+				}
+				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateUser(internal)); success {
+					return
+				}
+				ctx.JSON(200, toExternalUser(internal))
+			} else {
+				ctx.JSON(404, gin.H{"error": "User not found"})
+			}
+		}
+	})
+}
+
 // DeleteUserByID godoc
 //
 // @Summary Returns and delete User by ID if you're admin
@@ -205,6 +262,30 @@ func (a *UserApi) DeleteUserByID(ctx *gin.Context) {
 			ctx.AbortWithError(400, errors.New("user doesn't exist"))
 		}
 	})
+}
+
+// ChangePassword godoc
+//
+// @Summary Changes User's password
+// @Description Permissions: Current User
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body model.UserPasswordUpdate true "User password data"
+// @Success 201 {string} string "Ok"
+// @Failure 400 {string} string "User doesn't exist"
+// @Failure 401 {string} string "You need to provide a valid access token or user credentials to access this api"
+// @Router /user/password [patch]
+func (a *UserApi) ChangePassword(ctx *gin.Context) {
+	pw := model.UserPasswordUpdate{}
+	if err := ctx.Bind(&pw); err == nil {
+		user, err := a.DB.GetUserByID(auth.GetUserID(ctx))
+		if success := SuccessOrAbort(ctx, 500, err); !success {
+			return
+		}
+		user.Password = password.CreatePassword(pw.Password, a.PasswordStrength)
+		SuccessOrAbort(ctx, 500, a.DB.UpdateUser(user))
+	}
 }
 
 func toExternalUser(internal *model.User) *model.UserExternal {
