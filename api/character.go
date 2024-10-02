@@ -103,7 +103,7 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 // UpdateCharacter Updates Character by ID
 //
 // @Summary Updates Character by ID or nil
-// @Description Updates Character
+// @Description Permissions for Character's User or Admin
 // @Tags Character
 // @Accept json
 // @Produce json
@@ -153,7 +153,7 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 // DeleteCharacter Deletes Character by ID
 //
 // @Summary Deletes Character by ID or returns nil
-// @Description Deletes Character by ID for current user or admin
+// @Description Permissions for Character's User or Admin
 // @Tags Character
 // @Accept json
 // @Produce json

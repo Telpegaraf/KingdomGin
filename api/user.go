@@ -171,6 +171,17 @@ func (a *UserApi) CreateUser(ctx *gin.Context) {
 // @Failure 401 {string} string "You need to provide a valid access token or user credentials to access this api"
 // @Router /user/{id} [delete]
 func (a *UserApi) DeleteUserByID(ctx *gin.Context) {
+	currentUserID, exists := ctx.Get("userID")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+	currentUser, _ := a.DB.GetUserByID(currentUserID.(uint))
+	if !currentUser.Admin {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
+		return
+	}
+
 	withID(ctx, "id", func(id uint) {
 		user, err := a.DB.GetUserByID(id)
 		if success := SuccessOrAbort(ctx, 500, err); !success {
