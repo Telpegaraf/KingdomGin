@@ -76,7 +76,7 @@ func (a *Controller) Login(ctx *gin.Context) {
 	}
 
 	ctx.SetSameSite(http.SameSiteLaxMode)
-	ctx.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
+	ctx.SetCookie("Authorization", tokenString, 3600*24, "", "", false, true)
 	ctx.JSON(http.StatusOK, gin.H{})
 }
 

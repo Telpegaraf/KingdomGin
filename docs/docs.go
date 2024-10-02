@@ -16,6 +16,33 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/character": {
+            "get": {
+                "description": "Return all characters for current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character"
+                ],
+                "summary": "Returns all characters",
+                "responses": {
+                    "200": {
+                        "description": "Character details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create new character",
                 "consumes": [
@@ -31,7 +58,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "Character data",
-                        "name": "user",
+                        "name": "character",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -67,7 +94,7 @@ const docTemplate = `{
                 "tags": [
                     "Character"
                 ],
-                "summary": "returns Character by id",
+                "summary": "Returns Character by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -86,6 +113,90 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Character not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes Character by ID for current user or admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character"
+                ],
+                "summary": "Deletes Character by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Character id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Character doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Updates Character",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character"
+                ],
+                "summary": "Updates Character by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Character id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Character data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterUpdateExternal"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Character details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterExternal"
+                        }
+                    },
+                    "400": {
+                        "description": "Character doesn't exist",
                         "schema": {
                             "type": "string"
                         }
@@ -397,6 +508,20 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CharacterUpdateExternal": {
+            "type": "object",
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "model.CreateCharacter": {
             "type": "object",
             "required": [
@@ -434,6 +559,12 @@ const docTemplate = `{
             "properties": {
                 "description": {
                     "type": "string"
+                },
+                "gods": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.God"
+                    }
                 },
                 "id": {
                     "type": "integer"

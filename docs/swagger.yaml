@@ -27,6 +27,15 @@ definitions:
     required:
     - name
     type: object
+  model.CharacterUpdateExternal:
+    properties:
+      alias:
+        type: string
+      last_name:
+        type: string
+      name:
+        type: string
+    type: object
   model.CreateCharacter:
     properties:
       alias:
@@ -52,6 +61,10 @@ definitions:
     properties:
       description:
         type: string
+      gods:
+        items:
+          $ref: '#/definitions/model.God'
+        type: array
       id:
         type: integer
       name:
@@ -122,6 +135,24 @@ info:
   version: 0.1.0
 paths:
   /character:
+    get:
+      consumes:
+      - application/json
+      description: Return all characters for current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Character details
+          schema:
+            $ref: '#/definitions/model.CharacterExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all characters
+      tags:
+      - Character
     post:
       consumes:
       - application/json
@@ -129,7 +160,7 @@ paths:
       parameters:
       - description: Character data
         in: body
-        name: user
+        name: character
         required: true
         schema:
           $ref: '#/definitions/model.CreateCharacter'
@@ -148,6 +179,32 @@ paths:
       tags:
       - Character
   /character/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes Character by ID for current user or admin
+      parameters:
+      - description: Character id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Character doesn't exist
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Deletes Character by ID or returns nil
+      tags:
+      - Character
     get:
       consumes:
       - application/json
@@ -169,7 +226,37 @@ paths:
           description: Character not found
           schema:
             type: string
-      summary: returns Character by id
+      summary: Returns Character by id
+      tags:
+      - Character
+    patch:
+      consumes:
+      - application/json
+      description: Updates Character
+      parameters:
+      - description: Character id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Character data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.CharacterUpdateExternal'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Character details
+          schema:
+            $ref: '#/definitions/model.CharacterExternal'
+        "400":
+          description: Character doesn't exist
+          schema:
+            type: string
+      summary: Updates Character by ID or nil
       tags:
       - Character
   /god:

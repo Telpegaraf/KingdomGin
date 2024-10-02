@@ -23,3 +23,20 @@ func (d *GormDatabase) GetCharacterByID(id uint) (*model.Character, error) {
 func (d *GormDatabase) CreateCharacter(character *model.Character) error {
 	return d.DB.Create(character).Error
 }
+
+// GetCharacters returns all characters
+func (d *GormDatabase) GetCharacters(id uint) ([]*model.Character, error) {
+	var characters []*model.Character
+	err := d.DB.Where(&model.Character{UserID: id}).Find(&characters).Error
+	return characters, err
+}
+
+// DeleteCharacterByID deletes character by its id
+func (d *GormDatabase) DeleteCharacterByID(id uint) error {
+	return d.DB.Where("id = ?", id).Delete(&model.Character{}, id).Error
+}
+
+// UpdateCharacter updates character by its id
+func (d *GormDatabase) UpdateCharacter(character *model.Character) error {
+	return d.DB.Save(character).Error
+}

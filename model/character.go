@@ -21,3 +21,9 @@ type CharacterExternal struct {
 	LastName string ` json:"last_name" query:"last_name" form:"last_name"`
 	UserID   uint   ` json:"user_id" query:"user_id" form:"user_id"`
 }
+
+type CharacterUpdateExternal struct {
+	Name     string `json:"name" query:"name" form:"name"`
+	Alias    string `json:"alias" query:"alias" form:"alias"`
+	LastName string `json:"last_name" query:"last_name" form:"last_name"`
+}
