@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"kingdom/auth"
 	"kingdom/model"
 	"net/http"
 )
@@ -113,12 +114,7 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 // @Failure 404 {string} string "Character doesn't exist"
 // @Router /character/{id} [patch]
 func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
-	userID, exists := ctx.Get("userID")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-	user, _ := a.DB.GetUserByID(userID.(uint))
+	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
 
 	withID(ctx, "id", func(id uint) {
 		var character *model.CharacterUpdateExternal
@@ -128,7 +124,7 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 				return
 			}
 			if oldCharacter != nil {
-				if oldCharacter.ID != user.ID && !user.Admin {
+				if oldCharacter.UserID != user.ID && !user.Admin {
 					ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
 					return
 				}
@@ -163,12 +159,7 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 // @Failure 403 {string} string "You can't access for this API"
 // @Router /character/{id} [delete]
 func (a *CharacterApi) DeleteCharacter(ctx *gin.Context) {
-	userID, exists := ctx.Get("userID")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-	user, _ := a.DB.GetUserByID(userID.(uint))
+	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
 
 	withID(ctx, "id", func(id uint) {
 		character, err := a.DB.GetCharacterByID(id)
@@ -176,7 +167,7 @@ func (a *CharacterApi) DeleteCharacter(ctx *gin.Context) {
 			return
 		}
 		if character != nil {
-			if character.UserID != userID.(uint) && !user.Admin {
+			if character.UserID != user.ID && !user.Admin {
 				ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
 				return
 			}

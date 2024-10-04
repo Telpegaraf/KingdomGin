@@ -62,8 +62,9 @@ func (a *Controller) Login(ctx *gin.Context) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": user.ID,
-		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"sub":     user.ID,
+		"exp":     time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"isAdmin": user.Admin,
 	})
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("TOKEN_SECRET")))

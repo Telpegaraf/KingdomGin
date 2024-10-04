@@ -166,6 +166,7 @@ func (a *Auth) RequireJWT(c *gin.Context) {
 		}
 		userIdUint := uint(userIdFloat64)
 		c.Set("userID", userIdUint)
+		c.Set("isAdmin", claims["isAdmin"])
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 		c.Abort()
