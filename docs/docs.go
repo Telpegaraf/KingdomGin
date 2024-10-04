@@ -204,6 +204,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/class": {
+            "post": {
+                "description": "Create new Character Class",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character Class"
+                ],
+                "summary": "Create and returns new Character Class or nil",
+                "parameters": [
+                    {
+                        "description": "Character Class data",
+                        "name": "god",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterClassCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Character Class details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterClass"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/god": {
             "post": {
                 "description": "Create new God",
@@ -582,6 +622,40 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CharacterClass": {
+            "type": "object",
+            "properties": {
+                "health": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "perceptionMastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                }
+            }
+        },
+        "model.CharacterClassCreate": {
+            "type": "object",
+            "properties": {
+                "health": {
+                    "type": "integer",
+                    "example": 6
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Fighter"
+                },
+                "perception_mastery": {
+                    "type": "string",
+                    "example": "Train"
+                }
+            }
+        },
         "model.CharacterExternal": {
             "type": "object",
             "required": [
@@ -720,6 +794,23 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "model.MasteryLevel": {
+            "type": "string",
+            "enum": [
+                "None",
+                "Train",
+                "Expert",
+                "Master",
+                "Legend"
+            ],
+            "x-enum-varnames": [
+                "None",
+                "Train",
+                "Expert",
+                "Master",
+                "Legend"
+            ]
         },
         "model.UserExternal": {
             "type": "object",

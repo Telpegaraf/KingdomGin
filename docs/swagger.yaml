@@ -12,6 +12,29 @@ definitions:
       userID:
         type: integer
     type: object
+  model.CharacterClass:
+    properties:
+      health:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      perceptionMastery:
+        $ref: '#/definitions/model.MasteryLevel'
+    type: object
+  model.CharacterClassCreate:
+    properties:
+      health:
+        example: 6
+        type: integer
+      name:
+        example: Fighter
+        type: string
+      perception_mastery:
+        example: Train
+        type: string
+    type: object
   model.CharacterExternal:
     properties:
       alias:
@@ -103,6 +126,20 @@ definitions:
       worships:
         type: string
     type: object
+  model.MasteryLevel:
+    enum:
+    - None
+    - Train
+    - Expert
+    - Master
+    - Legend
+    type: string
+    x-enum-varnames:
+    - None
+    - Train
+    - Expert
+    - Master
+    - Legend
   model.UserExternal:
     properties:
       admin:
@@ -273,6 +310,32 @@ paths:
       summary: Updates Character by ID or nil
       tags:
       - Character
+  /class:
+    post:
+      consumes:
+      - application/json
+      description: Create new Character Class
+      parameters:
+      - description: Character Class data
+        in: body
+        name: god
+        required: true
+        schema:
+          $ref: '#/definitions/model.CharacterClassCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Character Class details
+          schema:
+            $ref: '#/definitions/model.CharacterClass'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Create and returns new Character Class or nil
+      tags:
+      - Character Class
   /god:
     post:
       consumes:

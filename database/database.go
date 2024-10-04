@@ -19,7 +19,13 @@ func New(
 		return nil, err
 	}
 
-	if err := db.AutoMigrate(new(model.User), new(model.Character), new(model.Domain), new(model.God)); err != nil {
+	if err := db.AutoMigrate(
+		new(model.User),
+		new(model.Character),
+		new(model.Domain),
+		new(model.God),
+		new(model.CharacterClass),
+	); err != nil {
 		return nil, err
 	}
 

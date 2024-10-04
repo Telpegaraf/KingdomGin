@@ -35,6 +35,9 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	characterHandler := api.CharacterApi{
 		DB: db,
 	}
+	characterClassHandler := api.CharacterClassApi{
+		DB: db,
+	}
 
 	godHandler := api.GodApi{DB: db}
 
@@ -71,6 +74,10 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	{
 		godGroup.GET("/:id", godHandler.GetGodById)
 		godGroup.POST("", godHandler.CreateGod)
+	}
+	characterClassGroup := g.Group("/class").Use(authentication.RequireJWT)
+	{
+		characterClassGroup.POST("", characterClassHandler.CreateCharacterClass)
 	}
 	return g, func() {}
 }
