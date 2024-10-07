@@ -6,6 +6,7 @@ type Character struct {
 	Alias    string `gorm:"type:varchar(120)"`
 	LastName string `gorm:"type:varchar(120)"`
 	UserID   uint
+	Stat     Stat
 }
 
 type CreateCharacter struct {

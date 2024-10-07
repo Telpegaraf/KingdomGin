@@ -23,13 +23,13 @@ type CharacterClass struct {
 }
 
 func (c *CharacterClass) BeforeSave(tx *gorm.DB) error {
-	if !isValidMasteryLevel(Health(c.Health)) {
+	if !isValidHealth(Health(c.Health)) {
 		return errors.New("invalid Health value")
 	}
 	return nil
 }
 
-func isValidMasteryLevel(level Health) bool {
+func isValidHealth(level Health) bool {
 	switch level {
 	case Six, Eight, Ten, Twelve:
 		return true
