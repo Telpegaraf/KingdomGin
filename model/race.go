@@ -20,6 +20,7 @@ func (r Race) BeforeSave(tx *gorm.DB) error {
 	if !isValidSize(r.Size) {
 		return errors.New("invalid size")
 	}
+	return nil
 }
 
 func isValidSize(size Size) bool {
