@@ -5,8 +5,8 @@ import (
 	"kingdom/model"
 )
 
-func (a *CharacterApi) CreateStat(ctx *gin.Context, characterID uint) {
-	internal := &model.Stat{
+func (a *CharacterApi) CreateAttribute(ctx *gin.Context, characterID uint) {
+	internal := &model.Attributes{
 		CharacterID: characterID,
 	}
 	if success := SuccessOrAbort(ctx, 500, a.DB.CreateStat(internal)); !success {

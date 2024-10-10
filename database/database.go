@@ -25,7 +25,7 @@ func New(
 		new(model.Domain),
 		new(model.God),
 		new(model.CharacterClass),
-		new(model.Stat),
+		new(model.Attributes),
 		new(model.Item),
 	); err != nil {
 		return nil, err

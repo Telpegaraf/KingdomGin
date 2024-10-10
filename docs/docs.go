@@ -57,6 +57,20 @@ const docTemplate = `{
                 "summary": "Create and returns character or nil",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Number of characters per page",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
                         "description": "Character data",
                         "name": "character",
                         "in": "body",
@@ -611,11 +625,17 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "lastName": {
+                "last_name": {
                     "type": "string"
+                },
+                "level": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
+                },
+                "stat": {
+                    "$ref": "#/definitions/model.Stat"
                 },
                 "userID": {
                     "type": "integer"
@@ -811,6 +831,35 @@ const docTemplate = `{
                 "Master",
                 "Legend"
             ]
+        },
+        "model.Stat": {
+            "type": "object",
+            "properties": {
+                "characterID": {
+                    "type": "integer"
+                },
+                "charisma": {
+                    "type": "integer"
+                },
+                "constitution": {
+                    "type": "integer"
+                },
+                "dexterity": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "intelligence": {
+                    "type": "integer"
+                },
+                "strength": {
+                    "type": "integer"
+                },
+                "wisdom": {
+                    "type": "integer"
+                }
+            }
         },
         "model.UserExternal": {
             "type": "object",

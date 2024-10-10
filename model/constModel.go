@@ -2,6 +2,7 @@ package model
 
 type Health int8
 type MasteryLevel string
+type Size string
 
 const (
 	Six    Health = 6
@@ -16,4 +17,13 @@ const (
 	Expert MasteryLevel = "Expert"
 	Master MasteryLevel = "Master"
 	Legend MasteryLevel = "Legend"
+)
+
+const (
+	Tiny       Size = "Tiny"
+	Small      Size = "Small"
+	Medium     Size = "Medium"
+	Large      Size = "Large"
+	Huge       Size = "Huge"
+	Gargantuan Size = "Gargantuan"
 )

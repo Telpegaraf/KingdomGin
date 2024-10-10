@@ -14,7 +14,7 @@ type CharacterDatabase interface {
 	UpdateCharacter(character *model.Character) error
 	DeleteCharacterByID(id uint) error
 	GetUserByID(id uint) (*model.User, error)
-	CreateStat(stat *model.Stat) error
+	CreateStat(stat *model.Attributes) error
 }
 
 type CharacterApi struct {
@@ -64,6 +64,7 @@ func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
 	}
 
 	characters, err := a.DB.GetCharacters(userID.(uint))
+
 	if success := SuccessOrAbort(ctx, 500, err); !success {
 		return
 	}
@@ -100,7 +101,7 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 			return
 		}
 		go func() {
-			a.CreateStat(ctx, internal.ID)
+			a.CreateAttribute(ctx, internal.ID)
 		}()
 	}
 	ctx.JSON(http.StatusCreated, ToExternalCharacter(character))

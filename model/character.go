@@ -4,9 +4,10 @@ type Character struct {
 	ID       uint   `gorm:"primaryKey"`
 	Name     string `gorm:"not null;type:varchar(120)"`
 	Alias    string `gorm:"type:varchar(120)"`
-	LastName string `gorm:"type:varchar(120)"`
+	LastName string `gorm:"type:varchar(120)" json:"last_name"`
+	Level    int8   `gorm:"default:1"`
 	UserID   uint
-	Stat     Stat
+	Stat     Attributes
 }
 
 type CreateCharacter struct {

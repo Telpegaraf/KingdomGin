@@ -5,10 +5,14 @@ definitions:
         type: string
       id:
         type: integer
-      lastName:
+      last_name:
         type: string
+      level:
+        type: integer
       name:
         type: string
+      stat:
+        $ref: '#/definitions/model.Stat'
       userID:
         type: integer
     type: object
@@ -140,6 +144,25 @@ definitions:
     - Expert
     - Master
     - Legend
+  model.Stat:
+    properties:
+      characterID:
+        type: integer
+      charisma:
+        type: integer
+      constitution:
+        type: integer
+      dexterity:
+        type: integer
+      id:
+        type: integer
+      intelligence:
+        type: integer
+      strength:
+        type: integer
+      wisdom:
+        type: integer
+    type: object
   model.UserExternal:
     properties:
       admin:
@@ -209,6 +232,16 @@ paths:
       - application/json
       description: Create new character
       parameters:
+      - default: 1
+        description: page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of characters per page
+        in: query
+        name: limit
+        type: integer
       - description: Character data
         in: body
         name: character
