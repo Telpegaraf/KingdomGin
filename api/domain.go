@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"kingdom/auth"
 	"kingdom/model"
 	"net/http"
 )
@@ -12,6 +13,7 @@ type DomainDatabase interface {
 	GetDomains() ([]*model.Domain, error)
 	UpdateDomain(domain *model.Domain) error
 	DeleteDomain(id uint) error
+	GetUserByID(id uint) (*model.User, error)
 }
 
 type DomainApi struct {
@@ -19,6 +21,11 @@ type DomainApi struct {
 }
 
 func (a *DomainApi) CreateDomain(ctx *gin.Context) {
+	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
+	if !user.Admin {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You can't access for this API"})
+	}
+
 	domain := &model.CreateDomain{}
 	if err := ctx.ShouldBindJSON(domain); err == nil {
 		internal := &model.Domain{
@@ -57,6 +64,11 @@ func (a *DomainApi) GetDomains(ctx *gin.Context) {
 }
 
 func (a *DomainApi) UpdateDomain(ctx *gin.Context) {
+	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
+	if !user.Admin {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You can't access for this API"})
+	}
+
 	withID(ctx, "id", func(id uint) {
 		var domain *model.UpdateDomain
 		if err := ctx.ShouldBindJSON(domain); err == nil {
@@ -81,6 +93,11 @@ func (a *DomainApi) UpdateDomain(ctx *gin.Context) {
 }
 
 func (a *DomainApi) DeleteDomain(ctx *gin.Context) {
+	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
+	if !user.Admin {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You can't access for this API"})
+	}
+
 	withID(ctx, "id", func(id uint) {
 		domain, err := a.DB.GetDomainByID(id)
 		if success := SuccessOrAbort(ctx, 500, err); !success {
