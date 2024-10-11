@@ -71,11 +71,15 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		characterGroup.PATCH("/:id", characterHandler.UpdateCharacter)
 		characterGroup.DELETE("/:id", characterHandler.DeleteCharacter)
 	}
-	godGroup := g.Group("/god").Use(authentication.RequireJWT)
+	godGroup := g.Group("/god").Use(authentication.RequireAdmin)
 	{
-		godGroup.GET("/:id", godHandler.GetGodById)
 		godGroup.POST("", godHandler.CreateGod)
+		godGroup.PATCH("/:id", godHandler.UpdateGod)
+		godGroup.DELETE("/:id", godHandler.DeleteGod)
 	}
+	godGroup.GET("/:id", godHandler.GetGodById).Use(authentication.RequireJWT)
+	godGroup.GET("", godHandler.GetGods).Use(authentication.RequireJWT)
+
 	domainGroup := g.Group("/domain").Use(authentication.RequireAdmin)
 	{
 		domainGroup.POST("", domainHandler.CreateDomain)
