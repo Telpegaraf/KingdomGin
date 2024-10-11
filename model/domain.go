@@ -20,3 +20,9 @@ type UpdateDomain struct {
 	Name        string `json:"name" query:"name" form:"name" binding:"required"`
 	Description string `json:"description" query:"description" form:"description" binding:"required"`
 }
+
+type DomainExternal struct {
+	ID          uint   `json"id" query:"id" form:"id" binding:"required"`
+	Name        string `json:"name" query:"name" form:"name" binding:"required"`
+	Description string `json:"description" query:"description" form:"description" binding:"required"`
+}

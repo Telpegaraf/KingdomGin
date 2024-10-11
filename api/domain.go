@@ -35,7 +35,8 @@ type DomainApi struct {
 func (a *DomainApi) CreateDomain(ctx *gin.Context) {
 	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
 	if !user.Admin {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You can't access for this API"})
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
+		return
 	}
 
 	domain := &model.CreateDomain{}
@@ -105,25 +106,27 @@ func (a *DomainApi) GetDomains(ctx *gin.Context) {
 // @Produce json
 // @Param id path int true "Domain id"
 // @Param character body model.UpdateDomain true "Domain data"
-// @Success 200 {object} model.Domain "Domain details"
+// @Success 200 {object} model.DomainExternal "Domain details"
 // @Failure 403 {string} string "You can't access for this API"
 // @Failure 404 {string} string "Domain doesn't exist"
 // @Router /domain/{id} [patch]
 func (a *DomainApi) UpdateDomain(ctx *gin.Context) {
 	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
 	if !user.Admin {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You can't access for this API"})
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
+		return
 	}
 
 	withID(ctx, "id", func(id uint) {
 		var domain *model.UpdateDomain
-		if err := ctx.ShouldBindJSON(domain); err == nil {
+		if err := ctx.Bind(&domain); err == nil {
 			oldDomain, err := a.DB.GetDomainByID(id)
 			if success := SuccessOrAbort(ctx, 500, err); !success {
 				return
 			}
 			if oldDomain != nil {
 				internal := &model.Domain{
+					ID:          oldDomain.ID,
 					Name:        domain.Name,
 					Description: domain.Description,
 				}
@@ -153,7 +156,8 @@ func (a *DomainApi) UpdateDomain(ctx *gin.Context) {
 func (a *DomainApi) DeleteDomain(ctx *gin.Context) {
 	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
 	if !user.Admin {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You can't access for this API"})
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
+		return
 	}
 
 	withID(ctx, "id", func(id uint) {

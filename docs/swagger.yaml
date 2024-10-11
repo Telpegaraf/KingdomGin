@@ -146,6 +146,18 @@ definitions:
       name:
         type: string
     type: object
+  model.DomainExternal:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - description
+    - name
+    type: object
   model.God:
     properties:
       alias:
@@ -506,7 +518,7 @@ paths:
         "200":
           description: Domain details
           schema:
-            $ref: '#/definitions/model.Domain'
+            $ref: '#/definitions/model.DomainExternal'
         "403":
           description: You can't access for this API
           schema:

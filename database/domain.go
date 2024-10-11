@@ -14,7 +14,7 @@ func (d *GormDatabase) GetDomainByID(id uint) (*model.Domain, error) {
 		err = nil
 	}
 	if domain.ID == id {
-		return domain, nil
+		return domain, err
 	}
 	return nil, err
 }

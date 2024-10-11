@@ -427,7 +427,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Domain details",
                         "schema": {
-                            "$ref": "#/definitions/model.Domain"
+                            "$ref": "#/definitions/model.DomainExternal"
                         }
                     },
                     "403": {
@@ -1017,6 +1017,24 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/model.God"
                     }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.DomainExternal": {
+            "type": "object",
+            "required": [
+                "description",
+                "name"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
