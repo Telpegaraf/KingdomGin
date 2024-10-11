@@ -28,23 +28,23 @@ type Auth struct {
 
 type authenticate func(tokenID string, user *model.User) (authenticated, success bool, userId uint, err error)
 
-func (a *Auth) RequireAdmin() gin.HandlerFunc {
-	return a.requireToken(func(tokenID string, user *model.User) (bool, bool, uint, error) {
-		if user != nil {
-			return true, user.Admin, user.ID, nil
-		}
-		if token, err := a.DB.GetUserByToken(tokenID); err == nil {
-			return false, false, 0, err
-		} else if token != nil {
-			user, err := a.DB.GetUserByID(token.ID)
-			if err != nil {
-				return false, false, token.ID, err
-			}
-			return true, user.Admin, token.ID, nil
-		}
-		return false, false, 0, nil
-	})
-}
+//func (a *Auth) RequireAdmin() gin.HandlerFunc {
+//	return a.requireToken(func(tokenID string, user *model.User) (bool, bool, uint, error) {
+//		if user != nil {
+//			return true, user.Admin, user.ID, nil
+//		}
+//		if token, err := a.DB.GetUserByToken(tokenID); err == nil {
+//			return false, false, 0, err
+//		} else if token != nil {
+//			user, err := a.DB.GetUserByID(token.ID)
+//			if err != nil {
+//				return false, false, token.ID, err
+//			}
+//			return true, user.Admin, token.ID, nil
+//		}
+//		return false, false, 0, nil
+//	})
+//}
 
 func (a *Auth) tokenFromQueryOrHeader(ctx *gin.Context) string {
 	if token := a.tokenFromQuery(ctx); token != "" {
@@ -169,6 +169,45 @@ func (a *Auth) RequireJWT(c *gin.Context) {
 		c.Set("isAdmin", claims["isAdmin"])
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		c.Abort()
+		return
+	}
+	c.Next()
+}
+
+func (a *Auth) RequireAdmin(c *gin.Context) {
+	tokenString, err := c.Cookie("Authorization")
+
+	if err != nil || tokenString == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "No authorization token"})
+		c.Abort()
+		return
+	}
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(os.Getenv("TOKEN_SECRET")), nil
+	})
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		userIdFloat64, ok := claims["sub"].(float64)
+		if !ok {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			return
+		}
+		userIdUint := uint(userIdFloat64)
+		c.Set("userID", userIdUint)
+		c.Set("isAdmin", claims["isAdmin"])
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		c.Abort()
+		return
+	}
+	user, _ := a.DB.GetUserByID(GetUserID(c))
+	if !user.Admin {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
 		c.Abort()
 		return
 	}

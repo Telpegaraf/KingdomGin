@@ -299,7 +299,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Domain details",
                         "schema": {
-                            "$ref": "#/definitions/model.Domain"
+                            "$ref": "#/definitions/model.DomainExternal"
                         }
                     },
                     "401": {

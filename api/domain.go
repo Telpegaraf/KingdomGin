@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"kingdom/auth"
 	"kingdom/model"
 	"net/http"
 )
@@ -13,7 +12,6 @@ type DomainDatabase interface {
 	GetDomains() ([]*model.Domain, error)
 	UpdateDomain(domain *model.Domain) error
 	DeleteDomain(id uint) error
-	GetUserByID(id uint) (*model.User, error)
 }
 
 type DomainApi struct {
@@ -28,17 +26,11 @@ type DomainApi struct {
 // @Accept json
 // @Produce json
 // @Param character body model.CreateDomain true "Domain data"
-// @Success 201 {object} model.Domain "Domain details"
+// @Success 201 {object} model.DomainExternal "Domain details"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 403 {string} string "You can't access for this API"
 // @Router /domain [post]
 func (a *DomainApi) CreateDomain(ctx *gin.Context) {
-	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
-	if !user.Admin {
-		ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
-		return
-	}
-
 	domain := &model.CreateDomain{}
 	if err := ctx.ShouldBindJSON(domain); err == nil {
 		internal := &model.Domain{
@@ -111,12 +103,6 @@ func (a *DomainApi) GetDomains(ctx *gin.Context) {
 // @Failure 404 {string} string "Domain doesn't exist"
 // @Router /domain/{id} [patch]
 func (a *DomainApi) UpdateDomain(ctx *gin.Context) {
-	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
-	if !user.Admin {
-		ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
-		return
-	}
-
 	withID(ctx, "id", func(id uint) {
 		var domain *model.UpdateDomain
 		if err := ctx.Bind(&domain); err == nil {
@@ -154,12 +140,6 @@ func (a *DomainApi) UpdateDomain(ctx *gin.Context) {
 // @Failure 403 {string} string "You can't access for this API"
 // @Router /domain/{id} [delete]
 func (a *DomainApi) DeleteDomain(ctx *gin.Context) {
-	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
-	if !user.Admin {
-		ctx.JSON(http.StatusForbidden, gin.H{"error": "You can't access for this API"})
-		return
-	}
-
 	withID(ctx, "id", func(id uint) {
 		domain, err := a.DB.GetDomainByID(id)
 		if success := SuccessOrAbort(ctx, 500, err); !success {
