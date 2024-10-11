@@ -244,6 +244,207 @@ const docTemplate = `{
                 }
             }
         },
+        "/domain": {
+            "get": {
+                "description": "Return all domains",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Domain"
+                ],
+                "summary": "Returns all domains",
+                "responses": {
+                    "200": {
+                        "description": "Domain details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Domain"
+                ],
+                "summary": "Create and returns domain or nil",
+                "parameters": [
+                    {
+                        "description": "Domain data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateDomain"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Domain details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/domain/{id}": {
+            "get": {
+                "description": "Retrieve Domain details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Domain"
+                ],
+                "summary": "Returns Domain by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "domain id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "domain details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    },
+                    "404": {
+                        "description": "Domain not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Domain"
+                ],
+                "summary": "Deletes Domain by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Domain id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Domain doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Domain"
+                ],
+                "summary": "Updates Domain by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Domain id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Domain data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateDomain"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Domain details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Domain doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/god": {
             "post": {
                 "description": "Create new God",
@@ -602,7 +803,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.Attributes": {
+        "model.Attribute": {
             "type": "object",
             "properties": {
                 "characterID": {
@@ -650,7 +851,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "stat": {
-                    "$ref": "#/definitions/model.Attributes"
+                    "$ref": "#/definitions/model.Attribute"
                 },
                 "userID": {
                     "type": "integer"
@@ -775,6 +976,21 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CreateDomain": {
+            "type": "object",
+            "required": [
+                "description",
+                "name"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "model.CreateUser": {
             "type": "object",
             "required": [
@@ -856,6 +1072,21 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "worships": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateDomain": {
+            "type": "object",
+            "required": [
+                "description",
+                "name"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }

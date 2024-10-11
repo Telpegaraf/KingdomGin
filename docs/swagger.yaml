@@ -1,5 +1,5 @@
 definitions:
-  model.Attributes:
+  model.Attribute:
     properties:
       characterID:
         type: integer
@@ -31,7 +31,7 @@ definitions:
       name:
         type: string
       stat:
-        $ref: '#/definitions/model.Attributes'
+        $ref: '#/definitions/model.Attribute'
       userID:
         type: integer
     type: object
@@ -113,6 +113,16 @@ definitions:
     required:
     - name
     type: object
+  model.CreateDomain:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - description
+    - name
+    type: object
   model.CreateUser:
     properties:
       password:
@@ -168,6 +178,16 @@ definitions:
         type: string
       worships:
         type: string
+    type: object
+  model.UpdateDomain:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - description
+    - name
     type: object
   model.UserExternal:
     properties:
@@ -365,6 +385,139 @@ paths:
       summary: Create and returns new Character Class or nil
       tags:
       - Character Class
+  /domain:
+    get:
+      consumes:
+      - application/json
+      description: Return all domains
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Domain details
+          schema:
+            $ref: '#/definitions/model.Domain'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all domains
+      tags:
+      - Domain
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Domain data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateDomain'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Domain details
+          schema:
+            $ref: '#/definitions/model.Domain'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns domain or nil
+      tags:
+      - Domain
+  /domain/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Domain id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Domain doesn't exist
+          schema:
+            type: string
+      summary: Deletes Domain by ID or returns nil
+      tags:
+      - Domain
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Domain details using its ID
+      parameters:
+      - description: domain id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: domain details
+          schema:
+            $ref: '#/definitions/model.Domain'
+        "404":
+          description: Domain not found
+          schema:
+            type: string
+      summary: Returns Domain by id
+      tags:
+      - Domain
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Domain id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Domain data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateDomain'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Domain details
+          schema:
+            $ref: '#/definitions/model.Domain'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Domain doesn't exist
+          schema:
+            type: string
+      summary: Updates Domain by ID or nil
+      tags:
+      - Domain
   /god:
     post:
       consumes:
