@@ -25,7 +25,7 @@ type GodApi struct {
 // @Tags God
 // @Accept json
 // @Produce json
-// @Param god body model.God true "God data"
+// @Param god body model.GodCreate true "God data"
 // @Success 201 {object} model.God "God details"
 // @Failure 401 {string} string "Unauthorized"
 // @Router /god [post]
@@ -55,7 +55,7 @@ func (a *GodApi) CreateGod(ctx *gin.Context) {
 
 // GetGodById godoc
 //
-// @Summary returns God by id
+// @Summary Returns God by id
 // @Description Retrieve God details using its ID
 // @Tags God
 // @Accept json

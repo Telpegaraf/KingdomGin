@@ -492,7 +492,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.God"
+                            "$ref": "#/definitions/model.GodCreate"
                         }
                     }
                 ],
@@ -524,7 +524,7 @@ const docTemplate = `{
                 "tags": [
                     "God"
                 ],
-                "summary": "returns God by id",
+                "summary": "Returns God by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1141,6 +1141,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "description",
+                "id",
                 "name"
             ],
             "properties": {
@@ -1152,6 +1153,14 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "model.DomainID": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
                 }
             }
         },
@@ -1195,6 +1204,61 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "sacredColors": {
+                    "type": "string"
+                },
+                "temples": {
+                    "type": "string"
+                },
+                "worships": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.GodCreate": {
+            "type": "object",
+            "required": [
+                "alias",
+                "anathema",
+                "domains",
+                "edict",
+                "name",
+                "temples"
+            ],
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "alignment": {
+                    "type": "string"
+                },
+                "anathema": {
+                    "type": "string"
+                },
+                "areas_of_interest": {
+                    "type": "string"
+                },
+                "chosen_weapon": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "domains": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.DomainID"
+                    }
+                },
+                "edict": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sacred_animals": {
+                    "type": "string"
+                },
+                "sacred_colors": {
                     "type": "string"
                 },
                 "temples": {

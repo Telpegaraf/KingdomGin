@@ -156,7 +156,13 @@ definitions:
         type: string
     required:
     - description
+    - id
     - name
+    type: object
+  model.DomainID:
+    properties:
+      id:
+        type: integer
     type: object
   model.God:
     properties:
@@ -190,6 +196,44 @@ definitions:
         type: string
       worships:
         type: string
+    type: object
+  model.GodCreate:
+    properties:
+      alias:
+        type: string
+      alignment:
+        type: string
+      anathema:
+        type: string
+      areas_of_interest:
+        type: string
+      chosen_weapon:
+        type: string
+      description:
+        type: string
+      domains:
+        items:
+          $ref: '#/definitions/model.DomainID'
+        type: array
+      edict:
+        type: string
+      name:
+        type: string
+      sacred_animals:
+        type: string
+      sacred_colors:
+        type: string
+      temples:
+        type: string
+      worships:
+        type: string
+    required:
+    - alias
+    - anathema
+    - domains
+    - edict
+    - name
+    - temples
     type: object
   model.GodUpdate:
     properties:
@@ -597,7 +641,7 @@ paths:
         name: god
         required: true
         schema:
-          $ref: '#/definitions/model.God'
+          $ref: '#/definitions/model.GodCreate'
       produces:
       - application/json
       responses:
@@ -660,7 +704,7 @@ paths:
           description: God not found
           schema:
             type: string
-      summary: returns God by id
+      summary: Returns God by id
       tags:
       - God
     patch:
