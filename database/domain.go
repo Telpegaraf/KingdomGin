@@ -23,10 +23,10 @@ func (d *GormDatabase) GetDomainByID(id uint) (*model.Domain, error) {
 func (d *GormDatabase) CreateDomain(domain *model.Domain) error { return d.DB.Create(domain).Error }
 
 // GetDomains returns all Domains
-func (d *GormDatabase) GetDomains() (*[]model.Domain, error) {
-	var domains []model.Domain
+func (d *GormDatabase) GetDomains() ([]*model.Domain, error) {
+	var domains []*model.Domain
 	err := d.DB.Find(&domains).Error
-	return &domains, err
+	return domains, err
 }
 
 // UpdateDomain updates Domain

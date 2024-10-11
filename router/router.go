@@ -40,6 +40,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	}
 
 	godHandler := api.GodApi{DB: db}
+	domainHandler := api.DomainApi{DB: db}
 
 	authHandler := api.Controller{DB: db}
 
@@ -74,6 +75,14 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	{
 		godGroup.GET("/:id", godHandler.GetGodById)
 		godGroup.POST("", godHandler.CreateGod)
+	}
+	domainGroup := g.Group("/domain").Use(authentication.RequireJWT)
+	{
+		domainGroup.GET("/:id", domainHandler.GetDomainByID)
+		domainGroup.GET("", domainHandler.GetDomains)
+		domainGroup.POST("", domainHandler.CreateDomain)
+		domainGroup.PATCH("/:id", domainHandler.UpdateDomain)
+		domainGroup.DELETE("/:id", domainHandler.DeleteDomain)
 	}
 	characterClassGroup := g.Group("/class").Use(authentication.RequireJWT)
 	{
