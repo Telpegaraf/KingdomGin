@@ -6,12 +6,12 @@ import (
 	"kingdom/model"
 )
 
-// CreateAttribute creates new Attributes object, linked with Character
-func (d *GormDatabase) CreateAttribute(stat *model.Attributes) error { return d.DB.Create(stat).Error }
+// CreateAttribute creates new Attribute object, linked with Character
+func (d *GormDatabase) CreateAttribute(stat *model.Attribute) error { return d.DB.Create(stat).Error }
 
 // GetAttributeByID returns Attribute object by ID
-func (d *GormDatabase) GetAttributeByID(id uint) (*model.Attributes, error) {
-	attribute := &model.Attributes{}
+func (d *GormDatabase) GetAttributeByID(id uint) (*model.Attribute, error) {
+	attribute := &model.Attribute{}
 	err := d.DB.Find(attribute, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
@@ -22,19 +22,19 @@ func (d *GormDatabase) GetAttributeByID(id uint) (*model.Attributes, error) {
 	return nil, err
 }
 
-// GetAllAttributes returns all Attributes objects
-func (d *GormDatabase) GetAllAttributes() (*[]model.Attributes, error) {
-	var attributes []model.Attributes
+// GetAttributes returns all Attribute objects
+func (d *GormDatabase) GetAttributes() (*[]model.Attribute, error) {
+	var attributes []model.Attribute
 	err := d.DB.Find(&attributes).Error
 	return &attributes, err
 }
 
 // DeleteAttribute deletes Attribute object
 func (d *GormDatabase) DeleteAttribute(id uint) error {
-	return d.DB.Where("id = ?", id).Delete(&model.Attributes{}).Error
+	return d.DB.Where("id = ?", id).Delete(&model.Attribute{}).Error
 }
 
 // UpdateAttribute updates Attribute object
-func (d *GormDatabase) UpdateAttribute(attributes *model.Attributes) error {
+func (d *GormDatabase) UpdateAttribute(attributes *model.Attribute) error {
 	return d.DB.Save(attributes).Error
 }

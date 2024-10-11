@@ -22,8 +22,8 @@ func (d *GormDatabase) GetDomainByID(id uint) (*model.Domain, error) {
 // CreateDomain create new Domain
 func (d *GormDatabase) CreateDomain(domain *model.Domain) error { return d.DB.Create(domain).Error }
 
-// GetAllDomains returns all Domains
-func (d *GormDatabase) GetAllDomains() (*[]model.Domain, error) {
+// GetDomains returns all Domains
+func (d *GormDatabase) GetDomains() (*[]model.Domain, error) {
 	var domains []model.Domain
 	err := d.DB.Find(&domains).Error
 	return &domains, err

@@ -6,7 +6,7 @@ import (
 )
 
 func (a *CharacterApi) CreateAttribute(ctx *gin.Context, characterID uint) {
-	internal := &model.Attributes{
+	internal := &model.Attribute{
 		CharacterID: characterID,
 	}
 	if success := SuccessOrAbort(ctx, 500, a.DB.CreateAttribute(internal)); !success {

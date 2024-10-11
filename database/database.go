@@ -25,7 +25,7 @@ func New(
 		new(model.Domain),
 		new(model.God),
 		new(model.CharacterClass),
-		new(model.Attributes),
+		new(model.Attribute),
 		new(model.Item),
 		new(model.Feat),
 		new(model.Race),

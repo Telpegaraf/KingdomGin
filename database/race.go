@@ -17,8 +17,8 @@ func (d *GormDatabase) GetRaceByID(id uint) (*model.Race, error) {
 	return nil, err
 }
 
-// GetAllRace returns all Races
-func (d *GormDatabase) GetAllRace() ([]*model.Race, error) {
+// GetRaces returns all Races
+func (d *GormDatabase) GetRaces() ([]*model.Race, error) {
 	var races []*model.Race
 	err := d.DB.Find(&races).Error
 	return races, err

@@ -14,7 +14,7 @@ type CharacterDatabase interface {
 	UpdateCharacter(character *model.Character) error
 	DeleteCharacterByID(id uint) error
 	GetUserByID(id uint) (*model.User, error)
-	CreateAttribute(stat *model.Attributes) error
+	CreateAttribute(stat *model.Attribute) error
 }
 
 type CharacterApi struct {

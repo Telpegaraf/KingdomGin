@@ -1,6 +1,6 @@
 package model
 
-type Attributes struct {
+type Attribute struct {
 	ID           uint `gorm:"primary_key;AUTO_INCREMENT"`
 	Strength     int8 `gorm:"default:10"`
 	Dexterity    int8 `gorm:"default:10"`

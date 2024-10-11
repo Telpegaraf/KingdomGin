@@ -7,7 +7,7 @@ type Character struct {
 	LastName string `gorm:"type:varchar(120)" json:"last_name"`
 	Level    int8   `gorm:"default:1"`
 	UserID   uint
-	Stat     Attributes
+	Stat     Attribute
 }
 
 type CreateCharacter struct {

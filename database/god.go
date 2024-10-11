@@ -22,8 +22,8 @@ func (d *GormDatabase) GetGodByID(id uint) (*model.God, error) {
 // CreateGod create new God
 func (d *GormDatabase) CreateGod(god *model.God) error { return d.DB.Create(god).Error }
 
-// GetAllGod returns all Gods
-func (d *GormDatabase) GetAllGod() ([]*model.God, error) {
+// GetGods returns all Gods
+func (d *GormDatabase) GetGods() ([]*model.God, error) {
 	var gods []*model.God
 	err := d.DB.Preload("Domains").Find(&gods).Error
 	return gods, err

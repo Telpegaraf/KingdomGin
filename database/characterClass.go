@@ -24,8 +24,8 @@ func (d *GormDatabase) GetCharacterClassByID(id uint) (*model.CharacterClass, er
 	return nil, err
 }
 
-// GetAllCharacterClass returns all Character classes
-func (d *GormDatabase) GetAllCharacterClass() (*[]model.CharacterClass, error) {
+// GetCharacterClasses returns all Character classes
+func (d *GormDatabase) GetCharacterClasses() (*[]model.CharacterClass, error) {
 	var characterClass []model.CharacterClass
 	err := d.DB.Find(&characterClass).Error
 	return &characterClass, err
