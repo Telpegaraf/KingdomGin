@@ -10,3 +10,13 @@ type Domain struct {
 type DomainID struct {
 	ID uint
 }
+
+type CreateDomain struct {
+	Name        string `json:"name" query:"name" form:"name" binding:"required"`
+	Description string `json:"description" query:"description" form:"description" binding:"required"`
+}
+
+type UpdateDomain struct {
+	Name        string `json:"name" query:"name" form:"name" binding:"required"`
+	Description string `json:"description" query:"description" form:"description" binding:"required"`
+}
