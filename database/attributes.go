@@ -28,3 +28,13 @@ func (d *GormDatabase) GetAllAttributes() (*[]model.Attributes, error) {
 	err := d.DB.Find(&attributes).Error
 	return &attributes, err
 }
+
+// DeleteAttribute deletes Attribute object
+func (d *GormDatabase) DeleteAttribute(id uint) error {
+	return d.DB.Where("id = ?", id).Delete(&model.Attributes{}).Error
+}
+
+// UpdateAttribute updates Attribute object
+func (d *GormDatabase) UpdateAttribute(attributes *model.Attributes) error {
+	return d.DB.Save(attributes).Error
+}
