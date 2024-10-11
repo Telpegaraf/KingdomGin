@@ -4,7 +4,6 @@ import (
 	"errors"
 	"gorm.io/gorm"
 	"kingdom/model"
-	"log"
 )
 
 // GetDomainByID returns Domain by ID
@@ -38,17 +37,13 @@ func (d *GormDatabase) DeleteDomain(id uint) error {
 	return d.DB.Where("id = ?", id).Delete(&model.Domain{}).Error
 }
 
+// FindDomains Return Domain's ID in God object
 func (d *GormDatabase) FindDomains(domainIDs []model.DomainID) ([]model.Domain, error) {
-	log.Println(333)
 	var domains []model.Domain
 	var ids []uint
-
-	// Извлекаем ID из структуры
 	for _, domainID := range domainIDs {
 		ids = append(ids, domainID.ID)
 	}
-
-	// Ищем домены по этим ID
 	err := d.DB.Where("id IN (?)", ids).Find(&domains).Error
 	return domains, err
 }
