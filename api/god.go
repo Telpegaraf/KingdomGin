@@ -9,35 +9,13 @@ import (
 type GodDatabase interface {
 	GetGodByID(id uint) (*model.God, error)
 	CreateGod(god *model.God) error
+	GetGods() ([]*model.God, error)
+	UpdateGod(god *model.God) error
+	DeleteGod(id uint) error
 }
 
 type GodApi struct {
 	DB GodDatabase
-}
-
-// GetGodById godoc
-//
-// @Summary returns God by id
-// @Description Retrieve God details using its ID
-// @Tags God
-// @Accept json
-// @Produce json
-// @Param id path int true "god id"
-// @Success 200 {object} model.God "God details"
-// @Failure 404 {string} string "God not found"
-// @Router /god/{id} [get]
-func (a *GodApi) GetGodById(ctx *gin.Context) {
-	withID(ctx, "id", func(id uint) {
-		god, err := a.DB.GetGodByID(id)
-		if success := SuccessOrAbort(ctx, 500, err); !success {
-			return
-		}
-		if god != nil {
-			ctx.JSON(http.StatusOK, god)
-		} else {
-			ctx.JSON(404, gin.H{"error": "God not found"})
-		}
-	})
 }
 
 // CreateGod godoc
@@ -73,4 +51,125 @@ func (a *GodApi) CreateGod(ctx *gin.Context) {
 			return
 		}
 	}
+}
+
+// GetGodById godoc
+//
+// @Summary returns God by id
+// @Description Retrieve God details using its ID
+// @Tags God
+// @Accept json
+// @Produce json
+// @Param id path int true "god id"
+// @Success 200 {object} model.God "God details"
+// @Failure 404 {string} string "God not found"
+// @Router /god/{id} [get]
+func (a *GodApi) GetGodById(ctx *gin.Context) {
+	withID(ctx, "id", func(id uint) {
+		god, err := a.DB.GetGodByID(id)
+		if success := SuccessOrAbort(ctx, 500, err); !success {
+			return
+		}
+		if god != nil {
+			ctx.JSON(http.StatusOK, god)
+		} else {
+			ctx.JSON(404, gin.H{"error": "God not found"})
+		}
+	})
+}
+
+// GetGods godoc
+//
+// @Summary Returns all gods
+// @Description Return all gods and their domains
+// @Tags God
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.God "Character details"
+// @Failure 401 {string} string ""Unauthorized"
+// @Router /god [get]
+func (a *GodApi) GetGods(ctx *gin.Context) {
+	gods, err := a.DB.GetGods()
+	if success := SuccessOrAbort(ctx, 500, err); !success {
+		return
+	}
+	var resp []*model.God
+	for _, god := range gods {
+		resp = append(resp, god)
+	}
+	ctx.JSON(http.StatusOK, resp)
+}
+
+// UpdateGod Updates God by ID
+//
+// @Summary Updates God by ID or nil
+// @Description Updates God
+// @Tags God
+// @Accept json
+// @Produce json
+// @Param id path int true "God id"
+// @Param character body model.GodUpdate true "God data"
+// @Success 200 {object} model.God "God details"
+// @Failure 404 {string} string "God doesn't exist"
+// @Router /god/{id} [patch]
+func (a *GodApi) UpdateGod(ctx *gin.Context) {
+	var god *model.GodUpdate
+	withID(ctx, "id", func(id uint) {
+		oldGod, err := a.DB.GetGodByID(id)
+		if success := SuccessOrAbort(ctx, 500, err); !success {
+			return
+		}
+		if oldGod != nil {
+			internal := &model.God{
+				ID:              oldGod.ID,
+				Name:            god.Name,
+				Alias:           god.Alias,
+				Edict:           god.Edict,
+				Anathema:        god.Anathema,
+				AreasOfInterest: god.AreasOfInterest,
+				Worships:        god.Worships,
+				SacredAnimals:   god.SacredAnimals,
+				SacredColors:    god.SacredColors,
+				ChosenWeapon:    god.ChosenWeapon,
+				Alignment:       god.Alignment,
+				Description:     god.Description,
+				Domains:         god.Domains,
+			}
+			if success := SuccessOrAbort(ctx, 500, a.DB.UpdateGod(internal)); !success {
+				return
+			}
+			ctx.JSON(http.StatusOK, internal)
+		} else {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "God doesn't exist"})
+		}
+	})
+}
+
+// DeleteGod Deletes God by ID
+//
+// @Summary Deletes God by ID or returns nil
+// @Description Permissions for Auth user
+// @Tags God
+// @Accept json
+// @Produce json
+// @Param id path int true "God id"
+// @Success 204
+// @Failure 404 {string} string "God doesn't exist"
+// @Failure 403 {string} string "You can't access for this API"
+// @Router /god/{id} [delete]
+func (a *GodApi) DeleteGod(ctx *gin.Context) {
+	withID(ctx, "id", func(id uint) {
+		god, err := a.DB.GetGodByID(id)
+		if success := SuccessOrAbort(ctx, 500, err); !success {
+			return
+		}
+		if god != nil {
+			if success := SuccessOrAbort(ctx, 500, a.DB.DeleteGod(id)); !success {
+				return
+			}
+			ctx.JSON(http.StatusNoContent, gin.H{"message": "God was deleted"})
+		} else {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "God doesn't exist"})
+		}
+	})
 }

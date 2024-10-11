@@ -16,3 +16,35 @@ type God struct {
 	Description     string   `gorm:"type:text"`
 	Domains         []Domain `gorm:"many2many:god_domains;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
+
+type GodCreate struct {
+	Name            string   `json:"name" binding:"required" query:"name" form:"name"`
+	Alias           string   `json:"alias" binding:"required" query:"alias" form:"alias"`
+	Edict           string   `json:"edict" binding:"required" query:"edict" form:"edict"`
+	Anathema        string   `json:"anathema" binding:"required" query:"anathema" form:"anathema"`
+	AreasOfInterest string   `json:"areas_of_interest" query:"areas_of_interest" form:"areas_of_interest"`
+	Temples         string   `json:"temples" binding:"required" query:"temples" form:"temples"`
+	Worships        string   `json:"worships" query:"worships" form:"worships"`
+	SacredAnimals   string   `json:"sacred_animals" query:"sacred_animals" form:"sacred_animals"`
+	SacredColors    string   `json:"sacred_colors" query:"sacred_colors" form:"sacred_colors"`
+	ChosenWeapon    string   `json:"chosen_weapon" query:"chosen_weapon" form:"chosen_weapon"`
+	Alignment       string   `json:"alignment" query:"alignment" form:"alignment"`
+	Description     string   `json:"description" query:"description" form:"description"`
+	Domains         []Domain `json:"domains" binding:"required" query:"domains"`
+}
+
+type GodUpdate struct {
+	Name            string   `json:"name" binding:"required" query:"name" form:"name"`
+	Alias           string   `json:"alias" binding:"required" query:"alias" form:"alias"`
+	Edict           string   `json:"edict" binding:"required" query:"edict" form:"edict"`
+	Anathema        string   `json:"anathema" binding:"required" query:"anathema" form:"anathema"`
+	AreasOfInterest string   `json:"areas_of_interest" query:"areas_of_interest" form:"areas_of_interest"`
+	Temples         string   `json:"temples" binding:"required" query:"temples" form:"temples"`
+	Worships        string   `json:"worships" query:"worships" form:"worships"`
+	SacredAnimals   string   `json:"sacred_animals" query:"sacred_animals" form:"sacred_animals"`
+	SacredColors    string   `json:"sacred_colors" query:"sacred_colors" form:"sacred_colors"`
+	ChosenWeapon    string   `json:"chosen_weapon" query:"chosen_weapon" form:"chosen_weapon"`
+	Alignment       string   `json:"alignment" query:"alignment" form:"alignment"`
+	Description     string   `json:"description" query:"description" form:"description"`
+	Domains         []Domain `json:"domains" binding:"required" query:"domains"`
+}

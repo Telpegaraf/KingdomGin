@@ -29,8 +29,8 @@ func (d *GormDatabase) GetGods() ([]*model.God, error) {
 	return gods, err
 }
 
-// DeleteGodByID deletes God by ID
-func (d *GormDatabase) DeleteGodByID(id uint) error {
+// DeleteGod deletes God by ID
+func (d *GormDatabase) DeleteGod(id uint) error {
 	return d.DB.Where("id = ?", id).Delete(&model.God{}).Error
 }
 

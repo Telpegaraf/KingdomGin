@@ -442,6 +442,33 @@
             }
         },
         "/god": {
+            "get": {
+                "description": "Return all gods and their domains",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "God"
+                ],
+                "summary": "Returns all gods",
+                "responses": {
+                    "200": {
+                        "description": "Character details",
+                        "schema": {
+                            "$ref": "#/definitions/model.God"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create new God",
                 "consumes": [
@@ -512,6 +539,90 @@
                     },
                     "404": {
                         "description": "God not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Permissions for Auth user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "God"
+                ],
+                "summary": "Deletes God by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "God id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "God doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Updates God",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "God"
+                ],
+                "summary": "Updates God by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "God id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "God data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.GodUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "God details",
+                        "schema": {
+                            "$ref": "#/definitions/model.God"
+                        }
+                    },
+                    "404": {
+                        "description": "God doesn't exist",
                         "schema": {
                             "type": "string"
                         }
@@ -1080,6 +1191,61 @@
                     "type": "string"
                 },
                 "sacredColors": {
+                    "type": "string"
+                },
+                "temples": {
+                    "type": "string"
+                },
+                "worships": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.GodUpdate": {
+            "type": "object",
+            "required": [
+                "alias",
+                "anathema",
+                "domains",
+                "edict",
+                "name",
+                "temples"
+            ],
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "alignment": {
+                    "type": "string"
+                },
+                "anathema": {
+                    "type": "string"
+                },
+                "areas_of_interest": {
+                    "type": "string"
+                },
+                "chosen_weapon": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "domains": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Domain"
+                    }
+                },
+                "edict": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sacred_animals": {
+                    "type": "string"
+                },
+                "sacred_colors": {
                     "type": "string"
                 },
                 "temples": {

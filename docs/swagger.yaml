@@ -191,6 +191,44 @@ definitions:
       worships:
         type: string
     type: object
+  model.GodUpdate:
+    properties:
+      alias:
+        type: string
+      alignment:
+        type: string
+      anathema:
+        type: string
+      areas_of_interest:
+        type: string
+      chosen_weapon:
+        type: string
+      description:
+        type: string
+      domains:
+        items:
+          $ref: '#/definitions/model.Domain'
+        type: array
+      edict:
+        type: string
+      name:
+        type: string
+      sacred_animals:
+        type: string
+      sacred_colors:
+        type: string
+      temples:
+        type: string
+      worships:
+        type: string
+    required:
+    - alias
+    - anathema
+    - domains
+    - edict
+    - name
+    - temples
+    type: object
   model.UpdateDomain:
     properties:
       description:
@@ -531,6 +569,24 @@ paths:
       tags:
       - Domain
   /god:
+    get:
+      consumes:
+      - application/json
+      description: Return all gods and their domains
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Character details
+          schema:
+            $ref: '#/definitions/model.God'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all gods
+      tags:
+      - God
     post:
       consumes:
       - application/json
@@ -557,6 +613,32 @@ paths:
       tags:
       - God
   /god/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Auth user
+      parameters:
+      - description: God id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: God doesn't exist
+          schema:
+            type: string
+      summary: Deletes God by ID or returns nil
+      tags:
+      - God
     get:
       consumes:
       - application/json
@@ -579,6 +661,36 @@ paths:
           schema:
             type: string
       summary: returns God by id
+      tags:
+      - God
+    patch:
+      consumes:
+      - application/json
+      description: Updates God
+      parameters:
+      - description: God id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: God data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.GodUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: God details
+          schema:
+            $ref: '#/definitions/model.God'
+        "404":
+          description: God doesn't exist
+          schema:
+            type: string
+      summary: Updates God by ID or nil
       tags:
       - God
   /login:
