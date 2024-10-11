@@ -9,7 +9,7 @@ func (a *CharacterApi) CreateAttribute(ctx *gin.Context, characterID uint) {
 	internal := &model.Attributes{
 		CharacterID: characterID,
 	}
-	if success := SuccessOrAbort(ctx, 500, a.DB.CreateStat(internal)); !success {
+	if success := SuccessOrAbort(ctx, 500, a.DB.CreateAttribute(internal)); !success {
 		return
 	}
 }

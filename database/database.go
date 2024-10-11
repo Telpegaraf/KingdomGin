@@ -27,6 +27,10 @@ func New(
 		new(model.CharacterClass),
 		new(model.Attributes),
 		new(model.Item),
+		new(model.Feat),
+		new(model.Race),
+		new(model.Ancestry),
+		new(model.Background),
 	); err != nil {
 		return nil, err
 	}

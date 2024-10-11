@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"kingdom/model"
+	"net/http"
 )
 
 type AncestryDatabase interface {
@@ -14,5 +15,16 @@ type AncestryApi struct {
 }
 
 func (a *AncestryApi) CreateAncestry(ctx *gin.Context) {
-	ancestry := model.Ancestry{}
+	ancestry := &model.Ancestry{}
+	if err := ctx.Bind(&ancestry); err == nil {
+		internal := &model.Ancestry{
+			Name:        ancestry.Name,
+			Description: ancestry.Description,
+			RaceID:      ancestry.RaceID,
+		}
+		if success := SuccessOrAbort(ctx, 500, a.DB.CreateAncestry(internal)); !success {
+			return
+		}
+	}
+	ctx.JSON(http.StatusCreated, ancestry)
 }

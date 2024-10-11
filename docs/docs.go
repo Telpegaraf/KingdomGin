@@ -57,20 +57,6 @@ const docTemplate = `{
                 "summary": "Create and returns character or nil",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "default": 1,
-                        "description": "page number",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "default": 10,
-                        "description": "Number of characters per page",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
                         "description": "Character data",
                         "name": "character",
                         "in": "body",
@@ -616,6 +602,35 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.Attributes": {
+            "type": "object",
+            "properties": {
+                "characterID": {
+                    "type": "integer"
+                },
+                "charisma": {
+                    "type": "integer"
+                },
+                "constitution": {
+                    "type": "integer"
+                },
+                "dexterity": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "intelligence": {
+                    "type": "integer"
+                },
+                "strength": {
+                    "type": "integer"
+                },
+                "wisdom": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.Character": {
             "type": "object",
             "properties": {
@@ -635,7 +650,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "stat": {
-                    "$ref": "#/definitions/model.Stat"
+                    "$ref": "#/definitions/model.Attributes"
                 },
                 "userID": {
                     "type": "integer"
@@ -645,17 +660,47 @@ const docTemplate = `{
         "model.CharacterClass": {
             "type": "object",
             "properties": {
+                "commonWeaponMastery": {
+                    "type": "string"
+                },
+                "fortitudeMastery": {
+                    "type": "string"
+                },
                 "health": {
                     "type": "integer"
                 },
+                "heavyArmorMastery": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
+                },
+                "lightArmorMastery": {
+                    "type": "string"
+                },
+                "martialWeaponMastery": {
+                    "type": "string"
+                },
+                "mediumArmorMastery": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
                 },
                 "perceptionMastery": {
-                    "$ref": "#/definitions/model.MasteryLevel"
+                    "type": "string"
+                },
+                "reflexMastery": {
+                    "type": "string"
+                },
+                "unArmedWeaponMastery": {
+                    "type": "string"
+                },
+                "unarmedMastery": {
+                    "type": "string"
+                },
+                "willMastery": {
+                    "type": "string"
                 }
             }
         },
@@ -812,52 +857,6 @@ const docTemplate = `{
                 },
                 "worships": {
                     "type": "string"
-                }
-            }
-        },
-        "model.MasteryLevel": {
-            "type": "string",
-            "enum": [
-                "None",
-                "Train",
-                "Expert",
-                "Master",
-                "Legend"
-            ],
-            "x-enum-varnames": [
-                "None",
-                "Train",
-                "Expert",
-                "Master",
-                "Legend"
-            ]
-        },
-        "model.Stat": {
-            "type": "object",
-            "properties": {
-                "characterID": {
-                    "type": "integer"
-                },
-                "charisma": {
-                    "type": "integer"
-                },
-                "constitution": {
-                    "type": "integer"
-                },
-                "dexterity": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "intelligence": {
-                    "type": "integer"
-                },
-                "strength": {
-                    "type": "integer"
-                },
-                "wisdom": {
-                    "type": "integer"
                 }
             }
         },

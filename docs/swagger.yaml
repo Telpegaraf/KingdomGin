@@ -1,4 +1,23 @@
 definitions:
+  model.Attributes:
+    properties:
+      characterID:
+        type: integer
+      charisma:
+        type: integer
+      constitution:
+        type: integer
+      dexterity:
+        type: integer
+      id:
+        type: integer
+      intelligence:
+        type: integer
+      strength:
+        type: integer
+      wisdom:
+        type: integer
+    type: object
   model.Character:
     properties:
       alias:
@@ -12,20 +31,40 @@ definitions:
       name:
         type: string
       stat:
-        $ref: '#/definitions/model.Stat'
+        $ref: '#/definitions/model.Attributes'
       userID:
         type: integer
     type: object
   model.CharacterClass:
     properties:
+      commonWeaponMastery:
+        type: string
+      fortitudeMastery:
+        type: string
       health:
         type: integer
+      heavyArmorMastery:
+        type: string
       id:
         type: integer
+      lightArmorMastery:
+        type: string
+      martialWeaponMastery:
+        type: string
+      mediumArmorMastery:
+        type: string
       name:
         type: string
       perceptionMastery:
-        $ref: '#/definitions/model.MasteryLevel'
+        type: string
+      reflexMastery:
+        type: string
+      unArmedWeaponMastery:
+        type: string
+      unarmedMastery:
+        type: string
+      willMastery:
+        type: string
     type: object
   model.CharacterClassCreate:
     properties:
@@ -130,39 +169,6 @@ definitions:
       worships:
         type: string
     type: object
-  model.MasteryLevel:
-    enum:
-    - None
-    - Train
-    - Expert
-    - Master
-    - Legend
-    type: string
-    x-enum-varnames:
-    - None
-    - Train
-    - Expert
-    - Master
-    - Legend
-  model.Stat:
-    properties:
-      characterID:
-        type: integer
-      charisma:
-        type: integer
-      constitution:
-        type: integer
-      dexterity:
-        type: integer
-      id:
-        type: integer
-      intelligence:
-        type: integer
-      strength:
-        type: integer
-      wisdom:
-        type: integer
-    type: object
   model.UserExternal:
     properties:
       admin:
@@ -232,16 +238,6 @@ paths:
       - application/json
       description: Create new character
       parameters:
-      - default: 1
-        description: page number
-        in: query
-        name: page
-        type: integer
-      - default: 10
-        description: Number of characters per page
-        in: query
-        name: limit
-        type: integer
       - description: Character data
         in: body
         name: character
