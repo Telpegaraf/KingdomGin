@@ -1301,7 +1301,7 @@ const docTemplate = `{
                 "domains": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.Domain"
+                        "$ref": "#/definitions/model.DomainID"
                     }
                 },
                 "edict": {

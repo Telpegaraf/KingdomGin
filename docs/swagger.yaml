@@ -251,7 +251,7 @@ definitions:
         type: string
       domains:
         items:
-          $ref: '#/definitions/model.Domain'
+          $ref: '#/definitions/model.DomainID'
         type: array
       edict:
         type: string

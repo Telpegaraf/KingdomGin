@@ -12,6 +12,7 @@ type GodDatabase interface {
 	GetGods() ([]*model.God, error)
 	UpdateGod(god *model.God) error
 	DeleteGod(id uint) error
+	FindDomains(domainIDs []model.DomainID) ([]model.Domain, error)
 }
 
 type GodApi struct {
@@ -113,12 +114,17 @@ func (a *GodApi) GetGods(ctx *gin.Context) {
 // @Failure 404 {string} string "God doesn't exist"
 // @Router /god/{id} [patch]
 func (a *GodApi) UpdateGod(ctx *gin.Context) {
-	var god *model.GodUpdate
+	var god model.GodUpdate
+	if err := ctx.ShouldBindJSON(&god); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON provided"})
+		return
+	}
 	withID(ctx, "id", func(id uint) {
 		oldGod, err := a.DB.GetGodByID(id)
 		if success := SuccessOrAbort(ctx, 500, err); !success {
 			return
 		}
+		domains, err := a.DB.FindDomains(god.Domains)
 		if oldGod != nil {
 			internal := &model.God{
 				ID:              oldGod.ID,
@@ -133,7 +139,7 @@ func (a *GodApi) UpdateGod(ctx *gin.Context) {
 				ChosenWeapon:    god.ChosenWeapon,
 				Alignment:       god.Alignment,
 				Description:     god.Description,
-				Domains:         god.Domains,
+				Domains:         domains,
 			}
 			if success := SuccessOrAbort(ctx, 500, a.DB.UpdateGod(internal)); !success {
 				return

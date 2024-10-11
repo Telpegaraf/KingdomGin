@@ -8,7 +8,7 @@ type Domain struct {
 }
 
 type DomainID struct {
-	ID uint
+	ID uint `json:"id"`
 }
 
 type CreateDomain struct {
