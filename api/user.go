@@ -190,7 +190,12 @@ func (a *UserApi) UpdateUser(ctx *gin.Context) {
 
 	withID(ctx, "id", func(id uint) {
 		var user *model.UserUpdateExternal
-		if err := ctx.Bind(&user); err == nil {
+		if err := ctx.ShouldBindJSON(&user); err == nil {
+			_, err := mail.ParseAddress(*user.Email)
+			if err != nil {
+				ctx.JSON(400, gin.H{"error": err.Error()})
+				return
+			}
 			oldUser, err := a.DB.GetUserByID(id)
 			if success := SuccessOrAbort(ctx, 500, err); !success {
 				return
