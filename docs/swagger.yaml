@@ -200,8 +200,10 @@ definitions:
   model.GodCreate:
     properties:
       alias:
+        example: The Song of the Spheres
         type: string
       alignment:
+        example: CG
         type: string
       anathema:
         type: string
@@ -218,6 +220,7 @@ definitions:
       edict:
         type: string
       name:
+        example: Desna
         type: string
       sacred_animals:
         type: string
@@ -237,6 +240,7 @@ definitions:
     - edict
     - name
     - sacred_animals
+    - sacred_colors
     - temples
     - worships
     type: object

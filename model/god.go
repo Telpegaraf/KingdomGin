@@ -18,8 +18,8 @@ type God struct {
 }
 
 type GodCreate struct {
-	Name            string     `json:"name" binding:"required" query:"name" form:"name"`
-	Alias           string     `json:"alias" binding:"required" query:"alias" form:"alias"`
+	Name            string     `json:"name" binding:"required" query:"name" form:"name" example:"Desna"`
+	Alias           string     `json:"alias" binding:"required" query:"alias" form:"alias" example:"The Song of the Spheres"`
 	Edict           string     `json:"edict" binding:"required" query:"edict" form:"edict"`
 	Anathema        string     `json:"anathema" binding:"required" query:"anathema" form:"anathema"`
 	AreasOfInterest string     `json:"areas_of_interest" binding:"required" query:"areas_of_interest" form:"areas_of_interest"`
@@ -28,7 +28,7 @@ type GodCreate struct {
 	SacredAnimals   string     `json:"sacred_animals" binding:"required" query:"sacred_animals" form:"sacred_animals"`
 	SacredColors    string     `json:"sacred_colors" binding:"required" query:"sacred_colors" form:"sacred_colors"`
 	ChosenWeapon    string     `json:"chosen_weapon" binding:"required" query:"chosen_weapon" form:"chosen_weapon"`
-	Alignment       string     `json:"alignment" binding:"required" query:"alignment" form:"alignment"`
+	Alignment       string     `json:"alignment" binding:"required" query:"alignment" form:"alignment" example:"CG"`
 	Description     string     `json:"description" query:"description" form:"description"`
 	Domains         []DomainID `json:"domains" binding:"required" query:"domains"`
 }

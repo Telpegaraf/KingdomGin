@@ -1226,15 +1226,18 @@ const docTemplate = `{
                 "edict",
                 "name",
                 "sacred_animals",
+                "sacred_colors",
                 "temples",
                 "worships"
             ],
             "properties": {
                 "alias": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "The Song of the Spheres"
                 },
                 "alignment": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "CG"
                 },
                 "anathema": {
                     "type": "string"
@@ -1258,7 +1261,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Desna"
                 },
                 "sacred_animals": {
                     "type": "string"
