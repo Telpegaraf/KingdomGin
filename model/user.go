@@ -14,7 +14,7 @@ type User struct {
 	CreatedAt  time.Time      `gorm:"<-:create"`
 	UpdatedAt  time.Time      `gorm:"<-:update"`
 	DeletedAt  gorm.DeletedAt `gorm:"index"`
-	Characters []Character    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	Characters []Character    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type UserExternal struct {
@@ -41,4 +41,13 @@ type UserUpdateExternal struct {
 
 type UserPasswordUpdate struct {
 	Password string `json:"password,omitempty" query:"password" form:"password" binding:"required"`
+}
+
+func NewUser(username string, password []byte, admin bool) *User {
+	return &User{
+		Username:   username,
+		Password:   password,
+		Admin:      admin,
+		Characters: []Character{}, // Инициализация пустого среза
+	}
 }

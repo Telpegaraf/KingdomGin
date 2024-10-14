@@ -9,7 +9,7 @@ import (
 // GetUserByUsername returns the user by the given name or nil.
 func (d *GormDatabase) GetUserByUsername(name string) (*model.User, error) {
 	user := new(model.User)
-	err := d.DB.Where("username = ?", name).First(user).Error
+	err := d.DB.Where("username = ?", name).Find(user).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (d *GormDatabase) UpdateUser(user *model.User) error {
 
 // CreateUser creates a user.
 func (d *GormDatabase) CreateUser(user *model.User) error {
-	return d.DB.Create(user).Error
+	return d.DB.Create(&user).Error
 }
 
 // GetUserByToken returns the user for the given token or nil.

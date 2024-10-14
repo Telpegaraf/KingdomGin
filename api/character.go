@@ -39,7 +39,7 @@ func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 			return
 		}
 		if character != nil {
-			ctx.JSON(http.StatusOK, ToExternalCharacter(character))
+			ctx.JSON(http.StatusOK, character)
 		} else {
 			ctx.JSON(404, gin.H{"error": "Character not found"})
 		}
@@ -89,7 +89,7 @@ func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
 func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 	userID, _ := ctx.Get("userID")
 
-	character := &model.Character{}
+	character := &model.CreateCharacter{}
 	if err := ctx.Bind(character); err == nil {
 		internal := &model.Character{
 			Name:     character.Name,
@@ -104,7 +104,7 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 			a.CreateAttribute(ctx, internal.ID)
 		}()
 	}
-	ctx.JSON(http.StatusCreated, ToExternalCharacter(character))
+	ctx.JSON(http.StatusCreated, character)
 }
 
 // UpdateCharacter Updates Character by ID
@@ -144,7 +144,7 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateCharacter(internal)); success {
 					return
 				}
-				ctx.JSON(http.StatusOK, ToExternalCharacter(internal))
+				ctx.JSON(http.StatusOK, internal)
 			}
 		} else {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "Character doesn't exist"})
@@ -185,14 +185,4 @@ func (a *CharacterApi) DeleteCharacter(ctx *gin.Context) {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "Character doesn't exist"})
 		}
 	})
-}
-
-func ToExternalCharacter(internal *model.Character) *model.CharacterExternal {
-	return &model.CharacterExternal{
-		ID:       internal.ID,
-		Name:     internal.Name,
-		Alias:    internal.Alias,
-		LastName: internal.LastName,
-		UserID:   internal.UserID,
-	}
 }

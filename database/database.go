@@ -51,7 +51,3 @@ func New(
 type GormDatabase struct {
 	DB *gorm.DB
 }
-
-//func (d *GormDatabase) Close() {
-//	d.DB.Close()
-//}
