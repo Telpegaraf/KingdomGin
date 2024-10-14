@@ -37,7 +37,7 @@ func (d *GormDatabase) DeleteGod(id uint) error {
 // UpdateGod updates God
 func (d *GormDatabase) UpdateGod(god *model.God) error {
 	err := d.DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Save(god).Error; err != nil {
+		if err := tx.Updates(god).Error; err != nil {
 			return err
 		}
 		if err := tx.Model(god).Association("Domains").Replace(god.Domains); err != nil {

@@ -134,6 +134,7 @@ func (a *GodApi) UpdateGod(ctx *gin.Context) {
 				Anathema:        god.Anathema,
 				AreasOfInterest: god.AreasOfInterest,
 				Worships:        god.Worships,
+				Temples:         god.Temples,
 				SacredAnimals:   god.SacredAnimals,
 				SacredColors:    god.SacredColors,
 				ChosenWeapon:    god.ChosenWeapon,
