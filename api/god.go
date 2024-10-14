@@ -31,8 +31,9 @@ type GodApi struct {
 // @Failure 401 {string} string "Unauthorized"
 // @Router /god [post]
 func (a *GodApi) CreateGod(ctx *gin.Context) {
-	god := &model.God{}
-	if err := ctx.Bind(god); err == nil {
+	god := &model.GodCreate{}
+	if err := ctx.ShouldBindJSON(god); err == nil {
+		domains, _ := a.DB.FindDomains(god.Domains)
 		internal := &model.God{
 			Name:            god.Name,
 			Alias:           god.Alias,
@@ -46,7 +47,7 @@ func (a *GodApi) CreateGod(ctx *gin.Context) {
 			ChosenWeapon:    god.ChosenWeapon,
 			Alignment:       god.Alignment,
 			Description:     god.Description,
-			Domains:         god.Domains,
+			Domains:         domains,
 		}
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateGod(internal)); !success {
 			return

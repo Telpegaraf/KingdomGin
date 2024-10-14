@@ -229,11 +229,16 @@ definitions:
         type: string
     required:
     - alias
+    - alignment
     - anathema
+    - areas_of_interest
+    - chosen_weapon
     - domains
     - edict
     - name
+    - sacred_animals
     - temples
+    - worships
     type: object
   model.GodUpdate:
     properties:
@@ -265,13 +270,6 @@ definitions:
         type: string
       worships:
         type: string
-    required:
-    - alias
-    - anathema
-    - domains
-    - edict
-    - name
-    - temples
     type: object
   model.UpdateDomain:
     properties:

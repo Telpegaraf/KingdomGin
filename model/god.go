@@ -22,13 +22,13 @@ type GodCreate struct {
 	Alias           string     `json:"alias" binding:"required" query:"alias" form:"alias"`
 	Edict           string     `json:"edict" binding:"required" query:"edict" form:"edict"`
 	Anathema        string     `json:"anathema" binding:"required" query:"anathema" form:"anathema"`
-	AreasOfInterest string     `json:"areas_of_interest" query:"areas_of_interest" form:"areas_of_interest"`
+	AreasOfInterest string     `json:"areas_of_interest" binding:"required" query:"areas_of_interest" form:"areas_of_interest"`
 	Temples         string     `json:"temples" binding:"required" query:"temples" form:"temples"`
-	Worships        string     `json:"worships" query:"worships" form:"worships"`
-	SacredAnimals   string     `json:"sacred_animals" query:"sacred_animals" form:"sacred_animals"`
-	SacredColors    string     `json:"sacred_colors" query:"sacred_colors" form:"sacred_colors"`
-	ChosenWeapon    string     `json:"chosen_weapon" query:"chosen_weapon" form:"chosen_weapon"`
-	Alignment       string     `json:"alignment" query:"alignment" form:"alignment"`
+	Worships        string     `json:"worships" binding:"required" query:"worships" form:"worships"`
+	SacredAnimals   string     `json:"sacred_animals" binding:"required" query:"sacred_animals" form:"sacred_animals"`
+	SacredColors    string     `json:"sacred_colors" binding:"required" query:"sacred_colors" form:"sacred_colors"`
+	ChosenWeapon    string     `json:"chosen_weapon" binding:"required" query:"chosen_weapon" form:"chosen_weapon"`
+	Alignment       string     `json:"alignment" binding:"required" query:"alignment" form:"alignment"`
 	Description     string     `json:"description" query:"description" form:"description"`
 	Domains         []DomainID `json:"domains" binding:"required" query:"domains"`
 }

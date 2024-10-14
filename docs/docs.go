@@ -1218,11 +1218,16 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "alias",
+                "alignment",
                 "anathema",
+                "areas_of_interest",
+                "chosen_weapon",
                 "domains",
                 "edict",
                 "name",
-                "temples"
+                "sacred_animals",
+                "temples",
+                "worships"
             ],
             "properties": {
                 "alias": {
@@ -1271,14 +1276,6 @@ const docTemplate = `{
         },
         "model.GodUpdate": {
             "type": "object",
-            "required": [
-                "alias",
-                "anathema",
-                "domains",
-                "edict",
-                "name",
-                "temples"
-            ],
             "properties": {
                 "alias": {
                     "type": "string"
