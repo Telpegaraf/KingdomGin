@@ -8,7 +8,7 @@ import (
 type User struct {
 	ID         uint           `gorm:"primaryKey"`
 	Username   string         `gorm:"unique;not null"`
-	Email      *string        `gorm:"unique;type:varchar(100)"`
+	Email      string         `gorm:"unique;type:varchar(100)"`
 	Password   []byte         `gorm:"not null"`
 	Admin      bool           `gorm:"default:false"`
 	CreatedAt  time.Time      `gorm:"<-:create"`
@@ -27,6 +27,7 @@ type UserExternal struct {
 type CreateUser struct {
 	Username string `binding:"required" json:"username" query:"username" form:"username"`
 	Password string `json:"password,omitempty" query:"password" form:"password" binding:"required"`
+	Email    string `binding:"required" json:"email" query:"email" form:"email"`
 }
 
 type UserLogin struct {
@@ -41,13 +42,4 @@ type UserUpdateExternal struct {
 
 type UserPasswordUpdate struct {
 	Password string `json:"password,omitempty" query:"password" form:"password" binding:"required"`
-}
-
-func NewUser(username string, password []byte, admin bool) *User {
-	return &User{
-		Username:   username,
-		Password:   password,
-		Admin:      admin,
-		Characters: []Character{}, // Инициализация пустого среза
-	}
 }

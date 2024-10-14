@@ -8,6 +8,7 @@ import (
 	"kingdom/auth/password"
 	"kingdom/model"
 	"net/http"
+	"net/mail"
 )
 
 type UserDatabase interface {
@@ -131,9 +132,15 @@ func (a *UserApi) GetUserByUsername(ctx *gin.Context) {
 // @Router /user [post]
 func (a *UserApi) CreateUser(ctx *gin.Context) {
 	user := model.CreateUser{}
-	if err := ctx.Bind(&user); err == nil {
+	if err := ctx.ShouldBindJSON(&user); err == nil {
+		_, err := mail.ParseAddress(user.Email)
+		if err != nil {
+			ctx.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
 		internal := &model.User{
 			Username: user.Username,
+			Email:    user.Email,
 			Password: password.CreatePassword(user.Password, a.PasswordStrength),
 		}
 		existingUser, err := a.DB.GetUserByUsername(internal.Username)
@@ -147,14 +154,11 @@ func (a *UserApi) CreateUser(ctx *gin.Context) {
 			if success := SuccessOrAbort(ctx, 500, a.DB.CreateUser(internal)); !success {
 				return
 			}
-			if err := a.UserChangeNotifier.fireUserAdded(internal.ID); err != nil {
-				ctx.AbortWithError(http.StatusInternalServerError, err)
-				return
-			}
 			ctx.JSON(201, toExternalUser(internal))
 			return
 		} else {
-			ctx.AbortWithError(400, errors.New("user already exists"))
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "user already exists"})
+			return
 		}
 	}
 }
@@ -199,7 +203,7 @@ func (a *UserApi) UpdateUser(ctx *gin.Context) {
 				internal := &model.User{
 					ID:         oldUser.ID,
 					Username:   user.Username,
-					Email:      user.Email,
+					Email:      *user.Email,
 					Characters: oldUser.Characters,
 					Password:   oldUser.Password,
 					Admin:      oldUser.Admin,

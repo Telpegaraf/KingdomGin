@@ -1105,10 +1105,14 @@ const docTemplate = `{
         "model.CreateUser": {
             "type": "object",
             "required": [
+                "email",
                 "password",
                 "username"
             ],
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "password": {
                     "type": "string"
                 },

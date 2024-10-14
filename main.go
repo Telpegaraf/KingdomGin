@@ -42,7 +42,7 @@ func main() {
 	f, _ := os.Create("gin.log")
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 
-	db, err := database.New(dsn, username, password, &email, conf.PassStrength, true)
+	db, err := database.New(dsn, username, password, email, conf.PassStrength, true)
 	if err != nil {
 		panic(err)
 	}

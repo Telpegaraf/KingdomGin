@@ -11,7 +11,7 @@ func New(
 	dsn,
 	defaultUser string,
 	defaultPass string,
-	defaultEmail *string,
+	defaultEmail string,
 	strength int,
 	createDefaultUserIfNotExist bool) (*GormDatabase, error) {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})

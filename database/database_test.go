@@ -31,6 +31,7 @@ func (s *DatabaseSuite) BeforeTest(suiteName, testName string) {
 		db.Create(&model.User{
 			Username: "admin",
 			Password: password.CreatePassword("adminPassword", 10),
+			Email:    "admin@example.com",
 			Admin:    true})
 	}
 	assert.Nil(s.T(), err)

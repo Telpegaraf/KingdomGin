@@ -49,6 +49,7 @@ func (s *DatabaseSuite) TestUser() {
 	log.Println(testUser)
 	assert.Contains(s.T(), users, admin)
 	//assert.Contains(s.T(), users, testUser)
+	// TODO To Solve Problem with Characters
 	testUser.Username = "testuser2"
 	require.NoError(s.T(), s.db.UpdateUser(testUser))
 
@@ -71,5 +72,4 @@ func (s *DatabaseSuite) TestUser() {
 	users, err = s.db.GetUsers()
 	require.NoError(s.T(), err)
 	assert.Empty(s.T(), users)
-
 }
