@@ -1,7 +1,7 @@
 package model
 
 type Domain struct {
-	ID          uint   `gorm:"primary_key"`
+	ID          uint   `gorm:"primary_key; AUTO_INCREMENT; UNIQUE_INDEX;"`
 	Name        string `gorm:"unique;not null;type:varchar(120)"`
 	Description string `gorm:"type:text"`
 	Gods        []God  `gorm:"many2many:god_domains;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
