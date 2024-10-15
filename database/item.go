@@ -24,3 +24,10 @@ func (d *GormDatabase) GetWeapons() ([]*model.Weapon, error) {
 	err := d.DB.Preload("Item").Find(&weapons).Error
 	return weapons, err
 }
+
+// GetGears Returns all gears
+func (d *GormDatabase) GetGears() ([]*model.Gear, error) {
+	var gears []*model.Gear
+	err := d.DB.Preload("Item").Find(&gears).Error
+	return gears, err
+}
