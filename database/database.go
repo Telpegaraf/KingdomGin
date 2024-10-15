@@ -33,6 +33,7 @@ func New(
 		new(model.Background),
 		new(model.Item),
 		new(model.CharacterItem),
+		new(model.Armor),
 	); err != nil {
 		return nil, err
 	}

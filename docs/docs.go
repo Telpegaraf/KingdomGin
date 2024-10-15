@@ -634,6 +634,64 @@ const docTemplate = `{
                 }
             }
         },
+        "/item": {
+            "get": {
+                "description": "Return all items",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Returns all items",
+                "responses": {
+                    "200": {
+                        "description": "Item details",
+                        "schema": {
+                            "$ref": "#/definitions/model.ItemExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/item/armor": {
+            "get": {
+                "description": "Return all armors",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Returns all armors",
+                "responses": {
+                    "200": {
+                        "description": "Armor details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Armor"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "Авторизация пользователя по логину и паролю",
@@ -914,6 +972,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.Armor": {
+            "type": "object",
+            "properties": {
+                "armorClass": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "item": {
+                    "$ref": "#/definitions/model.Item"
+                }
+            }
+        },
         "model.Attribute": {
             "type": "object",
             "properties": {
@@ -948,6 +1020,12 @@ const docTemplate = `{
             "properties": {
                 "alias": {
                     "type": "string"
+                },
+                "characterItem": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterItem"
+                    }
                 },
                 "id": {
                     "type": "integer"
@@ -1052,6 +1130,29 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.CharacterItem": {
+            "type": "object",
+            "properties": {
+                "character": {
+                    "$ref": "#/definitions/model.Character"
+                },
+                "characterId": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "item": {
+                    "$ref": "#/definitions/model.Item"
+                },
+                "itemId": {
+                    "type": "integer"
+                },
+                "quantity": {
                     "type": "integer"
                 }
             }
@@ -1325,6 +1426,58 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "worships": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Item": {
+            "type": "object",
+            "properties": {
+                "bulk": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ownerID": {
+                    "type": "integer"
+                },
+                "ownerType": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ItemExternal": {
+            "type": "object",
+            "properties": {
+                "armor": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Armor"
+                    }
+                },
+                "bulk": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ownerID": {
+                    "type": "integer"
+                },
+                "ownerType": {
                     "type": "string"
                 }
             }

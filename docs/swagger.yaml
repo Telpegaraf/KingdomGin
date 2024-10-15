@@ -1,4 +1,13 @@
 definitions:
+  model.Armor:
+    properties:
+      armorClass:
+        type: integer
+      id:
+        type: integer
+      item:
+        $ref: '#/definitions/model.Item'
+    type: object
   model.Attribute:
     properties:
       characterID:
@@ -22,6 +31,10 @@ definitions:
     properties:
       alias:
         type: string
+      characterItem:
+        items:
+          $ref: '#/definitions/model.CharacterItem'
+        type: array
       id:
         type: integer
       last_name:
@@ -92,6 +105,21 @@ definitions:
         type: integer
     required:
     - name
+    type: object
+  model.CharacterItem:
+    properties:
+      character:
+        $ref: '#/definitions/model.Character'
+      characterId:
+        type: integer
+      id:
+        type: integer
+      item:
+        $ref: '#/definitions/model.Item'
+      itemId:
+        type: integer
+      quantity:
+        type: integer
     type: object
   model.CharacterUpdateExternal:
     properties:
@@ -276,6 +304,40 @@ definitions:
       temples:
         type: string
       worships:
+        type: string
+    type: object
+  model.Item:
+    properties:
+      bulk:
+        type: number
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      ownerID:
+        type: integer
+      ownerType:
+        type: string
+    type: object
+  model.ItemExternal:
+    properties:
+      armor:
+        items:
+          $ref: '#/definitions/model.Armor'
+        type: array
+      bulk:
+        type: number
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      ownerID:
+        type: integer
+      ownerType:
         type: string
     type: object
   model.UpdateDomain:
@@ -742,6 +804,44 @@ paths:
       summary: Updates God by ID or nil
       tags:
       - God
+  /item:
+    get:
+      consumes:
+      - application/json
+      description: Return all items
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Item details
+          schema:
+            $ref: '#/definitions/model.ItemExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all items
+      tags:
+      - Item
+  /item/armor:
+    get:
+      consumes:
+      - application/json
+      description: Return all armors
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Armor details
+          schema:
+            $ref: '#/definitions/model.Armor'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all armors
+      tags:
+      - Item
   /login:
     post:
       consumes:
