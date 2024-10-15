@@ -26,7 +26,8 @@ type Weapon struct {
 }
 
 type Gear struct {
-	ID uint `gorm:"primary_key;AUTO_INCREMENT"`
+	ID   uint `gorm:"primary_key;AUTO_INCREMENT"`
+	Item Item `gorm:"polymorphic:Owner;"`
 }
 
 //type CreateItem struct {
