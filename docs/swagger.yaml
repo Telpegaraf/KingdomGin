@@ -321,25 +321,6 @@ definitions:
       ownerType:
         type: string
     type: object
-  model.ItemExternal:
-    properties:
-      armor:
-        items:
-          $ref: '#/definitions/model.Armor'
-        type: array
-      bulk:
-        type: number
-      description:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      ownerID:
-        type: integer
-      ownerType:
-        type: string
-    type: object
   model.UpdateDomain:
     properties:
       description:
@@ -388,6 +369,17 @@ definitions:
         type: string
       username:
         type: string
+    type: object
+  model.Weapon:
+    properties:
+      damage:
+        type: integer
+      dice:
+        type: integer
+      diceQuantity:
+        type: integer
+      id:
+        type: integer
     type: object
 info:
   contact: {}
@@ -815,7 +807,7 @@ paths:
         "200":
           description: Item details
           schema:
-            $ref: '#/definitions/model.ItemExternal'
+            $ref: '#/definitions/model.Item'
         "401":
           description: Unauthorized
           schema:
@@ -840,6 +832,25 @@ paths:
           schema:
             type: string
       summary: Returns all armors
+      tags:
+      - Item
+  /item/weapon:
+    get:
+      consumes:
+      - application/json
+      description: Return all weapons
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Weapon details
+          schema:
+            $ref: '#/definitions/model.Weapon'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all weapons
       tags:
       - Item
   /login:

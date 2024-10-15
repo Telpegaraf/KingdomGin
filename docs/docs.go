@@ -651,7 +651,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Item details",
                         "schema": {
-                            "$ref": "#/definitions/model.ItemExternal"
+                            "$ref": "#/definitions/model.Item"
                         }
                     },
                     "401": {
@@ -681,6 +681,35 @@ const docTemplate = `{
                         "description": "Armor details",
                         "schema": {
                             "$ref": "#/definitions/model.Armor"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/item/weapon": {
+            "get": {
+                "description": "Return all weapons",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Returns all weapons",
+                "responses": {
+                    "200": {
+                        "description": "Weapon details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Weapon"
                         }
                     },
                     "401": {
@@ -1453,35 +1482,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.ItemExternal": {
-            "type": "object",
-            "properties": {
-                "armor": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Armor"
-                    }
-                },
-                "bulk": {
-                    "type": "number"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "ownerID": {
-                    "type": "integer"
-                },
-                "ownerType": {
-                    "type": "string"
-                }
-            }
-        },
         "model.UpdateDomain": {
             "type": "object",
             "required": [
@@ -1554,6 +1554,23 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "model.Weapon": {
+            "type": "object",
+            "properties": {
+                "damage": {
+                    "type": "integer"
+                },
+                "dice": {
+                    "type": "integer"
+                },
+                "diceQuantity": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         }

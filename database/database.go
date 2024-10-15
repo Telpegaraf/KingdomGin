@@ -34,6 +34,7 @@ func New(
 		new(model.Item),
 		new(model.CharacterItem),
 		new(model.Armor),
+		new(model.Weapon),
 	); err != nil {
 		return nil, err
 	}

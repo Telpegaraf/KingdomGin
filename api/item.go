@@ -9,6 +9,7 @@ import (
 type ItemDatabase interface {
 	GetItems() ([]*model.Item, error)
 	GetArmors() ([]*model.Armor, error)
+	GetWeapons() ([]*model.Weapon, error)
 }
 
 type ItemApi struct {
@@ -22,7 +23,7 @@ type ItemApi struct {
 // @Tags Item
 // @Accept json
 // @Produce json
-// @Success 200 {object} model.ItemExternal "Item details"
+// @Success 200 {object} model.Item "Item details"
 // @Failure 401 {string} string ""Unauthorized"
 // @Router /item [get]
 func (a *ItemApi) GetItems(ctx *gin.Context) {
@@ -55,6 +56,28 @@ func (a *ItemApi) GetArmors(ctx *gin.Context) {
 	var resp []*model.Armor
 	for _, armor := range armors {
 		resp = append(resp, armor)
+	}
+	ctx.JSON(http.StatusOK, resp)
+}
+
+// GetWeapons godoc
+//
+// @Summary Returns all weapons
+// @Description Return all weapons
+// @Tags Item
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.Weapon "Weapon details"
+// @Failure 401 {string} string ""Unauthorized"
+// @Router /item/weapon [get]
+func (a *ItemApi) GetWeapons(ctx *gin.Context) {
+	weapons, err := a.DB.GetWeapons()
+	if success := SuccessOrAbort(ctx, 500, err); !success {
+		return
+	}
+	var resp []*model.Weapon
+	for _, weapon := range weapons {
+		resp = append(resp, weapon)
 	}
 	ctx.JSON(http.StatusOK, resp)
 }

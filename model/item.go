@@ -1,18 +1,32 @@
 package model
 
+type Item struct {
+	ID          uint    `gorm:"primary_key"`
+	Name        string  `gorm:"unique;type:varchar(127)"`
+	Description string  `gorm:"type:text"`
+	Bulk        float64 `gorm:"type:decimal(10,3);default:0.001"`
+	Level       uint8   `gorm:"default:1;not null"`
+	Price       string  `gorm:"type:varchar(127)"`
+	OwnerID     uint
+	OwnerType   string
+}
+
 type Armor struct {
 	ID         uint `gorm:"primary_key;AUTO_INCREMENT"`
 	ArmorClass uint
 	Item       Item `gorm:"polymorphic:Owner;"`
 }
 
-type Item struct {
-	ID          uint    `gorm:"primary_key"`
-	Name        string  `gorm:"unique;type:varchar(127)"`
-	Description string  `gorm:"type:text"`
-	Bulk        float64 `gorm:"type:decimal(10,3);default:0.001"`
-	OwnerID     uint
-	OwnerType   string
+type Weapon struct {
+	ID           uint  `gorm:"primary_key;AUTO_INCREMENT"`
+	DiceQuantity uint8 `gorm:"default:1;not null"`
+	Dice         uint8 `gorm:"default:4;not null"`
+	Damage       uint8 `gorm:"default:1;not null1"`
+	Item         Item  `gorm:"polymorphic:Owner;"`
+}
+
+type Gear struct {
+	ID uint `gorm:"primary_key;AUTO_INCREMENT"`
 }
 
 //type CreateItem struct {
