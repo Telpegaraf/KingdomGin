@@ -31,6 +31,8 @@ func New(
 		new(model.Race),
 		new(model.Ancestry),
 		new(model.Background),
+		new(model.Item),
+		new(model.CharacterItem),
 	); err != nil {
 		return nil, err
 	}
