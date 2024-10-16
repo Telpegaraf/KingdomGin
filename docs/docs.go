@@ -15,6 +15,207 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/CharacterItem": {
+            "get": {
+                "description": "Return all CharacterItems",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CharacterItem"
+                ],
+                "summary": "Returns all CharacterItems",
+                "responses": {
+                    "200": {
+                        "description": "CharacterItem details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterItem"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CharacterItem"
+                ],
+                "summary": "Create and returns CharacterItem or nil",
+                "parameters": [
+                    {
+                        "description": "CharacterItem data",
+                        "name": "characterItem",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateCharacterItem"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "CharacterItem details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterItemExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/CharacterItem/{id}": {
+            "get": {
+                "description": "Retrieve CharacterItem details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CharacterItem"
+                ],
+                "summary": "Returns CharacterItem by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "CharacterItem id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "CharacterItem details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterItem"
+                        }
+                    },
+                    "404": {
+                        "description": "CharacterItem not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CharacterItem"
+                ],
+                "summary": "Deletes CharacterItem by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "CharacterItem id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "CharacterItem doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CharacterItem"
+                ],
+                "summary": "Updates CharacterItem by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "CharacterItem id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "CharacterItem data",
+                        "name": "characterItem",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateCharacterItem"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "CharacterItem details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterItemExternal"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "CharacterItem doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/character": {
             "get": {
                 "description": "Return all characters for current user",
@@ -1724,6 +1925,24 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CharacterItemExternal": {
+            "type": "object",
+            "properties": {
+                "character_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
         "model.CharacterUpdateExternal": {
             "type": "object",
             "properties": {
@@ -1780,6 +1999,25 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "model.CreateCharacterItem": {
+            "type": "object",
+            "required": [
+                "character_id",
+                "item_id"
+            ],
+            "properties": {
+                "character_id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -2140,10 +2378,10 @@ const docTemplate = `{
                 "bulk": {
                     "type": "number"
                 },
-                "character": {
+                "characterItem": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.Character"
+                        "$ref": "#/definitions/model.CharacterItem"
                     }
                 },
                 "description": {
@@ -2222,6 +2460,24 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "string"
+                }
+            }
+        },
+        "model.UpdateCharacterItem": {
+            "type": "object",
+            "required": [
+                "quantity"
+            ],
+            "properties": {
+                "character_id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },

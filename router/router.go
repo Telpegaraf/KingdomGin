@@ -42,6 +42,10 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		DB: db,
 	}
 
+	characterItemHandler := api.CharacterItemApi{
+		DB: db,
+	}
+
 	godHandler := api.GodApi{DB: db}
 	domainHandler := api.DomainApi{DB: db}
 
@@ -114,6 +118,15 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	itemGroup.PATCH("/weapon/:id", itemHandler.UpdateWeapon).Use(authentication.RequireAdmin)
 	itemGroup.POST("/gear", itemHandler.CreateGear).Use(authentication.RequireAdmin)
 	itemGroup.PATCH("/gear/:id", itemHandler.UpdateGear).Use(authentication.RequireAdmin)
+
+	characterItemGroup := g.Group("/character-item").Use(authentication.RequireJWT)
+	{
+		characterItemGroup.POST("", characterItemHandler.CreateCharacterItem)
+		characterItemGroup.GET("/:id", characterItemHandler.GetCharacterItemByID)
+		characterItemGroup.GET("", characterItemHandler.GetCharacterItems)
+		characterItemGroup.DELETE("/:id", characterItemHandler.DeleteCharacterItem)
+		characterItemGroup.PATCH("/:id", characterItemHandler.UpdateCharacterItem)
+	}
 
 	return g, func() {}
 }

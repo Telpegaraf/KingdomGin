@@ -11,8 +11,8 @@ func (d *GormDatabase) CreateCharacterItem(characterItem *model.CharacterItem) e
 	return d.DB.Create(characterItem).Error
 }
 
-// GetCharacterItem get character item by ID
-func (d *GormDatabase) GetCharacterItem(id uint) (*model.CharacterItem, error) {
+// GetCharacterItemByID get character item by ID
+func (d *GormDatabase) GetCharacterItemByID(id uint) (*model.CharacterItem, error) {
 	characterItem := new(model.CharacterItem)
 	err := d.DB.Preload("Character").Preload("Item").Find(characterItem, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
