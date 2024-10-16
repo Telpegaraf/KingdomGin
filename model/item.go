@@ -1,15 +1,15 @@
 package model
 
 type Item struct {
-	ID          uint    `gorm:"primary_key"`
-	Name        string  `gorm:"unique;type:varchar(127)"`
-	Description string  `gorm:"type:text"`
-	Bulk        float64 `gorm:"type:decimal(10,3);default:0.001"`
-	Level       uint8   `gorm:"default:1;not null"`
-	Price       string  `gorm:"type:varchar(127)"`
-	OwnerID     uint    `gorm:"uniqueIndex:idx_owner_id_owner_type"`
-	OwnerType   string  `gorm:"uniqueIndex:idx_owner_id_owner_type"`
-	Character   []Character
+	ID            uint            `gorm:"primary_key"`
+	Name          string          `gorm:"unique;type:varchar(127)"`
+	Description   string          `gorm:"type:text"`
+	Bulk          float64         `gorm:"type:decimal(10,3);default:0.001"`
+	Level         uint8           `gorm:"default:1;not null"`
+	Price         string          `gorm:"type:varchar(127)"`
+	OwnerID       uint            `gorm:"uniqueIndex:idx_owner_id_owner_type"`
+	OwnerType     string          `gorm:"uniqueIndex:idx_owner_id_owner_type"`
+	CharacterItem []CharacterItem `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type ItemExternal struct {
