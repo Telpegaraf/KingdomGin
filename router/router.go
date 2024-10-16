@@ -100,20 +100,20 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	{
 		itemGroup.GET("", itemHandler.GetItems)
 		itemGroup.GET(":id", itemHandler.GetItemByID)
-		itemGroup.DELETE("/:id", itemHandler.DeleteItem)
 		itemGroup.GET("/armor", itemHandler.GetArmors)
 		itemGroup.GET("/armor/:id", itemHandler.GetArmorByID)
-		itemGroup.POST("/armor", itemHandler.CreateArmor)
-		itemGroup.PATCH("/armor/:id", itemHandler.UpdateArmor)
 		itemGroup.GET("/weapon", itemHandler.GetWeapons)
 		itemGroup.GET("/weapon/:id", itemHandler.GetWeaponByID)
-		itemGroup.POST("/weapon", itemHandler.CreateWeapon)
-		itemGroup.PATCH("/weapon/:id", itemHandler.UpdateWeapon)
 		itemGroup.GET("/gear", itemHandler.GetGears)
 		itemGroup.GET("/gear/:id", itemHandler.GetGearByID)
-		itemGroup.POST("/gear", itemHandler.CreateGear)
-		itemGroup.PATCH("/gear/:id", itemHandler.UpdateGear)
 	}
+	itemGroup.DELETE("/:id", itemHandler.DeleteItem).Use(authentication.RequireAdmin)
+	itemGroup.POST("/armor", itemHandler.CreateArmor).Use(authentication.RequireAdmin)
+	itemGroup.PATCH("/armor/:id", itemHandler.UpdateArmor).Use(authentication.RequireAdmin)
+	itemGroup.POST("/weapon", itemHandler.CreateWeapon).Use(authentication.RequireAdmin)
+	itemGroup.PATCH("/weapon/:id", itemHandler.UpdateWeapon).Use(authentication.RequireAdmin)
+	itemGroup.POST("/gear", itemHandler.CreateGear).Use(authentication.RequireAdmin)
+	itemGroup.PATCH("/gear/:id", itemHandler.UpdateGear).Use(authentication.RequireAdmin)
 
 	return g, func() {}
 }
