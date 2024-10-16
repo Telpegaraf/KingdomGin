@@ -123,7 +123,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	{
 		characterItemGroup.POST("", characterItemHandler.CreateCharacterItem)
 		characterItemGroup.GET("/:id", characterItemHandler.GetCharacterItemByID)
-		characterItemGroup.GET("", characterItemHandler.GetCharacterItems)
+		characterItemGroup.GET("/list/:character_id", characterItemHandler.GetCharacterItems)
 		characterItemGroup.DELETE("/:id", characterItemHandler.DeleteCharacterItem)
 		characterItemGroup.PATCH("/:id", characterItemHandler.UpdateCharacterItem)
 	}

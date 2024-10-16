@@ -9,7 +9,7 @@ import (
 type CharacterItemDatabase interface {
 	CreateCharacterItem(characterItem *model.CharacterItem) error
 	GetCharacterItemByID(id uint) (*model.CharacterItem, error)
-	GetCharacterItems() ([]*model.CharacterItem, error)
+	GetCharacterItems(characterId uint) ([]*model.CharacterItem, error)
 	UpdateCharacterItem(item *model.CharacterItem) error
 	DeleteCharacterItem(id uint) error
 }
@@ -76,20 +76,24 @@ func (a *CharacterItemApi) GetCharacterItemByID(ctx *gin.Context) {
 // @Tags CharacterItem
 // @Accept json
 // @Produce json
+// @Param character_id path int true "Character id"
 // @Success 200 {object} model.CharacterItemExternal "CharacterItem details"
 // @Failure 401 {string} string ""Unauthorized"
-// @Router /character-item [get]
+// @Router /character-item/list/{character_id} [get]
 func (a *CharacterItemApi) GetCharacterItems(ctx *gin.Context) {
-	CharacterItems, err := a.DB.GetCharacterItems()
-	if success := SuccessOrAbort(ctx, 500, err); !success {
-		ctx.JSON(http.StatusNotFound, err)
-	}
-	var resp []*model.CharacterItemExternal
-	for _, characterItem := range CharacterItems {
-		characterItemExternal := ToExternalCharacterItem(characterItem, &characterItem.Character, &characterItem.Item)
-		resp = append(resp, characterItemExternal)
-	}
-	ctx.JSON(http.StatusOK, resp)
+	withID(ctx, "character_id", func(id uint) {
+		CharacterItems, err := a.DB.GetCharacterItems(id)
+		if success := SuccessOrAbort(ctx, 500, err); !success {
+			ctx.JSON(http.StatusNotFound, err)
+		}
+		var resp []*model.CharacterItemExternal
+		for _, characterItem := range CharacterItems {
+			characterItemExternal := ToExternalCharacterItem(characterItem, &characterItem.Character, &characterItem.Item)
+			resp = append(resp, characterItemExternal)
+		}
+		ctx.JSON(http.StatusOK, resp)
+	})
+
 }
 
 // UpdateCharacterItem Updates CharacterItem by ID

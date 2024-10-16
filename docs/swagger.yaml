@@ -706,24 +706,6 @@ paths:
       tags:
       - Character
   /character-item:
-    get:
-      consumes:
-      - application/json
-      description: Return all CharacterItems
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: CharacterItem details
-          schema:
-            $ref: '#/definitions/model.CharacterItemExternal'
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-      summary: Returns all CharacterItems
-      tags:
-      - CharacterItem
     post:
       consumes:
       - application/json
@@ -836,6 +818,31 @@ paths:
           schema:
             type: string
       summary: Updates CharacterItem by ID or nil
+      tags:
+      - CharacterItem
+  /character-item/list/{character_id}:
+    get:
+      consumes:
+      - application/json
+      description: Return all CharacterItems
+      parameters:
+      - description: Character id
+        in: path
+        name: character_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CharacterItem details
+          schema:
+            $ref: '#/definitions/model.CharacterItemExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all CharacterItems
       tags:
       - CharacterItem
   /character/{id}:

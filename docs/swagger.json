@@ -79,33 +79,6 @@
             }
         },
         "/character-item": {
-            "get": {
-                "description": "Return all CharacterItems",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "CharacterItem"
-                ],
-                "summary": "Returns all CharacterItems",
-                "responses": {
-                    "200": {
-                        "description": "CharacterItem details",
-                        "schema": {
-                            "$ref": "#/definitions/model.CharacterItemExternal"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "Permissions for Admin",
                 "consumes": [
@@ -144,6 +117,44 @@
                     },
                     "403": {
                         "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/character-item/list/{character_id}": {
+            "get": {
+                "description": "Return all CharacterItems",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CharacterItem"
+                ],
+                "summary": "Returns all CharacterItems",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Character id",
+                        "name": "character_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "CharacterItem details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterItemExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }

@@ -25,9 +25,9 @@ func (d *GormDatabase) GetCharacterItemByID(id uint) (*model.CharacterItem, erro
 }
 
 // GetCharacterItems get character items
-func (d *GormDatabase) GetCharacterItems() ([]*model.CharacterItem, error) {
+func (d *GormDatabase) GetCharacterItems(characterId uint) ([]*model.CharacterItem, error) {
 	var characterItems []*model.CharacterItem
-	err := d.DB.Preload("Character").Preload("Item").Find(&characterItems).Error
+	err := d.DB.Where("character_id = ?", characterId).Preload("Character").Preload("Item").Find(&characterItems).Error
 	return characterItems, err
 }
 
