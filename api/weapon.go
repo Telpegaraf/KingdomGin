@@ -39,7 +39,7 @@ func (a *ItemApi) CreateWeapon(ctx *gin.Context) {
 			ctx.JSON(http.StatusInternalServerError, success)
 			return
 		}
-		ctx.JSON(http.StatusCreated, ToExternalweapon(internalWeapon, internalItem))
+		ctx.JSON(http.StatusCreated, ToExternalWeapon(internalWeapon, internalItem))
 	} else {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
@@ -62,7 +62,7 @@ func (a *ItemApi) GetWeapons(ctx *gin.Context) {
 	}
 	var resp []*model.WeaponExternal
 	for _, weapon := range weapons {
-		externalWeapon := ToExternalweapon(weapon, &weapon.Item)
+		externalWeapon := ToExternalWeapon(weapon, &weapon.Item)
 		resp = append(resp, externalWeapon)
 	}
 	ctx.JSON(http.StatusOK, resp)
@@ -86,7 +86,7 @@ func (a *ItemApi) GetWeaponByID(ctx *gin.Context) {
 			ctx.JSON(http.StatusNotFound, err)
 			return
 		}
-		ctx.JSON(http.StatusOK, ToExternalweapon(weapon, &weapon.Item))
+		ctx.JSON(http.StatusOK, ToExternalWeapon(weapon, &weapon.Item))
 	})
 }
 
@@ -131,12 +131,13 @@ func (a *ItemApi) UpdateWeapon(ctx *gin.Context) {
 				ctx.JSON(http.StatusInternalServerError, success)
 				return
 			}
-			ctx.JSON(http.StatusOK, ToExternalweapon(internalWeapon, internalItem))
+			newWeapon, _ := a.DB.GetWeaponByID(id)
+			ctx.JSON(http.StatusOK, ToExternalWeapon(newWeapon, &newWeapon.Item))
 		}
 	})
 }
 
-func ToExternalweapon(weapon *model.Weapon, item *model.Item) *model.WeaponExternal {
+func ToExternalWeapon(weapon *model.Weapon, item *model.Item) *model.WeaponExternal {
 	return &model.WeaponExternal{
 		ID:           weapon.ID,
 		Name:         item.Name,
