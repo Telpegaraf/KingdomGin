@@ -155,10 +155,8 @@ definitions:
   model.CreateArmor:
     properties:
       armor_class:
-        example: 1
         type: integer
       bulk:
-        example: 1
         type: number
       description:
         type: string
@@ -169,8 +167,6 @@ definitions:
       price:
         type: string
     required:
-    - armor_class
-    - bulk
     - description
     - name
     - price
@@ -196,6 +192,25 @@ definitions:
     - description
     - name
     type: object
+  model.CreateGear:
+    properties:
+      bulk:
+        example: 1
+        type: number
+      description:
+        type: string
+      level:
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
+    required:
+    - bulk
+    - description
+    - name
+    - price
+    type: object
   model.CreateUser:
     properties:
       email:
@@ -212,6 +227,7 @@ definitions:
   model.CreateWeapon:
     properties:
       bulk:
+        example: 0.1
         type: number
       damage:
         type: integer
@@ -220,8 +236,10 @@ definitions:
       description:
         type: string
       dice:
+        example: 4
         type: integer
       diceQuantity:
+        example: 1
         type: integer
       level:
         type: integer
@@ -231,12 +249,10 @@ definitions:
         type: string
     required:
     - bulk
-    - damage
     - damage_type
     - description
     - dice
     - diceQuantity
-    - level
     - name
     - price
     type: object
@@ -277,6 +293,24 @@ definitions:
         type: integer
       item:
         $ref: '#/definitions/model.Item'
+    type: object
+  model.GearExternal:
+    properties:
+      bulk:
+        example: 1
+        type: number
+      description:
+        type: string
+      id:
+        type: integer
+      item_id:
+        type: integer
+      level:
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
     type: object
   model.God:
     properties:
@@ -432,6 +466,20 @@ definitions:
     required:
     - description
     - name
+    type: object
+  model.UpdateGear:
+    properties:
+      bulk:
+        example: 1
+        type: number
+      description:
+        type: string
+      level:
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
     type: object
   model.UpdateWeapon:
     properties:
@@ -1098,6 +1146,94 @@ paths:
           schema:
             type: string
       summary: Returns all gears
+      tags:
+      - Item
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Gear data
+        in: body
+        name: gear
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateGear'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Gear details
+          schema:
+            $ref: '#/definitions/model.GearExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Gear or nil
+      tags:
+      - Item
+  /item/gear/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Permissions for auth users
+      parameters:
+      - description: Gear id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Gear details
+          schema:
+            $ref: '#/definitions/model.Gear'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns Gear by ID
+      tags:
+      - Item
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Gear id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Gear data
+        in: body
+        name: Gear
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateGear'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Gear details
+          schema:
+            $ref: '#/definitions/model.Gear'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Gear doesn't exist
+          schema:
+            type: string
+      summary: Updates Gear by ID or nil
       tags:
       - Item
   /item/weapon:

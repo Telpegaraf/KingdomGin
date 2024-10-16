@@ -22,13 +22,13 @@ func (a *ItemApi) CreateArmor(ctx *gin.Context) {
 	armor := &model.CreateArmor{}
 	if err := ctx.ShouldBindJSON(armor); err == nil {
 		internalArmor := &model.Armor{
-			ArmorClass: armor.ArmorClass,
+			ArmorClass: *armor.ArmorClass,
 		}
 		internalItem := &model.Item{
 			Name:        armor.Name,
 			Description: armor.Description,
 			Bulk:        armor.Bulk,
-			Level:       armor.Level,
+			Level:       *armor.Level,
 			Price:       armor.Price,
 			OwnerType:   "armors",
 		}
@@ -110,7 +110,7 @@ func (a *ItemApi) UpdateArmor(ctx *gin.Context) {
 				return
 			}
 			internalArmor := &model.Armor{
-				ArmorClass: armor.ArmorClass,
+				ArmorClass: *armor.ArmorClass,
 				ID:         oldArmor.ID,
 			}
 			internalItem := &model.Item{
@@ -118,7 +118,7 @@ func (a *ItemApi) UpdateArmor(ctx *gin.Context) {
 				Name:        armor.Name,
 				Description: armor.Description,
 				Bulk:        armor.Bulk,
-				Level:       armor.Level,
+				Level:       *armor.Level,
 				Price:       armor.Price,
 			}
 			if success := SuccessOrAbort(ctx, 500, a.DB.UpdateArmor(internalArmor, internalItem)); !success {

@@ -24,14 +24,14 @@ func (a *ItemApi) CreateWeapon(ctx *gin.Context) {
 		internalWeapon := &model.Weapon{
 			Dice:         weapon.Dice,
 			DiceQuantity: weapon.DiceQuantity,
-			Damage:       weapon.Damage,
+			Damage:       *weapon.Damage,
 			DamageType:   weapon.DamageType,
 		}
 		internalItem := &model.Item{
 			Name:        weapon.Name,
 			Description: weapon.Description,
 			Bulk:        weapon.Bulk,
-			Level:       weapon.Level,
+			Level:       *weapon.Level,
 			Price:       weapon.Price,
 			OwnerType:   "weapons",
 		}
@@ -115,7 +115,7 @@ func (a *ItemApi) UpdateWeapon(ctx *gin.Context) {
 			internalWeapon := &model.Weapon{
 				Dice:         weapon.Dice,
 				DiceQuantity: weapon.DiceQuantity,
-				Damage:       weapon.Damage,
+				Damage:       *weapon.Damage,
 				DamageType:   weapon.DamageType,
 				ID:           oldWeapon.ID,
 			}
@@ -124,7 +124,7 @@ func (a *ItemApi) UpdateWeapon(ctx *gin.Context) {
 				Name:        weapon.Name,
 				Description: weapon.Description,
 				Bulk:        weapon.Bulk,
-				Level:       weapon.Level,
+				Level:       *weapon.Level,
 				Price:       weapon.Price,
 			}
 			if success := SuccessOrAbort(ctx, 500, a.DB.UpdateWeapon(internalWeapon, internalItem)); !success {

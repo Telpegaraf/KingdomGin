@@ -852,6 +852,139 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Create and returns Gear or nil",
+                "parameters": [
+                    {
+                        "description": "Gear data",
+                        "name": "gear",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateGear"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Gear details",
+                        "schema": {
+                            "$ref": "#/definitions/model.GearExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/item/gear/{id}": {
+            "get": {
+                "description": "Permissions for auth users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Returns Gear by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Gear id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Gear details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Gear"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Updates Gear by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Gear id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Gear data",
+                        "name": "Gear",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateGear"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Gear details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Gear"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Gear doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/item/weapon": {
@@ -1531,20 +1664,16 @@ const docTemplate = `{
         "model.CreateArmor": {
             "type": "object",
             "required": [
-                "armor_class",
-                "bulk",
                 "description",
                 "name",
                 "price"
             ],
             "properties": {
                 "armor_class": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 },
                 "bulk": {
-                    "type": "number",
-                    "example": 1
+                    "type": "number"
                 },
                 "description": {
                     "type": "string"
@@ -1592,6 +1721,33 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CreateGear": {
+            "type": "object",
+            "required": [
+                "bulk",
+                "description",
+                "name",
+                "price"
+            ],
+            "properties": {
+                "bulk": {
+                    "type": "number",
+                    "example": 1
+                },
+                "description": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
+                }
+            }
+        },
         "model.CreateUser": {
             "type": "object",
             "required": [
@@ -1615,18 +1771,17 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "bulk",
-                "damage",
                 "damage_type",
                 "description",
                 "dice",
                 "diceQuantity",
-                "level",
                 "name",
                 "price"
             ],
             "properties": {
                 "bulk": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 0.1
                 },
                 "damage": {
                     "type": "integer"
@@ -1638,10 +1793,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "dice": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 4
                 },
                 "diceQuantity": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "level": {
                     "type": "integer"
@@ -1709,6 +1866,33 @@ const docTemplate = `{
                 },
                 "item": {
                     "$ref": "#/definitions/model.Item"
+                }
+            }
+        },
+        "model.GearExternal": {
+            "type": "object",
+            "properties": {
+                "bulk": {
+                    "type": "number",
+                    "example": 1
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
                 }
             }
         },
@@ -1936,6 +2120,27 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateGear": {
+            "type": "object",
+            "properties": {
+                "bulk": {
+                    "type": "number",
+                    "example": 1
+                },
+                "description": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
                     "type": "string"
                 }
             }

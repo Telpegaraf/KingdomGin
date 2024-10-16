@@ -44,10 +44,10 @@ func (d *GormDatabase) CreateWeapon(weapon *model.Weapon, item *model.Item) erro
 // UpdateWeapon updates Weapon and Item with Owner ID
 func (d *GormDatabase) UpdateWeapon(weapon *model.Weapon, item *model.Item) error {
 	err := d.DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Updates(weapon).Error; err != nil {
+		if err := tx.Model(&weapon).Select("Damage").Updates(weapon).Error; err != nil {
 			return err
 		}
-		if err := tx.Updates(item).Error; err != nil {
+		if err := tx.Model(&item).Select("Level").Updates(item).Error; err != nil {
 			return err
 		}
 		return nil
