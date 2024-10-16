@@ -60,6 +60,7 @@ func (a *DomainApi) GetDomainByID(ctx *gin.Context) {
 		domain, err := a.DB.GetDomainByID(id)
 		if success := SuccessOrAbort(ctx, 500, err); !success {
 			ctx.JSON(http.StatusNotFound, err)
+			return
 		}
 		if domain != nil {
 			ctx.JSON(http.StatusOK, domain)

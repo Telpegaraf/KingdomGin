@@ -11,6 +11,7 @@ type ItemDatabase interface {
 	GetArmors() ([]*model.Armor, error)
 	GetWeapons() ([]*model.Weapon, error)
 	GetGears() ([]*model.Gear, error)
+	GetArmorByID(id uint) (*model.Armor, error)
 }
 
 type ItemApi struct {
@@ -35,28 +36,6 @@ func (a *ItemApi) GetItems(ctx *gin.Context) {
 	var resp []*model.Item
 	for _, item := range items {
 		resp = append(resp, item)
-	}
-	ctx.JSON(http.StatusOK, resp)
-}
-
-// GetArmors godoc
-//
-// @Summary Returns all armors
-// @Description Return all armors
-// @Tags Item
-// @Accept json
-// @Produce json
-// @Success 200 {object} model.Armor "Armor details"
-// @Failure 401 {string} string ""Unauthorized"
-// @Router /item/armor [get]
-func (a *ItemApi) GetArmors(ctx *gin.Context) {
-	armors, err := a.DB.GetArmors()
-	if success := SuccessOrAbort(ctx, 500, err); !success {
-		return
-	}
-	var resp []*model.Armor
-	for _, armor := range armors {
-		resp = append(resp, armor)
 	}
 	ctx.JSON(http.StatusOK, resp)
 }

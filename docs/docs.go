@@ -692,6 +692,73 @@ const docTemplate = `{
                 }
             }
         },
+        "/item/armor/{id}": {
+            "get": {
+                "description": "Permissions for auth users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Returns Armor by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "armor id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Armor details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Armor"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/item/gear": {
+            "get": {
+                "description": "Return all gears",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Returns all gears",
+                "responses": {
+                    "200": {
+                        "description": "Gear details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Gear"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/item/weapon": {
             "get": {
                 "description": "Return all weapons",
@@ -1298,6 +1365,17 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Gear": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "item": {
+                    "$ref": "#/definitions/model.Item"
+                }
+            }
+        },
         "model.God": {
             "type": "object",
             "properties": {
@@ -1471,6 +1549,9 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "level": {
+                    "type": "integer"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -1478,6 +1559,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "ownerType": {
+                    "type": "string"
+                },
+                "price": {
                     "type": "string"
                 }
             }
@@ -1571,6 +1655,9 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "item": {
+                    "$ref": "#/definitions/model.Item"
                 }
             }
         }
