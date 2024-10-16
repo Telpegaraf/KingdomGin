@@ -125,7 +125,8 @@ func (a *ItemApi) UpdateArmor(ctx *gin.Context) {
 				ctx.JSON(http.StatusInternalServerError, success)
 				return
 			}
-			ctx.JSON(http.StatusOK, ToExternalArmor(internalArmor, internalItem))
+			newArmor, _ := a.DB.GetArmorByID(id)
+			ctx.JSON(http.StatusOK, ToExternalArmor(newArmor, &newArmor.Item))
 		}
 	})
 }
