@@ -714,7 +714,7 @@
                     "201": {
                         "description": "Armor details",
                         "schema": {
-                            "$ref": "#/definitions/model.Armor"
+                            "$ref": "#/definitions/model.ArmorExternal"
                         }
                     },
                     "401": {
@@ -763,6 +763,57 @@
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Updates Armor by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Armor id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Armor data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateArmor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Armor details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Armor"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Domain doesn't exist",
                         "schema": {
                             "type": "string"
                         }
@@ -1119,6 +1170,39 @@
                 },
                 "item": {
                     "$ref": "#/definitions/model.Item"
+                }
+            }
+        },
+        "model.ArmorExternal": {
+            "type": "object",
+            "required": [
+                "name",
+                "price"
+            ],
+            "properties": {
+                "armor_class": {
+                    "type": "integer"
+                },
+                "bulk": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
                 }
             }
         },
@@ -1629,6 +1713,29 @@
                     "type": "integer"
                 },
                 "ownerType": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateArmor": {
+            "type": "object",
+            "properties": {
+                "armor_class": {
+                    "type": "integer"
+                },
+                "bulk": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 },
                 "price": {

@@ -103,7 +103,8 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		itemGroup.GET("/armor/:id", itemHandler.GetArmorByID)
 		itemGroup.GET("/weapon", itemHandler.GetWeapons)
 		itemGroup.GET("/gear", itemHandler.GetGears)
-		itemGroup.POST("armor", itemHandler.CreateArmor)
+		itemGroup.POST("/armor", itemHandler.CreateArmor)
+		itemGroup.PATCH("/armor/:id", itemHandler.UpdateArmor)
 	}
 
 	return g, func() {}

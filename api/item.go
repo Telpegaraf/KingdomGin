@@ -13,6 +13,8 @@ type ItemDatabase interface {
 	GetGears() ([]*model.Gear, error)
 	GetArmorByID(id uint) (*model.Armor, error)
 	CreateArmor(armor *model.Armor, item *model.Item) error
+	UpdateArmor(armor *model.Armor, item *model.Item) error
+	DeleteArmor(id uint) error
 }
 
 type ItemApi struct {

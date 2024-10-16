@@ -40,3 +40,31 @@ func (d *GormDatabase) CreateArmor(armor *model.Armor, item *model.Item) error {
 	})
 	return err
 }
+
+// UpdateArmor updates Armor and Item with Owner ID
+func (d *GormDatabase) UpdateArmor(armor *model.Armor, item *model.Item) error {
+	err := d.DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Save(armor).Error; err != nil {
+			return err
+		}
+		if err := tx.Save(item).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	return err
+}
+
+// DeleteArmor deletes Armor and Item with Owner ID
+func (d *GormDatabase) DeleteArmor(id uint) error {
+	err := d.DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Delete(&model.Armor{}, id).Error; err != nil {
+			return err
+		}
+		if err := tx.Delete(&model.Item{}, id).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	return err
+}

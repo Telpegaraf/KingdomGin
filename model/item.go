@@ -39,6 +39,26 @@ type CreateArmor struct {
 	ArmorClass  uint8   `json:"armor_class" query:"armor_class" form:"armor_class" binding:"required"`
 }
 
+type UpdateArmor struct {
+	Name        string  `json:"name" query:"name" form:"name"`
+	Description string  `json:"description" query:"description" form:"description"`
+	Bulk        float64 `json:"bulk" query:"bulk" form:"bulk"`
+	Level       uint8   `json:"level" query:"level" form:"level"`
+	Price       string  `json:"price" query:"price" form:"price"`
+	ArmorClass  uint8   `json:"armor_class" query:"armor_class" form:"armor_class"`
+}
+
+type ArmorExternal struct {
+	ID          uint    `json:"id" query:"id" form:"id"`
+	Name        string  `json:"name" query:"name" binding:"required" form:"name"`
+	Description string  `json:"description" query:"description" form:"description"`
+	Bulk        float64 `json:"bulk" query:"bulk" form:"bulk"`
+	Level       uint8   `json:"level" query:"level" form:"level"`
+	Price       string  `json:"price" query:"price" binding:"required" form:"price"`
+	ArmorClass  uint8   `json:"armor_class" query:"armor_class" form:"armor_class"`
+	ItemID      uint    `json:"item_id" query:"item_id" form:"item_id"`
+}
+
 //type CreateItem struct {
 //	Name        string  `json:"name" query:"name" form:"name" binding:"required"`
 //	Description string  `json:"description" query:"description" form:"description" binding:"required"`

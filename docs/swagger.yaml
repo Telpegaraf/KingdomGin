@@ -8,6 +8,28 @@ definitions:
       item:
         $ref: '#/definitions/model.Item'
     type: object
+  model.ArmorExternal:
+    properties:
+      armor_class:
+        type: integer
+      bulk:
+        type: number
+      description:
+        type: string
+      id:
+        type: integer
+      item_id:
+        type: integer
+      level:
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
+    required:
+    - name
+    - price
+    type: object
   model.Attribute:
     properties:
       characterID:
@@ -349,6 +371,21 @@ definitions:
       ownerID:
         type: integer
       ownerType:
+        type: string
+      price:
+        type: string
+    type: object
+  model.UpdateArmor:
+    properties:
+      armor_class:
+        type: integer
+      bulk:
+        type: number
+      description:
+        type: string
+      level:
+        type: integer
+      name:
         type: string
       price:
         type: string
@@ -885,7 +922,7 @@ paths:
         "201":
           description: Armor details
           schema:
-            $ref: '#/definitions/model.Armor'
+            $ref: '#/definitions/model.ArmorExternal'
         "401":
           description: Unauthorized
           schema:
@@ -920,6 +957,40 @@ paths:
           schema:
             type: string
       summary: Returns Armor by ID
+      tags:
+      - Item
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Armor id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Armor data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateArmor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Armor details
+          schema:
+            $ref: '#/definitions/model.Armor'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Domain doesn't exist
+          schema:
+            type: string
+      summary: Updates Armor by ID or nil
       tags:
       - Item
   /item/gear:
