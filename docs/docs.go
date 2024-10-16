@@ -690,6 +690,50 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Create and returns armor or nil",
+                "parameters": [
+                    {
+                        "description": "Armor data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateArmor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Armor details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Armor"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/item/armor/{id}": {
@@ -1263,6 +1307,36 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateArmor": {
+            "type": "object",
+            "required": [
+                "armor_class",
+                "bulk",
+                "description",
+                "name",
+                "price"
+            ],
+            "properties": {
+                "armor_class": {
+                    "type": "integer"
+                },
+                "bulk": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
                     "type": "string"
                 }
             }

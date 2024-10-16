@@ -130,6 +130,27 @@ definitions:
       name:
         type: string
     type: object
+  model.CreateArmor:
+    properties:
+      armor_class:
+        type: integer
+      bulk:
+        type: number
+      description:
+        type: string
+      level:
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
+    required:
+    - armor_class
+    - bulk
+    - description
+    - name
+    - price
+    type: object
   model.CreateCharacter:
     properties:
       alias:
@@ -845,6 +866,35 @@ paths:
           schema:
             type: string
       summary: Returns all armors
+      tags:
+      - Item
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Armor data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateArmor'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Armor details
+          schema:
+            $ref: '#/definitions/model.Armor'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns armor or nil
       tags:
       - Item
   /item/armor/{id}:

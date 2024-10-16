@@ -6,6 +6,40 @@ import (
 	"net/http"
 )
 
+// CreateArmor godoc
+//
+// @Summary Create and returns armor or nil
+// @Description Permissions for Admin
+// @Tags Item
+// @Accept json
+// @Produce json
+// @Param character body model.CreateArmor true "Armor data"
+// @Success 201 {object} model.Armor "Armor details"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 403 {string} string "You can't access for this API"
+// @Router /item/armor [post]
+func (a *ItemApi) CreateArmor(ctx *gin.Context) {
+	armor := &model.CreateArmor{}
+	if err := ctx.ShouldBindJSON(armor); err == nil {
+		internalArmor := &model.Armor{
+			ArmorClass: armor.ArmorClass,
+		}
+		internalItem := &model.Item{
+			Name:        armor.Name,
+			Description: armor.Description,
+			Bulk:        armor.Bulk,
+			Level:       armor.Level,
+			Price:       armor.Price,
+			OwnerType:   "armors",
+		}
+		if success := SuccessOrAbort(ctx, 500, a.DB.CreateArmor(internalArmor, internalItem)); !success {
+			ctx.JSON(http.StatusInternalServerError, success)
+			return
+		}
+		ctx.JSON(http.StatusOK, armor)
+	}
+}
+
 // GetArmors godoc
 //
 // @Summary Returns all armors

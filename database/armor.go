@@ -25,3 +25,18 @@ func (d *GormDatabase) GetArmorByID(id uint) (*model.Armor, error) {
 	}
 	return nil, err
 }
+
+// CreateArmor creates Armor and Item with Owner ID
+func (d *GormDatabase) CreateArmor(armor *model.Armor, item *model.Item) error {
+	err := d.DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(armor).Error; err != nil {
+			return err
+		}
+		item.OwnerID = armor.ID
+		if err := tx.Create(item).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	return err
+}

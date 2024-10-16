@@ -13,7 +13,7 @@ type Item struct {
 
 type Armor struct {
 	ID         uint `gorm:"primary_key;AUTO_INCREMENT"`
-	ArmorClass uint
+	ArmorClass uint8
 	Item       Item `gorm:"polymorphic:Owner;"`
 }
 
@@ -28,6 +28,15 @@ type Weapon struct {
 type Gear struct {
 	ID   uint `gorm:"primary_key;AUTO_INCREMENT"`
 	Item Item `gorm:"polymorphic:Owner;"`
+}
+
+type CreateArmor struct {
+	Name        string  `json:"name" query:"name" binding:"required" form:"name"`
+	Description string  `json:"description" query:"description" binding:"required" form:"description"`
+	Bulk        float64 `json:"bulk" query:"bulk" binding:"required" form:"bulk"`
+	Level       uint8   `json:"level" query:"level" form:"level"`
+	Price       string  `json:"price" query:"price" binding:"required" form:"price"`
+	ArmorClass  uint8   `json:"armor_class" query:"armor_class" form:"armor_class" binding:"required"`
 }
 
 //type CreateItem struct {
