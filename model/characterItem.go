@@ -13,11 +13,18 @@ type CharacterItem struct {
 type CreateCharacterItem struct {
 	CharacterID uint `json:"character_id" query:"character_id" binding:"required" form:"character_id"`
 	ItemID      uint `json:"item_id" query:"item_id" binding:"required" form:"item_id"`
-	Quantity    uint `json:"quantity" query:"quantity" form:"quantity"`
+	Quantity    uint `json:"quantity" query:"quantity" form:"quantity" example:"1"`
 }
 
 type UpdateCharacterItem struct {
 	CharacterID uint `json:"character_id" query:"character_id" form:"character_id"`
 	ItemID      uint `json:"item_id" query:"item_id" form:"item_id"`
-	Quantity    uint `json:"quantity" query:"quantity" binding:"required" form:"quantity"`
+	Quantity    uint `json:"quantity" query:"quantity" binding:"required" form:"quantity" example:"1"`
+}
+
+type CharacterItemExternal struct {
+	ID          uint `json:"id" query:"id" form:"id"`
+	CharacterID uint `json:"character_id" query:"character_id" form:"character_id"`
+	ItemID      uint `json:"item_id" query:"item_id" form:"item_id"`
+	Quantity    uint `json:"quantity" query:"quantity" form:"quantity" example:"1"`
 }

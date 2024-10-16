@@ -6,7 +6,12 @@ import (
 	"kingdom/model"
 )
 
-// GetCharacterByID returns Character for the ID
+// CreateCharacter create and returns new Character
+func (d *GormDatabase) CreateCharacter(character *model.Character) error {
+	return d.DB.Create(character).Error
+}
+
+// GetCharacterByID returns Character by ID
 func (d *GormDatabase) GetCharacterByID(id uint) (*model.Character, error) {
 	character := new(model.Character)
 	err := d.DB.Find(character, id).Error
@@ -19,11 +24,6 @@ func (d *GormDatabase) GetCharacterByID(id uint) (*model.Character, error) {
 	return nil, err
 }
 
-// CreateCharacter create and returns new Character
-func (d *GormDatabase) CreateCharacter(character *model.Character) error {
-	return d.DB.Create(character).Error
-}
-
 // GetCharacters returns all characters
 func (d *GormDatabase) GetCharacters(id uint) ([]*model.Character, error) {
 	var characters []*model.Character
@@ -31,12 +31,12 @@ func (d *GormDatabase) GetCharacters(id uint) ([]*model.Character, error) {
 	return characters, err
 }
 
-// DeleteCharacterByID deletes character by its id
-func (d *GormDatabase) DeleteCharacterByID(id uint) error {
-	return d.DB.Where("id = ?", id).Delete(&model.Character{}, id).Error
-}
-
 // UpdateCharacter updates character by its id
 func (d *GormDatabase) UpdateCharacter(character *model.Character) error {
 	return d.DB.Save(character).Error
+}
+
+// DeleteCharacterByID deletes character by its id
+func (d *GormDatabase) DeleteCharacterByID(id uint) error {
+	return d.DB.Where("id = ?", id).Delete(&model.Character{}, id).Error
 }
