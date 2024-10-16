@@ -427,6 +427,10 @@ definitions:
     properties:
       bulk:
         type: number
+      character:
+        items:
+          $ref: '#/definitions/model.Character'
+        type: array
       description:
         type: string
       id:
@@ -441,6 +445,28 @@ definitions:
         type: string
       price:
         type: string
+    type: object
+  model.ItemExternal:
+    properties:
+      bulk:
+        type: number
+      description:
+        type: string
+      id:
+        type: integer
+      level:
+        type: integer
+      name:
+        type: string
+      owner_id:
+        type: integer
+      owner_type:
+        type: string
+      price:
+        type: string
+    required:
+    - name
+    - price
     type: object
   model.UpdateArmor:
     properties:
@@ -1065,7 +1091,7 @@ paths:
         "200":
           description: Item details
           schema:
-            $ref: '#/definitions/model.Armor'
+            $ref: '#/definitions/model.ItemExternal'
         "401":
           description: Unauthorized
           schema:

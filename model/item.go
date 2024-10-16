@@ -9,6 +9,18 @@ type Item struct {
 	Price       string  `gorm:"type:varchar(127)"`
 	OwnerID     uint    `gorm:"uniqueIndex:idx_owner_id_owner_type"`
 	OwnerType   string  `gorm:"uniqueIndex:idx_owner_id_owner_type"`
+	Character   []Character
+}
+
+type ItemExternal struct {
+	ID          uint    `json:"id" query:"id" form:"id"`
+	Name        string  `json:"name" query:"name" binding:"required" form:"name"`
+	Description string  `json:"description" query:"description" form:"description"`
+	Bulk        float64 `json:"bulk" query:"bulk" form:"bulk"`
+	Level       uint8   `json:"level" query:"level" form:"level"`
+	Price       string  `json:"price" query:"price" binding:"required" form:"price"`
+	OwnerID     uint    `json:"owner_id" query:"owner_id" form:"owner_id"`
+	OwnerType   string  `json:"owner_type" query:"owner_type" form:"owner_type"`
 }
 
 type Armor struct {

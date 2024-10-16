@@ -1175,7 +1175,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Item details",
                         "schema": {
-                            "$ref": "#/definitions/model.Armor"
+                            "$ref": "#/definitions/model.ItemExternal"
                         }
                     },
                     "401": {
@@ -2140,6 +2140,12 @@ const docTemplate = `{
                 "bulk": {
                     "type": "number"
                 },
+                "character": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Character"
+                    }
+                },
                 "description": {
                     "type": "string"
                 },
@@ -2156,6 +2162,39 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "ownerType": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ItemExternal": {
+            "type": "object",
+            "required": [
+                "name",
+                "price"
+            ],
+            "properties": {
+                "bulk": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owner_id": {
+                    "type": "integer"
+                },
+                "owner_type": {
                     "type": "string"
                 },
                 "price": {

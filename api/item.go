@@ -58,7 +58,7 @@ func (a *ItemApi) GetItems(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Item id"
-// @Success 200 {object} model.Armor "Item details"
+// @Success 200 {object} model.ItemExternal "Item details"
 // @Failure 401 {string} string ""Unauthorized"
 // @Router /item/{id} [get]
 func (a *ItemApi) GetItemByID(ctx *gin.Context) {
@@ -68,7 +68,7 @@ func (a *ItemApi) GetItemByID(ctx *gin.Context) {
 			ctx.JSON(http.StatusNotFound, err)
 			return
 		}
-		ctx.JSON(http.StatusOK, item)
+		ctx.JSON(http.StatusOK, ToItemExternal(item))
 	})
 }
 
@@ -99,4 +99,17 @@ func (a *ItemApi) DeleteItem(ctx *gin.Context) {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "Character doesn't exist"})
 		}
 	})
+}
+
+func ToItemExternal(item *model.Item) *model.ItemExternal {
+	return &model.ItemExternal{
+		ID:          item.ID,
+		Name:        item.Name,
+		Description: item.Description,
+		Level:       item.Level,
+		Bulk:        item.Bulk,
+		Price:       item.Price,
+		OwnerType:   item.OwnerType,
+		OwnerID:     item.OwnerID,
+	}
 }
