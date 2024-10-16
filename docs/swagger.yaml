@@ -155,8 +155,10 @@ definitions:
   model.CreateArmor:
     properties:
       armor_class:
+        example: 1
         type: integer
       bulk:
+        example: 1
         type: number
       description:
         type: string
@@ -206,6 +208,37 @@ definitions:
     - email
     - password
     - username
+    type: object
+  model.CreateWeapon:
+    properties:
+      bulk:
+        type: number
+      damage:
+        type: integer
+      damage_type:
+        type: string
+      description:
+        type: string
+      dice:
+        type: integer
+      diceQuantity:
+        type: integer
+      level:
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
+    required:
+    - bulk
+    - damage
+    - damage_type
+    - description
+    - dice
+    - diceQuantity
+    - level
+    - name
+    - price
     type: object
   model.Domain:
     properties:
@@ -400,6 +433,27 @@ definitions:
     - description
     - name
     type: object
+  model.UpdateWeapon:
+    properties:
+      bulk:
+        type: number
+      damage:
+        type: integer
+      damage_type:
+        type: string
+      description:
+        type: string
+      dice:
+        type: integer
+      diceQuantity:
+        type: integer
+      level:
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
+    type: object
   model.UserExternal:
     properties:
       admin:
@@ -443,6 +497,8 @@ definitions:
     properties:
       damage:
         type: integer
+      damageType:
+        type: string
       dice:
         type: integer
       diceQuantity:
@@ -451,6 +507,38 @@ definitions:
         type: integer
       item:
         $ref: '#/definitions/model.Item'
+    type: object
+  model.WeaponExternal:
+    properties:
+      bulk:
+        type: number
+      damage:
+        example: 1
+        type: integer
+      damage_type:
+        type: string
+      description:
+        type: string
+      dice:
+        example: 1
+        type: integer
+      diceQuantity:
+        example: 1
+        type: integer
+      id:
+        type: integer
+      item_id:
+        type: integer
+      level:
+        example: 1
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
+    required:
+    - name
+    - price
     type: object
 info:
   contact: {}
@@ -971,7 +1059,7 @@ paths:
         type: integer
       - description: Armor data
         in: body
-        name: character
+        name: armor
         required: true
         schema:
           $ref: '#/definitions/model.UpdateArmor'
@@ -987,7 +1075,7 @@ paths:
           schema:
             type: string
         "404":
-          description: Domain doesn't exist
+          description: Armor doesn't exist
           schema:
             type: string
       summary: Updates Armor by ID or nil
@@ -1029,6 +1117,94 @@ paths:
           schema:
             type: string
       summary: Returns all weapons
+      tags:
+      - Item
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Weapon data
+        in: body
+        name: weapon
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateWeapon'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Weapon details
+          schema:
+            $ref: '#/definitions/model.WeaponExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns weapon or nil
+      tags:
+      - Item
+  /item/weapon/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Permissions for auth users
+      parameters:
+      - description: Weapon id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Weapon details
+          schema:
+            $ref: '#/definitions/model.Weapon'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns weapon by ID
+      tags:
+      - Item
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Weapon id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Weapon data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateWeapon'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Weapon details
+          schema:
+            $ref: '#/definitions/model.Weapon'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Weapon doesn't exist
+          schema:
+            type: string
+      summary: Updates weapon by ID or nil
       tags:
       - Item
   /login:

@@ -18,11 +18,12 @@ type Armor struct {
 }
 
 type Weapon struct {
-	ID           uint  `gorm:"primary_key;AUTO_INCREMENT"`
-	DiceQuantity uint8 `gorm:"default:1;not null"`
-	Dice         uint8 `gorm:"default:4;not null"`
-	Damage       uint8 `gorm:"default:1;not null1"`
-	Item         Item  `gorm:"polymorphic:Owner;"`
+	ID           uint   `gorm:"primary_key;AUTO_INCREMENT"`
+	DiceQuantity uint8  `gorm:"default:1;not null"`
+	Dice         uint8  `gorm:"default:4;not null"`
+	Damage       uint8  `gorm:"default:1;not null"`
+	Item         Item   `gorm:"polymorphic:Owner;"`
+	DamageType   string `gorm:"type:varchar(127);not null"`
 }
 
 type Gear struct {
@@ -33,10 +34,10 @@ type Gear struct {
 type CreateArmor struct {
 	Name        string  `json:"name" query:"name" binding:"required" form:"name"`
 	Description string  `json:"description" query:"description" binding:"required" form:"description"`
-	Bulk        float64 `json:"bulk" query:"bulk" binding:"required" form:"bulk"`
+	Bulk        float64 `json:"bulk" query:"bulk" binding:"required" form:"bulk" example:"1"`
 	Level       uint8   `json:"level" query:"level" form:"level"`
 	Price       string  `json:"price" query:"price" binding:"required" form:"price"`
-	ArmorClass  uint8   `json:"armor_class" query:"armor_class" form:"armor_class" binding:"required"`
+	ArmorClass  uint8   `json:"armor_class" query:"armor_class" form:"armor_class" binding:"required" example:"1"`
 }
 
 type UpdateArmor struct {
@@ -59,32 +60,40 @@ type ArmorExternal struct {
 	ItemID      uint    `json:"item_id" query:"item_id" form:"item_id"`
 }
 
-//type CreateItem struct {
-//	Name        string  `json:"name" query:"name" form:"name" binding:"required"`
-//	Description string  `json:"description" query:"description" form:"description" binding:"required"`
-//	Bulk        float64 `json:"bulk" query:"bulk" form:"bulk" binding:"required"`
-//}
-//
-//type UpdateItem struct {
-//	Name        string  `json:"name" query:"name" form:"name"`
-//	Description string  `json:"description" query:"description" form:"description"`
-//	Bulk        float64 `json:"bulk" query:"bulk" form:"bulk"`
-//}
+type CreateWeapon struct {
+	Name         string  `json:"name" query:"name" binding:"required" form:"name"`
+	Description  string  `json:"description" query:"description" binding:"required" form:"description"`
+	Bulk         float64 `json:"bulk" query:"bulk" binding:"required" form:"bulk"`
+	Level        uint8   `json:"level" query:"level" form:"level" binding:"required"`
+	Price        string  `json:"price" query:"price" binding:"required" form:"price"`
+	DiceQuantity uint8   `json:"diceQuantity" query:"dice_quantity" form:"dice_quantity" binding:"required"`
+	Dice         uint8   `json:"dice" query:"dice" form:"dice" binding:"required"`
+	Damage       uint8   `json:"damage" query:"damage" form:"damage" binding:"required"`
+	DamageType   string  `json:"damage_type" query:"damage_type" form:"damage_type" binding:"required"`
+}
 
-//type Weapon struct {
-//	ID        uint `gorm:"primary_key;AUTO_INCREMENT"`
-//	OwnerID   uint
-//	Damage    uint
-//	OwnerType string
-//}
+type UpdateWeapon struct {
+	Name         string  `json:"name" query:"name" form:"name"`
+	Description  string  `json:"description" query:"description" form:"description"`
+	Bulk         float64 `json:"bulk" query:"bulk" form:"bulk"`
+	Level        uint8   `json:"level" query:"level" form:"level"`
+	Price        string  `json:"price" query:"price" form:"price"`
+	DiceQuantity uint8   `json:"diceQuantity" query:"dice_quantity" form:"dice_quantity"`
+	Dice         uint8   `json:"dice" query:"dice" form:"dice"`
+	Damage       uint8   `json:"damage" query:"damage" form:"damage"`
+	DamageType   string  `json:"damage_type" query:"damage_type" form:"damage_type"`
+}
 
-//
-//func (a *Armor) BeforeCreate(tx *gorm.DB) {
-//	a.OwnerType = "items"
-//	return
-//}
-
-//func (a *Weapon) BeforeUpdate(tx *gorm.DB) {
-//	a.OwnerType = "items"
-//	return
-//}
+type WeaponExternal struct {
+	ID           uint    `json:"id" query:"id" form:"id"`
+	Name         string  `json:"name" query:"name" binding:"required" form:"name"`
+	Description  string  `json:"description" query:"description" form:"description"`
+	Bulk         float64 `json:"bulk" query:"bulk" form:"bulk"`
+	Level        uint8   `json:"level" query:"level" form:"level" example:"1"`
+	Price        string  `json:"price" query:"price" binding:"required" form:"price"`
+	DiceQuantity uint8   `json:"diceQuantity" query:"dice_quantity" form:"dice_quantity" example:"1"`
+	Dice         uint8   `json:"dice" query:"dice" form:"dice" example:"1"`
+	Damage       uint8   `json:"damage" query:"damage" form:"damage" example:"1"`
+	DamageType   string  `json:"damage_type" query:"damage_type" form:"damage_type"`
+	ItemID       uint    `json:"item_id" query:"item_id" form:"item_id"`
+}

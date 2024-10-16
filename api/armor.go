@@ -36,7 +36,9 @@ func (a *ItemApi) CreateArmor(ctx *gin.Context) {
 			ctx.JSON(http.StatusInternalServerError, success)
 			return
 		}
-		ctx.JSON(http.StatusOK, ToExternalArmor(internalArmor, internalItem))
+		ctx.JSON(http.StatusCreated, ToExternalArmor(internalArmor, internalItem))
+	} else {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 }
 
@@ -93,10 +95,10 @@ func (a *ItemApi) GetArmorByID(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Armor id"
-// @Param character body model.UpdateArmor true "Armor data"
+// @Param armor body model.UpdateArmor true "Armor data"
 // @Success 200 {object} model.Armor "Armor details"
 // @Failure 403 {string} string "You can't access for this API"
-// @Failure 404 {string} string "Domain doesn't exist"
+// @Failure 404 {string} string "Armor doesn't exist"
 // @Router /item/armor/{id} [patch]
 func (a *ItemApi) UpdateArmor(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {

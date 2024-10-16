@@ -795,7 +795,7 @@ const docTemplate = `{
                     },
                     {
                         "description": "Armor data",
-                        "name": "character",
+                        "name": "armor",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -817,7 +817,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "Domain doesn't exist",
+                        "description": "Armor doesn't exist",
                         "schema": {
                             "type": "string"
                         }
@@ -876,6 +876,139 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Create and returns weapon or nil",
+                "parameters": [
+                    {
+                        "description": "Weapon data",
+                        "name": "weapon",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateWeapon"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Weapon details",
+                        "schema": {
+                            "$ref": "#/definitions/model.WeaponExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/item/weapon/{id}": {
+            "get": {
+                "description": "Permissions for auth users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Returns weapon by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Weapon id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Weapon details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Weapon"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Updates weapon by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Weapon id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Weapon data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateWeapon"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Weapon details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Weapon"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Weapon doesn't exist",
                         "schema": {
                             "type": "string"
                         }
@@ -1406,10 +1539,12 @@ const docTemplate = `{
             ],
             "properties": {
                 "armor_class": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "bulk": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 1
                 },
                 "description": {
                     "type": "string"
@@ -1472,6 +1607,49 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateWeapon": {
+            "type": "object",
+            "required": [
+                "bulk",
+                "damage",
+                "damage_type",
+                "description",
+                "dice",
+                "diceQuantity",
+                "level",
+                "name",
+                "price"
+            ],
+            "properties": {
+                "bulk": {
+                    "type": "number"
+                },
+                "damage": {
+                    "type": "integer"
+                },
+                "damage_type": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "dice": {
+                    "type": "integer"
+                },
+                "diceQuantity": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
                     "type": "string"
                 }
             }
@@ -1762,6 +1940,38 @@ const docTemplate = `{
                 }
             }
         },
+        "model.UpdateWeapon": {
+            "type": "object",
+            "properties": {
+                "bulk": {
+                    "type": "number"
+                },
+                "damage": {
+                    "type": "integer"
+                },
+                "damage_type": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "dice": {
+                    "type": "integer"
+                },
+                "diceQuantity": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
+                }
+            }
+        },
         "model.UserExternal": {
             "type": "object",
             "required": [
@@ -1828,6 +2038,9 @@ const docTemplate = `{
                 "damage": {
                     "type": "integer"
                 },
+                "damageType": {
+                    "type": "string"
+                },
                 "dice": {
                     "type": "integer"
                 },
@@ -1839,6 +2052,52 @@ const docTemplate = `{
                 },
                 "item": {
                     "$ref": "#/definitions/model.Item"
+                }
+            }
+        },
+        "model.WeaponExternal": {
+            "type": "object",
+            "required": [
+                "name",
+                "price"
+            ],
+            "properties": {
+                "bulk": {
+                    "type": "number"
+                },
+                "damage": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "damage_type": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "dice": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "diceQuantity": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
                 }
             }
         }
