@@ -1931,11 +1931,17 @@ const docTemplate = `{
                 "character_id": {
                     "type": "integer"
                 },
+                "character_name": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "itemID": {
                     "type": "integer"
+                },
+                "item_name": {
+                    "type": "string"
                 },
                 "quantity": {
                     "type": "integer",

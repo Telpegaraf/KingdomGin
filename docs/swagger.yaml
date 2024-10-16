@@ -147,8 +147,12 @@ definitions:
     properties:
       character_id:
         type: integer
+      character_name:
+        type: string
       id:
         type: integer
+      item_name:
+        type: string
       itemID:
         type: integer
       quantity:

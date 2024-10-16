@@ -41,7 +41,7 @@ func (a *CharacterItemApi) CreateCharacterItem(ctx *gin.Context) {
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacterItem(internal)); !success {
 			return
 		}
-		ctx.JSON(http.StatusCreated, ToExternalCharacterItem(internal))
+		ctx.JSON(http.StatusCreated, ToExternalCharacterItem(internal, &internal.Character, &internal.Item))
 	}
 }
 
@@ -85,8 +85,8 @@ func (a *CharacterItemApi) GetCharacterItems(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, err)
 	}
 	var resp []*model.CharacterItemExternal
-	for _, CharacterItem := range CharacterItems {
-		characterItemExternal := ToExternalCharacterItem(CharacterItem)
+	for _, characterItem := range CharacterItems {
+		characterItemExternal := ToExternalCharacterItem(characterItem, &characterItem.Character, &characterItem.Item)
 		resp = append(resp, characterItemExternal)
 	}
 	ctx.JSON(http.StatusOK, resp)
@@ -123,7 +123,7 @@ func (a *CharacterItemApi) UpdateCharacterItem(ctx *gin.Context) {
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateCharacterItem(internal)); !success {
 					return
 				}
-				ctx.JSON(http.StatusOK, ToExternalCharacterItem(internal))
+				ctx.JSON(http.StatusOK, ToExternalCharacterItem(internal, &internal.Character, &internal.Item))
 			}
 		} else {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "CharacterItem doesn't exist"})
@@ -160,11 +160,16 @@ func (a *CharacterItemApi) DeleteCharacterItem(ctx *gin.Context) {
 	})
 }
 
-func ToExternalCharacterItem(characterItem *model.CharacterItem) *model.CharacterItemExternal {
+func ToExternalCharacterItem(
+	characterItem *model.CharacterItem,
+	character *model.Character,
+	item *model.Item) *model.CharacterItemExternal {
 	return &model.CharacterItemExternal{
-		ID:          characterItem.ID,
-		CharacterID: characterItem.CharacterId,
-		Quantity:    characterItem.Quantity,
-		ItemID:      characterItem.ItemId,
+		ID:            characterItem.ID,
+		CharacterID:   character.ID,
+		CharacterName: character.Name,
+		Quantity:      characterItem.Quantity,
+		ItemID:        item.ID,
+		ItemName:      item.Name,
 	}
 }
