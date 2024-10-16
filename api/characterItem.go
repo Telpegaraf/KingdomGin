@@ -29,7 +29,7 @@ type CharacterItemApi struct {
 // @Success 201 {object} model.CharacterItemExternal "CharacterItem details"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 403 {string} string "You can't access for this API"
-// @Router /CharacterItem [post]
+// @Router /character-item [post]
 func (a *CharacterItemApi) CreateCharacterItem(ctx *gin.Context) {
 	CharacterItem := &model.CreateCharacterItem{}
 	if err := ctx.ShouldBindJSON(CharacterItem); err == nil {
@@ -53,9 +53,9 @@ func (a *CharacterItemApi) CreateCharacterItem(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "CharacterItem id"
-// @Success 200 {object} model.CharacterItem "CharacterItem details"
+// @Success 200 {object} model.CharacterItemExternal "CharacterItem details"
 // @Failure 404 {string} string "CharacterItem not found"
-// @Router /CharacterItem/{id} [get]
+// @Router /character-item/{id} [get]
 func (a *CharacterItemApi) GetCharacterItemByID(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		CharacterItem, err := a.DB.GetCharacterItemByID(id)
@@ -76,9 +76,9 @@ func (a *CharacterItemApi) GetCharacterItemByID(ctx *gin.Context) {
 // @Tags CharacterItem
 // @Accept json
 // @Produce json
-// @Success 200 {object} model.CharacterItem "CharacterItem details"
+// @Success 200 {object} model.CharacterItemExternal "CharacterItem details"
 // @Failure 401 {string} string ""Unauthorized"
-// @Router /CharacterItem [get]
+// @Router /character-item [get]
 func (a *CharacterItemApi) GetCharacterItems(ctx *gin.Context) {
 	CharacterItems, err := a.DB.GetCharacterItems()
 	if success := SuccessOrAbort(ctx, 500, err); !success {
@@ -104,7 +104,7 @@ func (a *CharacterItemApi) GetCharacterItems(ctx *gin.Context) {
 // @Success 200 {object} model.CharacterItemExternal "CharacterItem details"
 // @Failure 403 {string} string "You can't access for this API"
 // @Failure 404 {string} string "CharacterItem doesn't exist"
-// @Router /CharacterItem/{id} [patch]
+// @Router /character-item/{id} [patch]
 func (a *CharacterItemApi) UpdateCharacterItem(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		var CharacterItem *model.UpdateCharacterItem
@@ -142,7 +142,7 @@ func (a *CharacterItemApi) UpdateCharacterItem(ctx *gin.Context) {
 // @Success 204
 // @Failure 404 {string} string "CharacterItem doesn't exist"
 // @Failure 403 {string} string "You can't access for this API"
-// @Router /CharacterItem/{id} [delete]
+// @Router /character-item/{id} [delete]
 func (a *CharacterItemApi) DeleteCharacterItem(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		CharacterItem, err := a.DB.GetCharacterItemByID(id)
@@ -164,7 +164,7 @@ func ToExternalCharacterItem(characterItem *model.CharacterItem) *model.Characte
 	return &model.CharacterItemExternal{
 		ID:          characterItem.ID,
 		CharacterID: characterItem.CharacterId,
-		ItemID:      characterItem.ItemId,
 		Quantity:    characterItem.Quantity,
+		ItemID:      characterItem.ItemId,
 	}
 }

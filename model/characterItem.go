@@ -25,6 +25,6 @@ type UpdateCharacterItem struct {
 type CharacterItemExternal struct {
 	ID          uint `json:"id" query:"id" form:"id"`
 	CharacterID uint `json:"character_id" query:"character_id" form:"character_id"`
-	ItemID      uint `json:"item_id" query:"item_id" form:"item_id"`
 	Quantity    uint `json:"quantity" query:"quantity" form:"quantity" example:"1"`
+	ItemID      uint `json:"itemID" query:"item_id" form:"item_id"`
 }

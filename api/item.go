@@ -68,7 +68,7 @@ func (a *ItemApi) GetItemByID(ctx *gin.Context) {
 			ctx.JSON(http.StatusNotFound, err)
 			return
 		}
-		ctx.JSON(http.StatusOK, ToItemExternal(item))
+		ctx.JSON(http.StatusOK, ToExternalItem(item))
 	})
 }
 
@@ -101,7 +101,7 @@ func (a *ItemApi) DeleteItem(ctx *gin.Context) {
 	})
 }
 
-func ToItemExternal(item *model.Item) *model.ItemExternal {
+func ToExternalItem(item *model.Item) *model.ItemExternal {
 	return &model.ItemExternal{
 		ID:          item.ID,
 		Name:        item.Name,

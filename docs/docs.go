@@ -15,7 +15,74 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/CharacterItem": {
+        "/character": {
+            "get": {
+                "description": "Return all characters for current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character"
+                ],
+                "summary": "Returns all characters",
+                "responses": {
+                    "200": {
+                        "description": "Character details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new character",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character"
+                ],
+                "summary": "Create and returns character or nil",
+                "parameters": [
+                    {
+                        "description": "Character data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateCharacter"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Character details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/character-item": {
             "get": {
                 "description": "Return all CharacterItems",
                 "consumes": [
@@ -32,7 +99,7 @@ const docTemplate = `{
                     "200": {
                         "description": "CharacterItem details",
                         "schema": {
-                            "$ref": "#/definitions/model.CharacterItem"
+                            "$ref": "#/definitions/model.CharacterItemExternal"
                         }
                     },
                     "401": {
@@ -88,7 +155,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/CharacterItem/{id}": {
+        "/character-item/{id}": {
             "get": {
                 "description": "Retrieve CharacterItem details using its ID",
                 "consumes": [
@@ -114,7 +181,7 @@ const docTemplate = `{
                     "200": {
                         "description": "CharacterItem details",
                         "schema": {
-                            "$ref": "#/definitions/model.CharacterItem"
+                            "$ref": "#/definitions/model.CharacterItemExternal"
                         }
                     },
                     "404": {
@@ -209,73 +276,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "CharacterItem doesn't exist",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/character": {
-            "get": {
-                "description": "Return all characters for current user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Character"
-                ],
-                "summary": "Returns all characters",
-                "responses": {
-                    "200": {
-                        "description": "Character details",
-                        "schema": {
-                            "$ref": "#/definitions/model.CharacterExternal"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Create new character",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Character"
-                ],
-                "summary": "Create and returns character or nil",
-                "parameters": [
-                    {
-                        "description": "Character data",
-                        "name": "character",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.CreateCharacter"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Character details",
-                        "schema": {
-                            "$ref": "#/definitions/model.CharacterExternal"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }
@@ -1934,7 +1934,7 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "item_id": {
+                "itemID": {
                     "type": "integer"
                 },
                 "quantity": {

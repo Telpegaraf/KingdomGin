@@ -11,7 +11,74 @@
         "version": "0.1.0"
     },
     "paths": {
-        "/CharacterItem": {
+        "/character": {
+            "get": {
+                "description": "Return all characters for current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character"
+                ],
+                "summary": "Returns all characters",
+                "responses": {
+                    "200": {
+                        "description": "Character details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new character",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character"
+                ],
+                "summary": "Create and returns character or nil",
+                "parameters": [
+                    {
+                        "description": "Character data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateCharacter"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Character details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/character-item": {
             "get": {
                 "description": "Return all CharacterItems",
                 "consumes": [
@@ -28,7 +95,7 @@
                     "200": {
                         "description": "CharacterItem details",
                         "schema": {
-                            "$ref": "#/definitions/model.CharacterItem"
+                            "$ref": "#/definitions/model.CharacterItemExternal"
                         }
                     },
                     "401": {
@@ -84,7 +151,7 @@
                 }
             }
         },
-        "/CharacterItem/{id}": {
+        "/character-item/{id}": {
             "get": {
                 "description": "Retrieve CharacterItem details using its ID",
                 "consumes": [
@@ -110,7 +177,7 @@
                     "200": {
                         "description": "CharacterItem details",
                         "schema": {
-                            "$ref": "#/definitions/model.CharacterItem"
+                            "$ref": "#/definitions/model.CharacterItemExternal"
                         }
                     },
                     "404": {
@@ -205,73 +272,6 @@
                     },
                     "404": {
                         "description": "CharacterItem doesn't exist",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/character": {
-            "get": {
-                "description": "Return all characters for current user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Character"
-                ],
-                "summary": "Returns all characters",
-                "responses": {
-                    "200": {
-                        "description": "Character details",
-                        "schema": {
-                            "$ref": "#/definitions/model.CharacterExternal"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Create new character",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Character"
-                ],
-                "summary": "Create and returns character or nil",
-                "parameters": [
-                    {
-                        "description": "Character data",
-                        "name": "character",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.CreateCharacter"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Character details",
-                        "schema": {
-                            "$ref": "#/definitions/model.CharacterExternal"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }
@@ -1930,7 +1930,7 @@
                 "id": {
                     "type": "integer"
                 },
-                "item_id": {
+                "itemID": {
                     "type": "integer"
                 },
                 "quantity": {

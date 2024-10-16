@@ -149,7 +149,7 @@ definitions:
         type: integer
       id:
         type: integer
-      item_id:
+      itemID:
         type: integer
       quantity:
         example: 1
@@ -657,139 +657,6 @@ info:
   title: Kingdom Api
   version: 0.1.0
 paths:
-  /CharacterItem:
-    get:
-      consumes:
-      - application/json
-      description: Return all CharacterItems
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: CharacterItem details
-          schema:
-            $ref: '#/definitions/model.CharacterItem'
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-      summary: Returns all CharacterItems
-      tags:
-      - CharacterItem
-    post:
-      consumes:
-      - application/json
-      description: Permissions for Admin
-      parameters:
-      - description: CharacterItem data
-        in: body
-        name: characterItem
-        required: true
-        schema:
-          $ref: '#/definitions/model.CreateCharacterItem'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: CharacterItem details
-          schema:
-            $ref: '#/definitions/model.CharacterItemExternal'
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "403":
-          description: You can't access for this API
-          schema:
-            type: string
-      summary: Create and returns CharacterItem or nil
-      tags:
-      - CharacterItem
-  /CharacterItem/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Permissions for Admin
-      parameters:
-      - description: CharacterItem id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "403":
-          description: You can't access for this API
-          schema:
-            type: string
-        "404":
-          description: CharacterItem doesn't exist
-          schema:
-            type: string
-      summary: Deletes CharacterItem by ID or returns nil
-      tags:
-      - CharacterItem
-    get:
-      consumes:
-      - application/json
-      description: Retrieve CharacterItem details using its ID
-      parameters:
-      - description: CharacterItem id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: CharacterItem details
-          schema:
-            $ref: '#/definitions/model.CharacterItem'
-        "404":
-          description: CharacterItem not found
-          schema:
-            type: string
-      summary: Returns CharacterItem by id
-      tags:
-      - CharacterItem
-    patch:
-      consumes:
-      - application/json
-      description: Permissions for Admin
-      parameters:
-      - description: CharacterItem id
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: CharacterItem data
-        in: body
-        name: characterItem
-        required: true
-        schema:
-          $ref: '#/definitions/model.UpdateCharacterItem'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: CharacterItem details
-          schema:
-            $ref: '#/definitions/model.CharacterItemExternal'
-        "403":
-          description: You can't access for this API
-          schema:
-            type: string
-        "404":
-          description: CharacterItem doesn't exist
-          schema:
-            type: string
-      summary: Updates CharacterItem by ID or nil
-      tags:
-      - CharacterItem
   /character:
     get:
       consumes:
@@ -834,6 +701,139 @@ paths:
       summary: Create and returns character or nil
       tags:
       - Character
+  /character-item:
+    get:
+      consumes:
+      - application/json
+      description: Return all CharacterItems
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CharacterItem details
+          schema:
+            $ref: '#/definitions/model.CharacterItemExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all CharacterItems
+      tags:
+      - CharacterItem
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: CharacterItem data
+        in: body
+        name: characterItem
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateCharacterItem'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CharacterItem details
+          schema:
+            $ref: '#/definitions/model.CharacterItemExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns CharacterItem or nil
+      tags:
+      - CharacterItem
+  /character-item/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: CharacterItem id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: CharacterItem doesn't exist
+          schema:
+            type: string
+      summary: Deletes CharacterItem by ID or returns nil
+      tags:
+      - CharacterItem
+    get:
+      consumes:
+      - application/json
+      description: Retrieve CharacterItem details using its ID
+      parameters:
+      - description: CharacterItem id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CharacterItem details
+          schema:
+            $ref: '#/definitions/model.CharacterItemExternal'
+        "404":
+          description: CharacterItem not found
+          schema:
+            type: string
+      summary: Returns CharacterItem by id
+      tags:
+      - CharacterItem
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: CharacterItem id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: CharacterItem data
+        in: body
+        name: characterItem
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateCharacterItem'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CharacterItem details
+          schema:
+            $ref: '#/definitions/model.CharacterItemExternal'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: CharacterItem doesn't exist
+          schema:
+            type: string
+      summary: Updates CharacterItem by ID or nil
+      tags:
+      - CharacterItem
   /character/{id}:
     delete:
       consumes:
