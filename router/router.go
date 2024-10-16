@@ -99,6 +99,8 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	itemGroup := g.Group("/item").Use(authentication.RequireJWT)
 	{
 		itemGroup.GET("", itemHandler.GetItems)
+		itemGroup.GET(":id", itemHandler.GetItemByID)
+		itemGroup.DELETE("/:id", itemHandler.DeleteItem)
 		itemGroup.GET("/armor", itemHandler.GetArmors)
 		itemGroup.GET("/armor/:id", itemHandler.GetArmorByID)
 		itemGroup.POST("/armor", itemHandler.CreateArmor)

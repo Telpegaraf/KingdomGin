@@ -1022,6 +1022,57 @@ paths:
       summary: Returns all items
       tags:
       - Item
+  /item/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Item id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Item doesn't exist
+          schema:
+            type: string
+      summary: Deletes Item by ID or returns nil
+      tags:
+      - Item
+    get:
+      consumes:
+      - application/json
+      description: Permissions for auth users
+      parameters:
+      - description: Item id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Item details
+          schema:
+            $ref: '#/definitions/model.Armor'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns Item by ID
+      tags:
+      - Item
   /item/armor:
     get:
       consumes:
