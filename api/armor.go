@@ -55,9 +55,10 @@ func (a *ItemApi) GetArmors(ctx *gin.Context) {
 	if success := SuccessOrAbort(ctx, 500, err); !success {
 		return
 	}
-	var resp []*model.Armor
+	var resp []*model.ArmorExternal
 	for _, armor := range armors {
-		resp = append(resp, armor)
+		externalArmor := ToExternalArmor(armor, &armor.Item)
+		resp = append(resp, externalArmor)
 	}
 	ctx.JSON(http.StatusOK, resp)
 }
