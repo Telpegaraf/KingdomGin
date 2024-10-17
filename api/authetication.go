@@ -23,7 +23,7 @@ type Controller struct {
 //
 // @Summary Login user for token
 // @Description Авторизация пользователя по логину и паролю
-// @Tags auth
+// @Tags Auth
 // @Accept  json
 // @Produce  json
 // @Param user body model.UserLogin true "User data"

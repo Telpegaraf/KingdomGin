@@ -31,7 +31,7 @@ func (a *CharacterApi) CreateAttribute(ctx *gin.Context, characterID uint) {
 // @Tags Attribute
 // @Accept json
 // @Produce json
-// @Param id path int true "attribute id"
+// @Param id path int true "character_id"
 // @Success 200 {object} model.AttributeExternal "Attribute details"
 // @Failure 404 {string} string "Attribute not found"
 // @Router /attribute/{id} [get]
@@ -44,7 +44,7 @@ func (a *AttributeApi) GetAttributeByID(ctx *gin.Context) {
 		if attribute != nil {
 			ctx.JSON(http.StatusOK, ToExternalAttribute(attribute))
 		} else {
-			ctx.JSON(http.StatusNotFound, gin.H{"error": "Slot doesn't exist"})
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Attribute doesn't exist"})
 		}
 	})
 }
@@ -64,9 +64,9 @@ func (a *AttributeApi) GetAttributeByID(ctx *gin.Context) {
 func (a *AttributeApi) UpdateAttribute(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		var attribute *model.UpdateAttribute
-		if err := ctx.ShouldBind(attribute); err == nil {
+		if err := ctx.ShouldBindJSON(&attribute); err == nil {
 			oldAttribute, err := a.DB.GetAttributeByID(id)
-			if success := SuccessOrAbort(ctx, 500, err); !success {
+			if success := SuccessOrAbort(ctx, 404, err); !success {
 				return
 			}
 			if oldAttribute != nil {
@@ -78,13 +78,12 @@ func (a *AttributeApi) UpdateAttribute(ctx *gin.Context) {
 					Intelligence: *attribute.Intelligence,
 					Wisdom:       *attribute.Wisdom,
 					Charisma:     *attribute.Charisma,
+					CharacterID:  id,
 				}
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateAttribute(internal)); !success {
 					return
 				}
 				ctx.JSON(http.StatusOK, ToExternalAttribute(internal))
-			} else {
-				ctx.JSON(http.StatusNotFound, gin.H{"error": "Attribute doesn't exist"})
 			}
 		}
 	})

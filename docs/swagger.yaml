@@ -596,6 +596,27 @@ definitions:
       price:
         type: string
     type: object
+  model.UpdateAttribute:
+    properties:
+      charisma:
+        example: 10
+        type: integer
+      constitution:
+        example: 10
+        type: integer
+      dexterity:
+        example: 10
+        type: integer
+      intelligence:
+        example: 10
+        type: integer
+      strength:
+        example: 10
+        type: integer
+      wisdom:
+        example: 10
+        type: integer
+    type: object
   model.UpdateCharacterItem:
     properties:
       character_id:
@@ -751,7 +772,7 @@ paths:
       - application/json
       description: Permissions for auth user or admin
       parameters:
-      - description: attribute id
+      - description: character_id
         in: path
         name: id
         required: true
@@ -768,6 +789,36 @@ paths:
           schema:
             type: string
       summary: Returns attribute by id
+      tags:
+      - Attribute
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Character's User or Admin
+      parameters:
+      - description: Attribute id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Attribute data
+        in: body
+        name: attribute
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateAttribute'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Attribute details
+          schema:
+            $ref: '#/definitions/model.AttributeExternal'
+        "404":
+          description: Attribute doesn't exist
+          schema:
+            type: string
+      summary: Updates Attribute by ID or nil
       tags:
       - Attribute
   /character:
@@ -1733,7 +1784,7 @@ paths:
             type: string
       summary: Login user for token
       tags:
-      - auth
+      - Auth
   /slot/{id}:
     get:
       consumes:

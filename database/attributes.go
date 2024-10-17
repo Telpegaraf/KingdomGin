@@ -10,16 +10,13 @@ import (
 func (d *GormDatabase) CreateAttribute(stat *model.Attribute) error { return d.DB.Create(stat).Error }
 
 // GetAttributeByID returns Attribute object by ID
-func (d *GormDatabase) GetAttributeByID(id uint) (*model.Attribute, error) {
+func (d *GormDatabase) GetAttributeByID(characterID uint) (*model.Attribute, error) {
 	attribute := &model.Attribute{}
-	err := d.DB.Find(attribute, id).Error
+	err := d.DB.Where("character_id = ?", characterID).First(attribute).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
-	if attribute.ID == id {
-		return attribute, nil
-	}
-	return nil, err
+	return attribute, nil
 }
 
 // UpdateAttribute updates Attribute object

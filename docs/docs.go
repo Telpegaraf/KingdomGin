@@ -31,7 +31,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "attribute id",
+                        "description": "character_id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -46,6 +46,51 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Attribute not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Character's User or Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Attribute"
+                ],
+                "summary": "Updates Attribute by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Attribute id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Attribute data",
+                        "name": "attribute",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateAttribute"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Attribute details",
+                        "schema": {
+                            "$ref": "#/definitions/model.AttributeExternal"
+                        }
+                    },
+                    "404": {
+                        "description": "Attribute doesn't exist",
                         "schema": {
                             "type": "string"
                         }
@@ -1486,7 +1531,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "Login user for token",
                 "parameters": [
@@ -2726,6 +2771,35 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "string"
+                }
+            }
+        },
+        "model.UpdateAttribute": {
+            "type": "object",
+            "properties": {
+                "charisma": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "constitution": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "dexterity": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "intelligence": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "strength": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "wisdom": {
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },

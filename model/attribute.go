@@ -22,13 +22,12 @@ type CreateAttribute struct {
 }
 
 type UpdateAttribute struct {
-	Strength     *uint8 `json:"strength" query:"strength" form:"strength"`
-	Dexterity    *uint8 `json:"dexterity" query:"dexterity" form:"dexterity"`
-	Constitution *uint8 `json:"constitution" query:"constitution" form:"constitution"`
-	Intelligence *uint8 `json:"intelligence" query:"intelligence" form:"intelligence"`
-	Wisdom       *uint8 `json:"wisdom" query:"wisdom" form:"wisdom"`
-	Charisma     *uint8 `json:"charisma" query:"charisma" form:"charisma"`
-	CharacterID  uint
+	Strength     *uint8 `json:"strength" query:"strength" form:"strength" example:"10"`
+	Dexterity    *uint8 `json:"dexterity" query:"dexterity" form:"dexterity" example:"10"`
+	Constitution *uint8 `json:"constitution" query:"constitution" form:"constitution" example:"10"`
+	Intelligence *uint8 `json:"intelligence" query:"intelligence" form:"intelligence" example:"10"`
+	Wisdom       *uint8 `json:"wisdom" query:"wisdom" form:"wisdom" example:"10"`
+	Charisma     *uint8 `json:"charisma" query:"charisma" form:"charisma" example:"10"`
 }
 
 type AttributeExternal struct {
