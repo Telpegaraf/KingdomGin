@@ -5,6 +5,13 @@ import (
 	"kingdom/model"
 )
 
+type SlotDatabase interface {
+}
+
+type SlotApi struct {
+	DB SlotDatabase
+}
+
 func (a *CharacterApi) CreateSlot(ctx *gin.Context, characterID uint) {
 	internal := &model.Slot{
 		CharacterID: characterID,
