@@ -26,5 +26,5 @@ func (d *GormDatabase) GetSlotByID(id uint) (*model.Slot, error) {
 
 // UpdateSlot updates slot
 func (d *GormDatabase) UpdateSlot(slot *model.Slot) error {
-	return d.DB.Updates(slot).Error
+	return d.DB.Model(&slot).Select("armor_id", "first_weapon_id", "second_weapon_id").Updates(slot).Error
 }

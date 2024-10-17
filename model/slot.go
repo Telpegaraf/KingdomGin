@@ -2,7 +2,7 @@ package model
 
 type Slot struct {
 	ID             uint `gorm:"primary_key;AUTO_INCREMENT"`
-	CharacterID    uint
+	CharacterID    uint `gorm:"unique;"`
 	ArmorID        *uint
 	FirstWeaponID  *uint
 	SecondWeaponID *uint

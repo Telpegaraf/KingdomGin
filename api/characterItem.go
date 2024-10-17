@@ -64,7 +64,7 @@ func (a *CharacterItemApi) GetCharacterItemByID(ctx *gin.Context) {
 			return
 		}
 		if CharacterItem != nil {
-			ctx.JSON(http.StatusOK, CharacterItem)
+			ctx.JSON(http.StatusOK, ToExternalCharacterItem(CharacterItem, &CharacterItem.Character, &CharacterItem.Item))
 		}
 	})
 }
@@ -180,6 +180,7 @@ func ToExternalCharacterItem(
 		Quantity:      characterItem.Quantity,
 		ItemID:        item.ID,
 		ItemName:      item.Name,
+		ItemType:      item.OwnerType,
 		Bulk:          item.Bulk * float64(characterItem.Quantity),
 	}
 }

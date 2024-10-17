@@ -32,5 +32,6 @@ type CharacterItemExternal struct {
 	Quantity      uint    `json:"quantity" query:"quantity" form:"quantity" example:"1"`
 	ItemID        uint    `json:"itemID" query:"item_id" form:"item_id"`
 	ItemName      string  `json:"item_name" query:"item_name" form:"item_name"`
+	ItemType      string  `json:"item_type" query:"item_type" form:"item_type"`
 	Bulk          float64 `json:"bulk" query:"bulk" form:"bulk"`
 }
