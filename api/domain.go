@@ -40,8 +40,8 @@ func (a *DomainApi) CreateDomain(ctx *gin.Context) {
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateDomain(internal)); !success {
 			return
 		}
+		ctx.JSON(http.StatusCreated, ToDomainExternal(internal))
 	}
-	ctx.JSON(http.StatusCreated, domain)
 }
 
 // GetDomainByID godoc
@@ -63,7 +63,7 @@ func (a *DomainApi) GetDomainByID(ctx *gin.Context) {
 			return
 		}
 		if domain != nil {
-			ctx.JSON(http.StatusOK, domain)
+			ctx.JSON(http.StatusOK, ToDomainExternal(domain))
 		}
 	})
 }
@@ -83,9 +83,9 @@ func (a *DomainApi) GetDomains(ctx *gin.Context) {
 	if success := SuccessOrAbort(ctx, 500, err); !success {
 		ctx.JSON(http.StatusNotFound, err)
 	}
-	var resp []*model.Domain
+	var resp []*model.DomainExternal
 	for _, domain := range domains {
-		resp = append(resp, domain)
+		resp = append(resp, ToDomainExternal(domain))
 	}
 	ctx.JSON(http.StatusOK, resp)
 }
@@ -120,7 +120,7 @@ func (a *DomainApi) UpdateDomain(ctx *gin.Context) {
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateDomain(internal)); !success {
 					return
 				}
-				ctx.JSON(http.StatusOK, domain)
+				ctx.JSON(http.StatusOK, ToDomainExternal(internal))
 			}
 		} else {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "Domain doesn't exist"})
@@ -155,4 +155,12 @@ func (a *DomainApi) DeleteDomain(ctx *gin.Context) {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "Character doesn't exist"})
 		}
 	})
+}
+
+func ToDomainExternal(domain *model.Domain) *model.DomainExternal {
+	return &model.DomainExternal{
+		ID:          domain.ID,
+		Name:        domain.Name,
+		Description: domain.Description,
+	}
 }
