@@ -50,6 +50,10 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		DB: db,
 	}
 
+	attributeHandler := api.AttributeApi{
+		DB: db,
+	}
+
 	godHandler := api.GodApi{DB: db}
 	domainHandler := api.DomainApi{DB: db}
 
@@ -134,6 +138,9 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 
 	g.GET("/slot/:id", slotHandler.GetSlotByID).Use(authentication.RequireJWT)
 	g.PATCH("/slot/:id", slotHandler.UpdateSlot).Use(authentication.RequireJWT)
+
+	g.GET("/attribute/:id", attributeHandler.GetAttributeByID).Use(authentication.RequireJWT)
+	g.PATCH("/attribute/:id", attributeHandler.UpdateAttribute).Use(authentication.RequireJWT)
 
 	return g, func() {}
 }

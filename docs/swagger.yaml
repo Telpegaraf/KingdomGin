@@ -49,6 +49,25 @@ definitions:
       wisdom:
         type: integer
     type: object
+  model.AttributeExternal:
+    properties:
+      characterID:
+        type: integer
+      charisma:
+        type: integer
+      constitution:
+        type: integer
+      dexterity:
+        type: integer
+      id:
+        type: integer
+      intelligence:
+        type: integer
+      strength:
+        type: integer
+      wisdom:
+        type: integer
+    type: object
   model.Character:
     properties:
       alias:
@@ -170,6 +189,8 @@ definitions:
       id:
         type: integer
       item_name:
+        type: string
+      item_type:
         type: string
       itemID:
         type: integer
@@ -724,6 +745,31 @@ info:
   title: Kingdom Api
   version: 0.1.0
 paths:
+  /attribute/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Permissions for auth user or admin
+      parameters:
+      - description: attribute id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Attribute details
+          schema:
+            $ref: '#/definitions/model.AttributeExternal'
+        "404":
+          description: Attribute not found
+          schema:
+            type: string
+      summary: Returns attribute by id
+      tags:
+      - Attribute
   /character:
     get:
       consumes:

@@ -15,6 +15,44 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/attribute/{id}": {
+            "get": {
+                "description": "Permissions for auth user or admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Attribute"
+                ],
+                "summary": "Returns attribute by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "attribute id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Attribute details",
+                        "schema": {
+                            "$ref": "#/definitions/model.AttributeExternal"
+                        }
+                    },
+                    "404": {
+                        "description": "Attribute not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/character": {
             "get": {
                 "description": "Return all characters for current user",
@@ -1877,6 +1915,35 @@ const docTemplate = `{
                 }
             }
         },
+        "model.AttributeExternal": {
+            "type": "object",
+            "properties": {
+                "characterID": {
+                    "type": "integer"
+                },
+                "charisma": {
+                    "type": "integer"
+                },
+                "constitution": {
+                    "type": "integer"
+                },
+                "dexterity": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "intelligence": {
+                    "type": "integer"
+                },
+                "strength": {
+                    "type": "integer"
+                },
+                "wisdom": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.Character": {
             "type": "object",
             "properties": {
@@ -2062,6 +2129,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "item_name": {
+                    "type": "string"
+                },
+                "item_type": {
                     "type": "string"
                 },
                 "quantity": {

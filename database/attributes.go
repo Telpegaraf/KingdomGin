@@ -22,19 +22,9 @@ func (d *GormDatabase) GetAttributeByID(id uint) (*model.Attribute, error) {
 	return nil, err
 }
 
-// GetAttributes returns all Attribute objects
-func (d *GormDatabase) GetAttributes() (*[]model.Attribute, error) {
-	var attributes []model.Attribute
-	err := d.DB.Find(&attributes).Error
-	return &attributes, err
-}
-
-// DeleteAttribute deletes Attribute object
-func (d *GormDatabase) DeleteAttribute(id uint) error {
-	return d.DB.Where("id = ?", id).Delete(&model.Attribute{}).Error
-}
-
 // UpdateAttribute updates Attribute object
 func (d *GormDatabase) UpdateAttribute(attributes *model.Attribute) error {
-	return d.DB.Save(attributes).Error
+	return d.DB.Model(attributes).
+		Select("strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma").
+		Updates(attributes).Error
 }

@@ -3,7 +3,17 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"kingdom/model"
+	"net/http"
 )
+
+type AttributeDatabase interface {
+	GetAttributeByID(id uint) (*model.Attribute, error)
+	UpdateAttribute(attributes *model.Attribute) error
+}
+
+type AttributeApi struct {
+	DB AttributeDatabase
+}
 
 func (a *CharacterApi) CreateAttribute(ctx *gin.Context, characterID uint) {
 	internal := &model.Attribute{
@@ -11,5 +21,84 @@ func (a *CharacterApi) CreateAttribute(ctx *gin.Context, characterID uint) {
 	}
 	if success := SuccessOrAbort(ctx, 500, a.DB.CreateAttribute(internal)); !success {
 		return
+	}
+}
+
+// GetAttributeByID godoc
+//
+// @Summary Returns attribute by id
+// @Description Permissions for auth user or admin
+// @Tags Attribute
+// @Accept json
+// @Produce json
+// @Param id path int true "attribute id"
+// @Success 200 {object} model.AttributeExternal "Attribute details"
+// @Failure 404 {string} string "Attribute not found"
+// @Router /attribute/{id} [get]
+func (a *AttributeApi) GetAttributeByID(ctx *gin.Context) {
+	withID(ctx, "id", func(id uint) {
+		attribute, err := a.DB.GetAttributeByID(id)
+		if success := SuccessOrAbort(ctx, 500, err); !success {
+			return
+		}
+		if attribute != nil {
+			ctx.JSON(http.StatusOK, ToExternalAttribute(attribute))
+		} else {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Slot doesn't exist"})
+		}
+	})
+}
+
+// UpdateAttribute Updates Attribute by ID
+//
+// @Summary Updates Attribute by ID or nil
+// @Description Permissions for Character's User or Admin
+// @Tags Attribute
+// @Accept json
+// @Produce json
+// @Param id path int true "Attribute id"
+// @Param attribute body model.UpdateAttribute true "Attribute data"
+// @Success 200 {object} model.AttributeExternal "Attribute details"
+// @Failure 404 {string} string "Attribute doesn't exist"
+// @Router /attribute/{id} [patch]
+func (a *AttributeApi) UpdateAttribute(ctx *gin.Context) {
+	withID(ctx, "id", func(id uint) {
+		var attribute *model.UpdateAttribute
+		if err := ctx.ShouldBind(attribute); err == nil {
+			oldAttribute, err := a.DB.GetAttributeByID(id)
+			if success := SuccessOrAbort(ctx, 500, err); !success {
+				return
+			}
+			if oldAttribute != nil {
+				internal := &model.Attribute{
+					ID:           oldAttribute.ID,
+					Strength:     *attribute.Strength,
+					Dexterity:    *attribute.Dexterity,
+					Constitution: *attribute.Constitution,
+					Intelligence: *attribute.Intelligence,
+					Wisdom:       *attribute.Wisdom,
+					Charisma:     *attribute.Charisma,
+				}
+				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateAttribute(internal)); !success {
+					return
+				}
+				ctx.JSON(http.StatusOK, ToExternalAttribute(internal))
+			} else {
+				ctx.JSON(http.StatusNotFound, gin.H{"error": "Attribute doesn't exist"})
+			}
+		}
+	})
+}
+
+func ToExternalAttribute(attribute *model.Attribute) *model.AttributeExternal {
+	return &model.AttributeExternal{
+		ID:           attribute.ID,
+		CharacterID:  attribute.CharacterID,
+		Strength:     attribute.Strength,
+		Dexterity:    attribute.Dexterity,
+		Constitution: attribute.Constitution,
+		Intelligence: attribute.Intelligence,
+		Wisdom:       attribute.Wisdom,
+		Charisma:     attribute.Charisma,
 	}
 }
