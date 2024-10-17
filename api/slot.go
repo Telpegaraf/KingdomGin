@@ -9,7 +9,6 @@ import (
 type SlotDatabase interface {
 	GetSlotByID(id uint) (*model.Slot, error)
 	UpdateSlot(slot *model.Slot) error
-	GetCharacterItems(characterId uint) ([]*model.CharacterItem, error)
 	GetCharacterItemByID(id uint) (*model.CharacterItem, error)
 }
 
@@ -72,7 +71,7 @@ func (a *SlotApi) UpdateSlot(ctx *gin.Context) {
 
 			if slot.ArmorID != nil {
 				if armor, err := a.DB.GetCharacterItemByID(*slot.ArmorID); err == nil && armor != nil &&
-					armor.Item.OwnerType != "armors" {
+					armor.Item.OwnerType != "armors" || armor.CharacterID != slot.CharacterID {
 					ctx.JSON(http.StatusNotFound, gin.H{"error": "Wrong Armor slot"})
 					return
 				}
@@ -80,14 +79,14 @@ func (a *SlotApi) UpdateSlot(ctx *gin.Context) {
 
 			if slot.FirstWeaponID != nil {
 				if fWeapon, err := a.DB.GetCharacterItemByID(*slot.FirstWeaponID); err == nil && fWeapon != nil &&
-					fWeapon.Item.OwnerType != "weapons" {
+					fWeapon.Item.OwnerType != "weapons" || fWeapon.CharacterID != slot.CharacterID {
 					ctx.JSON(http.StatusNotFound, gin.H{"error": "Wrong First Weapon slot"})
 					return
 				}
 			}
 			if slot.SecondWeaponID != nil {
 				if sWeapon, err := a.DB.GetCharacterItemByID(*slot.SecondWeaponID); err == nil && sWeapon != nil &&
-					sWeapon.Item.OwnerType != "weapons" {
+					sWeapon.Item.OwnerType != "weapons" || sWeapon.CharacterID != slot.CharacterID {
 					ctx.JSON(http.StatusNotFound, gin.H{"error": "Wrong Second Weapon slot"})
 					return
 				}
@@ -125,40 +124,3 @@ func ToExternalSlot(slot *model.Slot) *model.SlotExternal {
 		SecondWeaponID: slot.SecondWeaponID,
 	}
 }
-
-//func CheckSlot(
-//	characterItems []*model.CharacterItem,
-//	armorId *uint,
-//	firstWeaponId *uint,
-//	secondWeaponId *uint) bool {
-//	var armorValue uint
-//	var firstWeaponValue uint
-//	var secondWeaponValue uint
-//	if armorId != nil {
-//		armorValue = *armorId
-//	}
-//	if firstWeaponId != nil {
-//		firstWeaponValue = *firstWeaponId
-//	}
-//	if secondWeaponId != nil {
-//		secondWeaponValue = *secondWeaponId
-//	}
-//	for _, characterItem := range characterItems {
-//		if characterItem.ID == armorValue {
-//			if characterItem.Item.OwnerType != "armors" {
-//				return false
-//			}
-//		}
-//		if characterItem.ID == firstWeaponValue {
-//			if characterItem.Item.OwnerType != "weapons" {
-//				return false
-//			}
-//		}
-//		if characterItem.ID == secondWeaponValue {
-//			if characterItem.Item.OwnerType != "weapons" {
-//				return false
-//			}
-//		}
-//	}
-//	return true
-//}
