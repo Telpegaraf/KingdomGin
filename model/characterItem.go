@@ -1,13 +1,16 @@
 package model
 
 type CharacterItem struct {
-	ID          uint `gorm:"primary_key;AUTO_INCREMENT"`
-	CharacterId uint `gorm:"not null;uniqueIndex:idx_character_item"`
-	ItemId      uint `gorm:"not null;uniqueIndex:idx_character_item"`
-	Quantity    uint `gorm:"not null;default=1"`
+	ID           uint   `gorm:"primary_key;AUTO_INCREMENT"`
+	CharacterID  uint   `gorm:"not null;uniqueIndex:idx_character_item"`
+	ItemID       uint   `gorm:"not null;uniqueIndex:idx_character_item"`
+	Quantity     uint   `gorm:"not null;default=1"`
+	Armor        []Slot `gorm:"foreignKey:ArmorID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	FirstWeapon  []Slot `gorm:"foreignKey:FirstWeaponID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	SecondWeapon []Slot `gorm:"foreignKey:SecondWeaponID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 
-	Character Character `gorm:"foreignKey:CharacterId;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	Item      Item      `gorm:"foreignKey:ItemId;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Character Character `gorm:"foreignKey:CharacterID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Item      Item      `gorm:"foreignKey:ItemID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 type CreateCharacterItem struct {

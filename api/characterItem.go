@@ -34,8 +34,8 @@ func (a *CharacterItemApi) CreateCharacterItem(ctx *gin.Context) {
 	CharacterItem := &model.CreateCharacterItem{}
 	if err := ctx.ShouldBindJSON(CharacterItem); err == nil {
 		internal := &model.CharacterItem{
-			CharacterId: CharacterItem.CharacterID,
-			ItemId:      CharacterItem.ItemID,
+			CharacterID: CharacterItem.CharacterID,
+			ItemID:      CharacterItem.ItemID,
 			Quantity:    CharacterItem.Quantity,
 		}
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacterItem(internal)); !success {
@@ -125,8 +125,8 @@ func (a *CharacterItemApi) UpdateCharacterItem(ctx *gin.Context) {
 			if oldCharacterItem != nil {
 				internal := &model.CharacterItem{
 					ID:          oldCharacterItem.ID,
-					CharacterId: CharacterItem.CharacterID,
-					ItemId:      CharacterItem.ItemID,
+					CharacterID: CharacterItem.CharacterID,
+					ItemID:      CharacterItem.ItemID,
 					Quantity:    CharacterItem.Quantity,
 				}
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateCharacterItem(internal)); !success {

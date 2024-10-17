@@ -7,8 +7,9 @@ type Character struct {
 	LastName      string `gorm:"type:varchar(120)" json:"last_name"`
 	Level         int8   `gorm:"default:1"`
 	UserID        uint
-	Stat          Attribute
-	CharacterItem []CharacterItem
+	Stat          Attribute       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	CharacterItem []CharacterItem `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Slot          []Slot          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 type CreateCharacter struct {
