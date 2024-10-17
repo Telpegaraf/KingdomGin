@@ -52,6 +52,7 @@ func (a *GodApi) CreateGod(ctx *gin.Context) {
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateGod(internal)); !success {
 			return
 		}
+		ctx.JSON(http.StatusCreated, ToExternalGod(internal))
 	}
 }
 
@@ -73,7 +74,7 @@ func (a *GodApi) GetGodById(ctx *gin.Context) {
 			return
 		}
 		if god != nil {
-			ctx.JSON(http.StatusOK, god)
+			ctx.JSON(http.StatusOK, ToExternalGod(god))
 		} else {
 			ctx.JSON(404, gin.H{"error": "God not found"})
 		}
@@ -95,9 +96,9 @@ func (a *GodApi) GetGods(ctx *gin.Context) {
 	if success := SuccessOrAbort(ctx, 500, err); !success {
 		return
 	}
-	var resp []*model.God
+	var resp []*model.GodExternal
 	for _, god := range gods {
-		resp = append(resp, god)
+		resp = append(resp, ToExternalGod(god))
 	}
 	ctx.JSON(http.StatusOK, resp)
 }
@@ -146,7 +147,7 @@ func (a *GodApi) UpdateGod(ctx *gin.Context) {
 			if success := SuccessOrAbort(ctx, 500, a.DB.UpdateGod(internal)); !success {
 				return
 			}
-			ctx.JSON(http.StatusOK, internal)
+			ctx.JSON(http.StatusOK, ToExternalGod(internal))
 		} else {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "God doesn't exist"})
 		}
@@ -180,4 +181,22 @@ func (a *GodApi) DeleteGod(ctx *gin.Context) {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "God doesn't exist"})
 		}
 	})
+}
+
+func ToExternalGod(god *model.God) *model.GodExternal {
+	return &model.GodExternal{
+		ID:              god.ID,
+		Name:            god.Name,
+		Description:     god.Description,
+		Edict:           god.Edict,
+		Anathema:        god.Anathema,
+		AreasOfInterest: god.AreasOfInterest,
+		Temples:         god.Temples,
+		Worships:        god.Worships,
+		SacredAnimals:   god.SacredAnimals,
+		SacredColors:    god.SacredColors,
+		ChosenWeapon:    god.ChosenWeapon,
+		Alignment:       god.Alignment,
+		Domains:         god.Domains,
+	}
 }

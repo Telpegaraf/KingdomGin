@@ -14,7 +14,7 @@ type God struct {
 	ChosenWeapon    string   `gorm:"type:varchar(255); not null"`
 	Alignment       string   `gorm:"type:varchar(255); not null"`
 	Description     string   `gorm:"type:text; not null"`
-	Domains         []Domain `gorm:"many2many:god_domains;constraint:OnUpdate:CASCADE,OnDelete:CASCADE; not null"`
+	Domains         []Domain `gorm:"many2many:god_domains;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;not null"`
 }
 
 type GodCreate struct {
@@ -47,4 +47,21 @@ type GodUpdate struct {
 	Alignment       string     `json:"alignment" query:"alignment" form:"alignment"`
 	Description     string     `json:"description" query:"description" form:"description"`
 	Domains         []DomainID `json:"domains" query:"domains"`
+}
+
+type GodExternal struct {
+	ID              uint     `json:"id" query:"id" form:"id"`
+	Name            string   `json:"name" query:"name" form:"name"`
+	Alias           string   `json:"alias" query:"alias" form:"alias"`
+	Edict           string   `json:"edict" query:"edict" form:"edict"`
+	Anathema        string   `json:"anathema" query:"anathema" form:"anathema"`
+	AreasOfInterest string   `json:"areas_of_interest" query:"areas_of_interest" form:"areas_of_interest"`
+	Temples         string   `json:"temples" query:"temples" form:"temples"`
+	Worships        string   `json:"worships" query:"worships" form:"worships"`
+	SacredAnimals   string   `json:"sacred_animals" query:"sacred_animals" form:"sacred_animals"`
+	SacredColors    string   `json:"sacred_colors" query:"sacred_colors" form:"sacred_colors"`
+	ChosenWeapon    string   `json:"chosen_weapon" query:"chosen_weapon" form:"chosen_weapon"`
+	Alignment       string   `json:"alignment" query:"alignment" form:"alignment"`
+	Description     string   `json:"description" query:"description" form:"description"`
+	Domains         []Domain `json:"domains" query:"domains"`
 }
