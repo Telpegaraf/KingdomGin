@@ -87,13 +87,18 @@ func (a *CharacterItemApi) GetCharacterItems(ctx *gin.Context) {
 			ctx.JSON(http.StatusNotFound, err)
 		}
 		var resp []*model.CharacterItemExternal
+		var bulk float64
 		for _, characterItem := range CharacterItems {
 			characterItemExternal := ToExternalCharacterItem(characterItem, &characterItem.Character, &characterItem.Item)
 			resp = append(resp, characterItemExternal)
+			bulk += characterItemExternal.Bulk
 		}
-		ctx.JSON(http.StatusOK, resp)
-	})
 
+		ctx.JSON(http.StatusOK, gin.H{
+			"resp": resp,
+			"bulk": bulk,
+		})
+	})
 }
 
 // UpdateCharacterItem Updates CharacterItem by ID
@@ -175,5 +180,6 @@ func ToExternalCharacterItem(
 		Quantity:      characterItem.Quantity,
 		ItemID:        item.ID,
 		ItemName:      item.Name,
+		Bulk:          item.Bulk * float64(characterItem.Quantity),
 	}
 }
