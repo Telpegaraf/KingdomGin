@@ -21,8 +21,9 @@ type SlotUpdate struct {
 }
 
 type SlotExternal struct {
-	CharacterID    uint `json:"character_id" query:"character_id" form:"character_id"`
-	ArmorID        uint `json:"armor_id" query:"armor_id" form:"armor_id"`
-	FirstWeaponID  uint `json:"first_weapon_id" query:"first_weapon_id" form:"first_weapon_id"`
-	SecondWeaponID uint `json:"second_weapon_id" query:"second_weapon_id" form:"second_weapon_id"`
+	ID             uint  `json:"id" query:"id" form:"id"`
+	CharacterID    uint  `json:"character_id" query:"character_id" form:"character_id"`
+	ArmorID        *uint `json:"armor_id" query:"armor_id" form:"armor_id"`
+	FirstWeaponID  *uint `json:"first_weapon_id" query:"first_weapon_id" form:"first_weapon_id"`
+	SecondWeaponID *uint `json:"second_weapon_id" query:"second_weapon_id" form:"second_weapon_id"`
 }

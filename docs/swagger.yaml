@@ -65,6 +65,10 @@ definitions:
         type: integer
       name:
         type: string
+      slot:
+        items:
+          $ref: '#/definitions/model.Slot'
+        type: array
       stat:
         $ref: '#/definitions/model.Attribute'
       userID:
@@ -130,21 +134,35 @@ definitions:
     type: object
   model.CharacterItem:
     properties:
+      armor:
+        items:
+          $ref: '#/definitions/model.Slot'
+        type: array
       character:
         $ref: '#/definitions/model.Character'
-      characterId:
+      characterID:
         type: integer
+      firstWeapon:
+        items:
+          $ref: '#/definitions/model.Slot'
+        type: array
       id:
         type: integer
       item:
         $ref: '#/definitions/model.Item'
-      itemId:
+      itemID:
         type: integer
       quantity:
         type: integer
+      secondWeapon:
+        items:
+          $ref: '#/definitions/model.Slot'
+        type: array
     type: object
   model.CharacterItemExternal:
     properties:
+      bulk:
+        type: number
       character_id:
         type: integer
       character_name:
@@ -496,6 +514,51 @@ definitions:
     required:
     - name
     - price
+    type: object
+  model.Slot:
+    properties:
+      armor:
+        $ref: '#/definitions/model.CharacterItem'
+      armorID:
+        type: integer
+      character:
+        $ref: '#/definitions/model.Character'
+      characterID:
+        type: integer
+      firstWeapon:
+        $ref: '#/definitions/model.CharacterItem'
+      firstWeaponID:
+        type: integer
+      id:
+        type: integer
+      secondWeapon:
+        $ref: '#/definitions/model.CharacterItem'
+      secondWeaponID:
+        type: integer
+    type: object
+  model.SlotExternal:
+    properties:
+      armor_id:
+        type: integer
+      character_id:
+        type: integer
+      first_weapon_id:
+        type: integer
+      id:
+        type: integer
+      second_weapon_id:
+        type: integer
+    type: object
+  model.SlotUpdate:
+    properties:
+      armor_id:
+        type: integer
+      character_id:
+        type: integer
+      first_weapon_id:
+        type: integer
+      second_weapon_id:
+        type: integer
     type: object
   model.UpdateArmor:
     properties:
@@ -1625,6 +1688,61 @@ paths:
       summary: Login user for token
       tags:
       - auth
+  /slot/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Permissions for auth user
+      parameters:
+      - description: slot id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: slot details
+          schema:
+            $ref: '#/definitions/model.SlotExternal'
+        "404":
+          description: Slot not found
+          schema:
+            type: string
+      summary: Returns slot by id
+      tags:
+      - Slot
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Character's User or Admin
+      parameters:
+      - description: Slot id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Character data
+        in: body
+        name: slot
+        required: true
+        schema:
+          $ref: '#/definitions/model.SlotUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Character details
+          schema:
+            $ref: '#/definitions/model.SlotExternal'
+        "404":
+          description: Slot doesn't exist
+          schema:
+            type: string
+      summary: Updates Slot by ID or nil
+      tags:
+      - Slot
   /user:
     get:
       consumes:

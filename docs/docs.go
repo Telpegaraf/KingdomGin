@@ -1475,6 +1475,89 @@ const docTemplate = `{
                 }
             }
         },
+        "/slot/{id}": {
+            "get": {
+                "description": "Permissions for auth user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Slot"
+                ],
+                "summary": "Returns slot by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "slot id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "slot details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SlotExternal"
+                        }
+                    },
+                    "404": {
+                        "description": "Slot not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Character's User or Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Slot"
+                ],
+                "summary": "Updates Slot by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Slot id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Character data",
+                        "name": "slot",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SlotUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Character details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SlotExternal"
+                        }
+                    },
+                    "404": {
+                        "description": "Slot doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "description": "Returns all users",
@@ -1818,6 +1901,12 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "slot": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Slot"
+                    }
+                },
                 "stat": {
                     "$ref": "#/definitions/model.Attribute"
                 },
@@ -1916,11 +2005,23 @@ const docTemplate = `{
         "model.CharacterItem": {
             "type": "object",
             "properties": {
+                "armor": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Slot"
+                    }
+                },
                 "character": {
                     "$ref": "#/definitions/model.Character"
                 },
-                "characterId": {
+                "characterID": {
                     "type": "integer"
+                },
+                "firstWeapon": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Slot"
+                    }
                 },
                 "id": {
                     "type": "integer"
@@ -1928,17 +2029,26 @@ const docTemplate = `{
                 "item": {
                     "$ref": "#/definitions/model.Item"
                 },
-                "itemId": {
+                "itemID": {
                     "type": "integer"
                 },
                 "quantity": {
                     "type": "integer"
+                },
+                "secondWeapon": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Slot"
+                    }
                 }
             }
         },
         "model.CharacterItemExternal": {
             "type": "object",
             "properties": {
+                "bulk": {
+                    "type": "number"
+                },
                 "character_id": {
                     "type": "integer"
                 },
@@ -2454,6 +2564,75 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "string"
+                }
+            }
+        },
+        "model.Slot": {
+            "type": "object",
+            "properties": {
+                "armor": {
+                    "$ref": "#/definitions/model.CharacterItem"
+                },
+                "armorID": {
+                    "type": "integer"
+                },
+                "character": {
+                    "$ref": "#/definitions/model.Character"
+                },
+                "characterID": {
+                    "type": "integer"
+                },
+                "firstWeapon": {
+                    "$ref": "#/definitions/model.CharacterItem"
+                },
+                "firstWeaponID": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "secondWeapon": {
+                    "$ref": "#/definitions/model.CharacterItem"
+                },
+                "secondWeaponID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.SlotExternal": {
+            "type": "object",
+            "properties": {
+                "armor_id": {
+                    "type": "integer"
+                },
+                "character_id": {
+                    "type": "integer"
+                },
+                "first_weapon_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "second_weapon_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.SlotUpdate": {
+            "type": "object",
+            "properties": {
+                "armor_id": {
+                    "type": "integer"
+                },
+                "character_id": {
+                    "type": "integer"
+                },
+                "first_weapon_id": {
+                    "type": "integer"
+                },
+                "second_weapon_id": {
+                    "type": "integer"
                 }
             }
         },
