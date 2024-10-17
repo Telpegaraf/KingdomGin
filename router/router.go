@@ -43,6 +43,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	domainHandler := api.DomainApi{DB: db}
 	featHandler := api.FeatAPI{DB: db}
 	raceHandler := api.RaceApi{DB: db}
+	ancestryHandler := api.AncestryApi{DB: db}
 
 	authHandler := api.Controller{DB: db}
 
@@ -102,11 +103,20 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 
 	raceGroup := g.Group("/race").Use(authentication.RequireJWT)
 	{
-		raceGroup.POST("", featHandler.CreateFeat)
-		raceGroup.PATCH("/:id", featHandler.UpdateFeat)
-		raceGroup.GET("", featHandler.GetFeats)
-		raceGroup.GET("/:id", featHandler.GetFeatByID)
-		raceGroup.DELETE("/:id", featHandler.DeleteFeat)
+		raceGroup.POST("", raceHandler.CreateRace)
+		raceGroup.PATCH("/:id", raceHandler.UpdateRace)
+		raceGroup.GET("", raceHandler.GetRaces)
+		raceGroup.GET("/:id", raceHandler.GetRaceByID)
+		raceGroup.DELETE("/:id", raceHandler.DeleteRace)
+	}
+
+	ancestryGroup := g.Group("/ancestry").Use(authentication.RequireJWT)
+	{
+		ancestryGroup.POST("", ancestryHandler.CreateAncestry)
+		ancestryGroup.PATCH("/:id", ancestryHandler.UpdateAncestry)
+		ancestryGroup.GET("", ancestryHandler.GetAncestries)
+		ancestryGroup.GET("/:id", ancestryHandler.GetAncestryByID)
+		ancestryGroup.DELETE("/:id", ancestryHandler.DeleteAncestry)
 	}
 
 	characterClassGroup := g.Group("/class").Use(authentication.RequireJWT)

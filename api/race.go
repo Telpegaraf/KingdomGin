@@ -25,7 +25,7 @@ type RaceApi struct {
 // @Tags Race
 // @Accept json
 // @Produce json
-// @Param feat body model.RaceCreate true "Feat data"
+// @Param race body model.RaceCreate true "Feat data"
 // @Success 201 {object} model.RaceExternal "Feat details"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 403 {string} string "You can't access for this API"
@@ -53,7 +53,7 @@ func (a *RaceApi) CreateRace(ctx *gin.Context) {
 //
 // @Summary Returns all Races
 // @Description Return all Races
-// @Tags Item
+// @Tags Race
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.Race "Race details"
@@ -76,7 +76,7 @@ func (a *RaceApi) GetRaces(ctx *gin.Context) {
 //
 // @Summary Returns Race by ID
 // @Description Permissions for auth users
-// @Tags Item
+// @Tags Race
 // @Accept json
 // @Produce json
 // @Param id path int true "Race id"
@@ -98,7 +98,7 @@ func (a *RaceApi) GetRaceByID(ctx *gin.Context) {
 //
 // @Summary Updates Race by ID or nil
 // @Description Permissions for Admin
-// @Tags Item
+// @Tags Race
 // @Accept json
 // @Produce json
 // @Param id path int true "Race id"
