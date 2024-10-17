@@ -32,34 +32,16 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		UserChangeNotifier: userChangeNotifier,
 		Registration:       conf.Registration}
 
-	characterHandler := api.CharacterApi{
-		DB: db,
-	}
-	characterClassHandler := api.CharacterClassApi{
-		DB: db,
-	}
-	itemHandler := api.ItemApi{
-		DB: db,
-	}
-
-	characterItemHandler := api.CharacterItemApi{
-		DB: db,
-	}
-
-	slotHandler := api.SlotApi{
-		DB: db,
-	}
-
-	attributeHandler := api.AttributeApi{
-		DB: db,
-	}
-
-	characterBoostHandler := api.CharacterBoostApi{
-		DB: db,
-	}
-
+	characterHandler := api.CharacterApi{DB: db}
+	characterClassHandler := api.CharacterClassApi{DB: db}
+	itemHandler := api.ItemApi{DB: db}
+	characterItemHandler := api.CharacterItemApi{DB: db}
+	slotHandler := api.SlotApi{DB: db}
+	attributeHandler := api.AttributeApi{DB: db}
+	characterBoostHandler := api.CharacterBoostApi{DB: db}
 	godHandler := api.GodApi{DB: db}
 	domainHandler := api.DomainApi{DB: db}
+	featHandler := api.FeatAPI{DB: db}
 
 	authHandler := api.Controller{DB: db}
 
@@ -107,6 +89,15 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	}
 	g.GET("/domain/:id", domainHandler.GetDomainByID).Use(authentication.RequireJWT)
 	g.GET("/domain", domainHandler.GetDomains).Use(authentication.RequireJWT)
+
+	feat := g.Group("/feat").Use(authentication.RequireJWT)
+	{
+		feat.POST("", featHandler.CreateFeat)
+		feat.PATCH("/:id", featHandler.UpdateFeat)
+		feat.GET("", featHandler.GetFeats)
+		feat.GET("/:id", featHandler.GetFeatByID)
+		feat.DELETE("/:id", featHandler.DeleteFeat)
+	}
 
 	characterClassGroup := g.Group("/class").Use(authentication.RequireJWT)
 	{
