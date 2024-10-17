@@ -41,7 +41,7 @@ func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 			return
 		}
 		if character != nil {
-			ctx.JSON(http.StatusOK, character)
+			ctx.JSON(http.StatusOK, ToExternalCharacter(character))
 		} else {
 			ctx.JSON(404, gin.H{"error": "Character not found"})
 		}
@@ -70,9 +70,9 @@ func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
 	if success := SuccessOrAbort(ctx, 500, err); !success {
 		return
 	}
-	var resp []*model.Character
+	var resp []*model.CharacterExternal
 	for _, character := range characters {
-		resp = append(resp, character)
+		resp = append(resp, ToExternalCharacter(character))
 	}
 	ctx.JSON(http.StatusOK, resp)
 }
@@ -107,8 +107,8 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 			a.CreateSlot(ctx, internal.ID)
 			a.CreateCharacterBoost(ctx, internal.ID)
 		}()
+		ctx.JSON(http.StatusCreated, ToExternalCharacter(internal))
 	}
-	ctx.JSON(http.StatusCreated, character)
 }
 
 // UpdateCharacter Updates Character by ID
@@ -119,7 +119,7 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Character id"
-// @Param character body model.CharacterUpdateExternal true "Character data"
+// @Param character body model.CharacterUpdate true "Character data"
 // @Success 200 {object} model.CharacterExternal "Character details"
 // @Failure 404 {string} string "Character doesn't exist"
 // @Router /character/{id} [patch]
@@ -127,7 +127,7 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 	user, _ := a.DB.GetUserByID(auth.GetUserID(ctx))
 
 	withID(ctx, "id", func(id uint) {
-		var character *model.CharacterUpdateExternal
+		var character *model.CharacterUpdate
 		if err := ctx.Bind(&character); err == nil {
 			oldCharacter, err := a.DB.GetCharacterByID(id)
 			if success := SuccessOrAbort(ctx, 500, err); !success {
@@ -148,7 +148,7 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateCharacter(internal)); success {
 					return
 				}
-				ctx.JSON(http.StatusOK, internal)
+				ctx.JSON(http.StatusOK, ToExternalCharacter(internal))
 			}
 		} else {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "Character doesn't exist"})
@@ -189,4 +189,19 @@ func (a *CharacterApi) DeleteCharacter(ctx *gin.Context) {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "Character doesn't exist"})
 		}
 	})
+}
+
+func ToExternalCharacter(character *model.Character) *model.CharacterExternal {
+	return &model.CharacterExternal{
+		ID:             character.ID,
+		Name:           character.Name,
+		Alias:          character.Alias,
+		LastName:       character.LastName,
+		UserID:         character.UserID,
+		Level:          character.Level,
+		CharacterItem:  character.CharacterItem,
+		CharacterBoost: character.CharacterBoost,
+		Attribute:      character.Attribute,
+		Slot:           character.Slot,
+	}
 }
