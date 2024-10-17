@@ -1,4 +1,15 @@
 definitions:
+  model.Ancestry:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      raceID:
+        type: integer
+    type: object
   model.Armor:
     properties:
       armorClass:
@@ -67,6 +78,23 @@ definitions:
         type: integer
       wisdom:
         type: integer
+    type: object
+  model.Background:
+    properties:
+      attributeBoost:
+        type: string
+      description:
+        type: string
+      featID:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      skill:
+        items:
+          $ref: '#/definitions/model.Skill'
+        type: array
     type: object
   model.Character:
     properties:
@@ -304,6 +332,17 @@ definitions:
     - description
     - name
     type: object
+  model.CreateFeat:
+    properties:
+      description:
+        type: string
+      level:
+        type: integer
+      name:
+        type: string
+    required:
+    - name
+    type: object
   model.CreateGear:
     properties:
       bulk:
@@ -398,6 +437,32 @@ definitions:
     properties:
       id:
         type: integer
+    type: object
+  model.Feat:
+    properties:
+      background:
+        items:
+          $ref: '#/definitions/model.Background'
+        type: array
+      description:
+        type: string
+      id:
+        type: integer
+      level:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.FeatExternal:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      level:
+        type: integer
+      name:
+        type: string
     type: object
   model.Gear:
     properties:
@@ -580,6 +645,101 @@ definitions:
     - name
     - price
     type: object
+  model.Race:
+    properties:
+      abilityBoost:
+        type: string
+      ancestry:
+        items:
+          $ref: '#/definitions/model.Ancestry'
+        type: array
+      description:
+        type: string
+      hitPoints:
+        type: integer
+      id:
+        type: integer
+      language:
+        type: string
+      name:
+        type: string
+      size:
+        type: string
+      speed:
+        type: integer
+    type: object
+  model.RaceCreate:
+    properties:
+      ability_boost:
+        type: string
+      description:
+        type: string
+      hit_points:
+        type: integer
+      language:
+        type: string
+      name:
+        type: string
+      size:
+        type: string
+      speed:
+        type: integer
+    required:
+    - description
+    - hit_points
+    - name
+    - size
+    - speed
+    type: object
+  model.RaceExternal:
+    properties:
+      ability_boost:
+        type: string
+      description:
+        type: string
+      hit_points:
+        type: integer
+      id:
+        type: integer
+      language:
+        type: string
+      name:
+        type: string
+      size:
+        type: string
+      speed:
+        type: integer
+    type: object
+  model.RaceUpdate:
+    properties:
+      ability_boost:
+        type: string
+      description:
+        type: string
+      hit_points:
+        type: integer
+      language:
+        type: string
+      name:
+        type: string
+      size:
+        type: string
+      speed:
+        type: integer
+    type: object
+  model.Skill:
+    properties:
+      background:
+        items:
+          $ref: '#/definitions/model.Background'
+        type: array
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   model.Slot:
     properties:
       armor:
@@ -705,6 +865,15 @@ definitions:
     required:
     - description
     - name
+    type: object
+  model.UpdateFeat:
+    properties:
+      description:
+        type: string
+      level:
+        type: integer
+      name:
+        type: string
     type: object
   model.UpdateGear:
     properties:
@@ -833,6 +1002,33 @@ info:
   title: Kingdom Api
   version: 0.1.0
 paths:
+  /Race/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Race id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Domain doesn't exist
+          schema:
+            type: string
+      summary: Deletes Race by ID or returns nil
+      tags:
+      - Race
   /attribute/{id}:
     get:
       consumes:
@@ -1367,6 +1563,115 @@ paths:
       summary: Updates Domain by ID or nil
       tags:
       - Domain
+  /feat:
+    get:
+      consumes:
+      - application/json
+      description: Return all Feats
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Feat details
+          schema:
+            $ref: '#/definitions/model.Feat'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all Feats
+      tags:
+      - Item
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Feat data
+        in: body
+        name: feat
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateFeat'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Feat details
+          schema:
+            $ref: '#/definitions/model.FeatExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Feat or nil
+      tags:
+      - Feat
+  /feat/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Feat id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Domain doesn't exist
+          schema:
+            type: string
+      summary: Deletes Feat by ID or returns nil
+      tags:
+      - Feat
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Feat id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Feat data
+        in: body
+        name: Feat
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateFeat'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Feat details
+          schema:
+            $ref: '#/definitions/model.Feat'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Feat doesn't exist
+          schema:
+            type: string
+      summary: Updates Feat by ID or nil
+      tags:
+      - Item
   /god:
     get:
       consumes:
@@ -1560,6 +1865,31 @@ paths:
           schema:
             type: string
       summary: Returns Item by ID
+      tags:
+      - Item
+  /item/Feat/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Permissions for auth users
+      parameters:
+      - description: Feat id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Feat details
+          schema:
+            $ref: '#/definitions/model.Feat'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns Feat by ID
       tags:
       - Item
   /item/armor:
@@ -1907,6 +2237,113 @@ paths:
       summary: Login user for token
       tags:
       - Auth
+  /race:
+    get:
+      consumes:
+      - application/json
+      description: Return all Races
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Race details
+          schema:
+            $ref: '#/definitions/model.Race'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all Races
+      tags:
+      - Item
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Feat data
+        in: body
+        name: feat
+        required: true
+        schema:
+          $ref: '#/definitions/model.RaceCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Feat details
+          schema:
+            $ref: '#/definitions/model.RaceExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Race or nil
+      tags:
+      - Race
+  /race/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Permissions for auth users
+      parameters:
+      - description: Race id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Race details
+          schema:
+            $ref: '#/definitions/model.Race'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns Race by ID
+      tags:
+      - Item
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Race id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Race data
+        in: body
+        name: race
+        required: true
+        schema:
+          $ref: '#/definitions/model.RaceUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Race details
+          schema:
+            $ref: '#/definitions/model.Race'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Race doesn't exist
+          schema:
+            type: string
+      summary: Updates Race by ID or nil
+      tags:
+      - Item
   /slot/{id}:
     get:
       consumes:

@@ -42,6 +42,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	godHandler := api.GodApi{DB: db}
 	domainHandler := api.DomainApi{DB: db}
 	featHandler := api.FeatAPI{DB: db}
+	raceHandler := api.RaceApi{DB: db}
 
 	authHandler := api.Controller{DB: db}
 
@@ -90,13 +91,22 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/domain/:id", domainHandler.GetDomainByID).Use(authentication.RequireJWT)
 	g.GET("/domain", domainHandler.GetDomains).Use(authentication.RequireJWT)
 
-	feat := g.Group("/feat").Use(authentication.RequireJWT)
+	featGroup := g.Group("/feat").Use(authentication.RequireJWT)
 	{
-		feat.POST("", featHandler.CreateFeat)
-		feat.PATCH("/:id", featHandler.UpdateFeat)
-		feat.GET("", featHandler.GetFeats)
-		feat.GET("/:id", featHandler.GetFeatByID)
-		feat.DELETE("/:id", featHandler.DeleteFeat)
+		featGroup.POST("", featHandler.CreateFeat)
+		featGroup.PATCH("/:id", featHandler.UpdateFeat)
+		featGroup.GET("", featHandler.GetFeats)
+		featGroup.GET("/:id", featHandler.GetFeatByID)
+		featGroup.DELETE("/:id", featHandler.DeleteFeat)
+	}
+
+	raceGroup := g.Group("/race").Use(authentication.RequireJWT)
+	{
+		raceGroup.POST("", featHandler.CreateFeat)
+		raceGroup.PATCH("/:id", featHandler.UpdateFeat)
+		raceGroup.GET("", featHandler.GetFeats)
+		raceGroup.GET("/:id", featHandler.GetFeatByID)
+		raceGroup.DELETE("/:id", featHandler.DeleteFeat)
 	}
 
 	characterClassGroup := g.Group("/class").Use(authentication.RequireJWT)

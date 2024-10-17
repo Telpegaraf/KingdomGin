@@ -15,6 +15,47 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/Race/{id}": {
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Race"
+                ],
+                "summary": "Deletes Race by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Race id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Domain doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/attribute/{id}": {
             "get": {
                 "description": "Permissions for auth user or admin",
@@ -823,6 +864,171 @@ const docTemplate = `{
                 }
             }
         },
+        "/feat": {
+            "get": {
+                "description": "Return all Feats",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Returns all Feats",
+                "responses": {
+                    "200": {
+                        "description": "Feat details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Feat"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feat"
+                ],
+                "summary": "Create and returns Feat or nil",
+                "parameters": [
+                    {
+                        "description": "Feat data",
+                        "name": "feat",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateFeat"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Feat details",
+                        "schema": {
+                            "$ref": "#/definitions/model.FeatExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/feat/{id}": {
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feat"
+                ],
+                "summary": "Deletes Feat by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Feat id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Domain doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Updates Feat by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Feat id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Feat data",
+                        "name": "Feat",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateFeat"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Feat details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Feat"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Feat doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/god": {
             "get": {
                 "description": "Return all gods and their domains",
@@ -1030,6 +1236,44 @@ const docTemplate = `{
                         "description": "Item details",
                         "schema": {
                             "$ref": "#/definitions/model.Item"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/item/Feat/{id}": {
+            "get": {
+                "description": "Permissions for auth users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Returns Feat by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Feat id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Feat details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Feat"
                         }
                     },
                     "401": {
@@ -1641,6 +1885,168 @@ const docTemplate = `{
                 }
             }
         },
+        "/race": {
+            "get": {
+                "description": "Return all Races",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Returns all Races",
+                "responses": {
+                    "200": {
+                        "description": "Race details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Race"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Race"
+                ],
+                "summary": "Create and returns Race or nil",
+                "parameters": [
+                    {
+                        "description": "Feat data",
+                        "name": "feat",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RaceCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Feat details",
+                        "schema": {
+                            "$ref": "#/definitions/model.RaceExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/race/{id}": {
+            "get": {
+                "description": "Permissions for auth users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Returns Race by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Race id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Race details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Race"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Updates Race by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Race id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Race data",
+                        "name": "race",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RaceUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Race details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Race"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Race doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/slot/{id}": {
             "get": {
                 "description": "Permissions for auth user",
@@ -1967,6 +2373,23 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.Ancestry": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "raceID": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.Armor": {
             "type": "object",
             "properties": {
@@ -2069,6 +2492,32 @@ const docTemplate = `{
                 },
                 "wisdom": {
                     "type": "integer"
+                }
+            }
+        },
+        "model.Background": {
+            "type": "object",
+            "properties": {
+                "attributeBoost": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "featID": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "skill": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Skill"
+                    }
                 }
             }
         },
@@ -2428,6 +2877,23 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CreateFeat": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "model.CreateGear": {
             "type": "object",
             "required": [
@@ -2562,6 +3028,46 @@ const docTemplate = `{
             "properties": {
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "model.Feat": {
+            "type": "object",
+            "properties": {
+                "background": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Background"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.FeatExternal": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -2832,6 +3338,149 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Race": {
+            "type": "object",
+            "properties": {
+                "abilityBoost": {
+                    "type": "string"
+                },
+                "ancestry": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ancestry"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "hitPoints": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "speed": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.RaceCreate": {
+            "type": "object",
+            "required": [
+                "description",
+                "hit_points",
+                "name",
+                "size",
+                "speed"
+            ],
+            "properties": {
+                "ability_boost": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "hit_points": {
+                    "type": "integer"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "speed": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.RaceExternal": {
+            "type": "object",
+            "properties": {
+                "ability_boost": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "hit_points": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "speed": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.RaceUpdate": {
+            "type": "object",
+            "properties": {
+                "ability_boost": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "hit_points": {
+                    "type": "integer"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "speed": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.Skill": {
+            "type": "object",
+            "properties": {
+                "background": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Background"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Slot": {
             "type": "object",
             "properties": {
@@ -3012,6 +3661,20 @@ const docTemplate = `{
             "properties": {
                 "description": {
                     "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateFeat": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
