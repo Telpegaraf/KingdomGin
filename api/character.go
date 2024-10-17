@@ -16,6 +16,7 @@ type CharacterDatabase interface {
 	GetUserByID(id uint) (*model.User, error)
 	CreateAttribute(stat *model.Attribute) error
 	CreateSlot(slot *model.Slot) error
+	CreateCharacterBoost(stat *model.CharacterBoost) error
 }
 
 type CharacterApi struct {
@@ -104,6 +105,7 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 		go func() {
 			a.CreateAttribute(ctx, internal.ID)
 			a.CreateSlot(ctx, internal.ID)
+			a.CreateCharacterBoost(ctx, internal.ID)
 		}()
 	}
 	ctx.JSON(http.StatusCreated, character)

@@ -499,6 +499,89 @@ const docTemplate = `{
                 }
             }
         },
+        "/character_boost/{id}": {
+            "get": {
+                "description": "Permissions for auth user or admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CharacterBoost"
+                ],
+                "summary": "Returns CharacterBoost by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "character_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "CharacterBoost details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterBoostExternal"
+                        }
+                    },
+                    "404": {
+                        "description": "CharacterBoost not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Character's User or Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CharacterBoost"
+                ],
+                "summary": "Updates CharacterBoost by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "CharacterBoost id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "CharacterBoost data",
+                        "name": "CharacterBoost",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateCharacterBoost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "CharacterBoost details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterBoostExternal"
+                        }
+                    },
+                    "404": {
+                        "description": "CharacterBoost doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/class": {
             "post": {
                 "description": "Create new Character Class",
@@ -1995,6 +2078,9 @@ const docTemplate = `{
                 "alias": {
                     "type": "string"
                 },
+                "characterBoost": {
+                    "$ref": "#/definitions/model.CharacterBoost"
+                },
                 "characterItem": {
                     "type": "array",
                     "items": {
@@ -2023,6 +2109,70 @@ const docTemplate = `{
                     "$ref": "#/definitions/model.Attribute"
                 },
                 "userID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.CharacterBoost": {
+            "type": "object",
+            "properties": {
+                "characterID": {
+                    "type": "integer"
+                },
+                "charisma": {
+                    "type": "integer"
+                },
+                "constitution": {
+                    "type": "integer"
+                },
+                "dexterity": {
+                    "type": "integer"
+                },
+                "free": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "intelligence": {
+                    "type": "integer"
+                },
+                "strength": {
+                    "type": "integer"
+                },
+                "wisdom": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.CharacterBoostExternal": {
+            "type": "object",
+            "properties": {
+                "characterID": {
+                    "type": "integer"
+                },
+                "charisma": {
+                    "type": "integer"
+                },
+                "constitution": {
+                    "type": "integer"
+                },
+                "dexterity": {
+                    "type": "integer"
+                },
+                "free": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "intelligence": {
+                    "type": "integer"
+                },
+                "strength": {
+                    "type": "integer"
+                },
+                "wisdom": {
                     "type": "integer"
                 }
             }
@@ -2788,6 +2938,38 @@ const docTemplate = `{
                 "dexterity": {
                     "type": "integer",
                     "example": 10
+                },
+                "intelligence": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "strength": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "wisdom": {
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "model.UpdateCharacterBoost": {
+            "type": "object",
+            "properties": {
+                "charisma": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "constitution": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "dexterity": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "free": {
+                    "type": "integer"
                 },
                 "intelligence": {
                     "type": "integer",

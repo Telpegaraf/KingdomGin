@@ -72,6 +72,8 @@ definitions:
     properties:
       alias:
         type: string
+      characterBoost:
+        $ref: '#/definitions/model.CharacterBoost'
       characterItem:
         items:
           $ref: '#/definitions/model.CharacterItem'
@@ -91,6 +93,48 @@ definitions:
       stat:
         $ref: '#/definitions/model.Attribute'
       userID:
+        type: integer
+    type: object
+  model.CharacterBoost:
+    properties:
+      characterID:
+        type: integer
+      charisma:
+        type: integer
+      constitution:
+        type: integer
+      dexterity:
+        type: integer
+      free:
+        type: integer
+      id:
+        type: integer
+      intelligence:
+        type: integer
+      strength:
+        type: integer
+      wisdom:
+        type: integer
+    type: object
+  model.CharacterBoostExternal:
+    properties:
+      characterID:
+        type: integer
+      charisma:
+        type: integer
+      constitution:
+        type: integer
+      dexterity:
+        type: integer
+      free:
+        type: integer
+      id:
+        type: integer
+      intelligence:
+        type: integer
+      strength:
+        type: integer
+      wisdom:
         type: integer
     type: object
   model.CharacterClass:
@@ -617,6 +661,29 @@ definitions:
         example: 10
         type: integer
     type: object
+  model.UpdateCharacterBoost:
+    properties:
+      charisma:
+        example: 10
+        type: integer
+      constitution:
+        example: 10
+        type: integer
+      dexterity:
+        example: 10
+        type: integer
+      free:
+        type: integer
+      intelligence:
+        example: 10
+        type: integer
+      strength:
+        example: 10
+        type: integer
+      wisdom:
+        example: 10
+        type: integer
+    type: object
   model.UpdateCharacterItem:
     properties:
       character_id:
@@ -1086,6 +1153,61 @@ paths:
       summary: Updates Character by ID or nil
       tags:
       - Character
+  /character_boost/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Permissions for auth user or admin
+      parameters:
+      - description: character_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CharacterBoost details
+          schema:
+            $ref: '#/definitions/model.CharacterBoostExternal'
+        "404":
+          description: CharacterBoost not found
+          schema:
+            type: string
+      summary: Returns CharacterBoost by id
+      tags:
+      - CharacterBoost
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Character's User or Admin
+      parameters:
+      - description: CharacterBoost id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: CharacterBoost data
+        in: body
+        name: CharacterBoost
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateCharacterBoost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CharacterBoost details
+          schema:
+            $ref: '#/definitions/model.CharacterBoostExternal'
+        "404":
+          description: CharacterBoost doesn't exist
+          schema:
+            type: string
+      summary: Updates CharacterBoost by ID or nil
+      tags:
+      - CharacterBoost
   /class:
     post:
       consumes:

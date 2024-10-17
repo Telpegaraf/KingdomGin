@@ -1,15 +1,16 @@
 package model
 
 type Character struct {
-	ID            uint   `gorm:"primaryKey"`
-	Name          string `gorm:"not null;type:varchar(120)"`
-	Alias         string `gorm:"type:varchar(120)"`
-	LastName      string `gorm:"type:varchar(120)" json:"last_name"`
-	Level         int8   `gorm:"default:1"`
-	UserID        uint
-	Stat          Attribute       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	CharacterItem []CharacterItem `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Slot          []Slot          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	ID             uint   `gorm:"primaryKey"`
+	Name           string `gorm:"not null;type:varchar(120)"`
+	Alias          string `gorm:"type:varchar(120)"`
+	LastName       string `gorm:"type:varchar(120)" json:"last_name"`
+	Level          int8   `gorm:"default:1"`
+	UserID         uint
+	Stat           Attribute       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	CharacterItem  []CharacterItem `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Slot           []Slot          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	CharacterBoost CharacterBoost  `gorm:"constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
 }
 
 type CreateCharacter struct {

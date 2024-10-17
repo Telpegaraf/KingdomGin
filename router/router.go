@@ -54,6 +54,10 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		DB: db,
 	}
 
+	characterBoostHandler := api.CharacterBoostApi{
+		DB: db,
+	}
+
 	godHandler := api.GodApi{DB: db}
 	domainHandler := api.DomainApi{DB: db}
 
@@ -141,6 +145,9 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 
 	g.GET("/attribute/:id", attributeHandler.GetAttributeByID).Use(authentication.RequireJWT)
 	g.PATCH("/attribute/:id", attributeHandler.UpdateAttribute).Use(authentication.RequireJWT)
+
+	g.GET("/character_boost/:id", characterBoostHandler.GetCharacterBoostByID).Use(authentication.RequireJWT)
+	g.PATCH("/character_boost/:id", characterBoostHandler.UpdateCharacterBoost).Use(authentication.RequireJWT)
 
 	return g, func() {}
 }
