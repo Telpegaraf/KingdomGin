@@ -7,13 +7,6 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'hit_point') THEN
-        CREATE TYPE hit_point AS ENUM ('Six', 'Eight', 'Ten', 'Twelve');
-    END IF;
-END $$;
-
-DO $$
-BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'school') THEN
         CREATE TYPE school AS ENUM
             ('Abjuration', 'Conjuration', 'Divination', 'Enchantment',

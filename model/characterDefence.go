@@ -12,7 +12,7 @@ type CharacterDefence struct {
 	Will              MasteryLevel `gorm:"type:mastery_level;default:None"`
 	Perception        MasteryLevel `gorm:"type:mastery_level;default:None"`
 	MaxHitPoint       uint16       `gorm:"default:6"`
-	HitPoint          int16        `gorm:"default:6"`
+	HitPoint          uint16       `gorm:"default:6"`
 	TemporaryHitPoint uint16       `gorm:"default:0"`
 	Dying             uint8        `gorm:"default:0"`
 	Wounded           bool         `gorm:"default:false"`
@@ -30,7 +30,7 @@ type CharacterDefenceUpdate struct {
 	Will              MasteryLevel `json:"will"`
 	Perception        MasteryLevel `json:"perception"`
 	MaxHitPoint       uint16       `json:"max_hit_point"`
-	HitPoint          int16        `json:"hit_point"`
+	HitPoint          *uint16      `json:"hit_point"`
 	TemporaryHitPoint uint16       `json:"temporary_hit_point"`
 	Dying             uint8        `json:"dying"`
 	Wounded           bool         `json:"wounded"`
@@ -48,7 +48,7 @@ type CharacterDefenceExternal struct {
 	Will              MasteryLevel `json:"will"`
 	Perception        MasteryLevel `json:"perception"`
 	MaxHitPoint       uint16       `json:"max_hit_point"`
-	HitPoint          int16        `json:"hit_point"`
+	HitPoint          uint16       `json:"hit_point"`
 	TemporaryHitPoint uint16       `json:"temporary_hit_point"`
 	Dying             uint8        `json:"dying"`
 	Wounded           bool         `json:"wounded"`

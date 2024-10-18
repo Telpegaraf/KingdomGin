@@ -17,6 +17,9 @@ type CharacterDatabase interface {
 	CreateAttribute(stat *model.Attribute) error
 	CreateSlot(slot *model.Slot) error
 	CreateCharacterBoost(stat *model.CharacterBoost) error
+	CreateCharacterDefence(characterDefence *model.CharacterDefence) error
+	GetRaceByID(id uint) (*model.Race, error)
+	GetCharacterClassByID(id uint) (*model.CharacterClass, error)
 }
 
 type CharacterApi struct {
@@ -208,6 +211,7 @@ func ToExternalCharacter(character *model.Character) *model.CharacterExternal {
 		Attribute:        character.Attribute,
 		Slot:             character.Slot,
 		CharacterClassID: character.CharacterClassID,
+		RaceID:           character.RaceID,
 		AncestryID:       character.AncestryID,
 		BackgroundID:     character.BackgroundID,
 	}

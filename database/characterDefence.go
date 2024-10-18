@@ -6,6 +6,11 @@ import (
 	"kingdom/model"
 )
 
+// CreateCharacterDefence creates Character Defence object
+func (d *GormDatabase) CreateCharacterDefence(characterDefence *model.CharacterDefence) error {
+	return d.DB.Create(characterDefence).Error
+}
+
 // GetCharacterDefenceByID returns Character Defence object by ID
 func (d *GormDatabase) GetCharacterDefenceByID(id uint) (*model.CharacterDefence, error) {
 	characterDefence := new(model.CharacterDefence)

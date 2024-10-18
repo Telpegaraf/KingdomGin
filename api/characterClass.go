@@ -28,8 +28,8 @@ func (a *CharacterClassApi) CreateCharacterClass(ctx *gin.Context) {
 	characterClass := &model.CharacterClassCreate{}
 	if err := ctx.Bind(characterClass); err == nil {
 		internal := &model.CharacterClass{
-			Name:   characterClass.Name,
-			Health: characterClass.Health,
+			Name:     characterClass.Name,
+			HitPoint: characterClass.HitPoint,
 		}
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacterClass(internal)); !success {
 			return
