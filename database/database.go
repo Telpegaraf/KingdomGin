@@ -52,6 +52,7 @@ func New(
 		new(model.CharacterBoost),
 		new(model.Spell),
 		new(model.CharacterDefence),
+		new(model.CharacterSpell),
 	); err != nil {
 		return nil, err
 	}

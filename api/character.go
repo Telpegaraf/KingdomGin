@@ -99,6 +99,8 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 			LastName:         character.LastName,
 			UserID:           userID.(uint),
 			CharacterClassID: character.CharacterClassID,
+			AncestryID:       character.AncestryID,
+			BackgroundID:     character.BackgroundID,
 		}
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacter(internal)); !success {
 			return
@@ -206,5 +208,7 @@ func ToExternalCharacter(character *model.Character) *model.CharacterExternal {
 		Attribute:        character.Attribute,
 		Slot:             character.Slot,
 		CharacterClassID: character.CharacterClassID,
+		AncestryID:       character.AncestryID,
+		BackgroundID:     character.BackgroundID,
 	}
 }

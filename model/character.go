@@ -7,7 +7,10 @@ type Character struct {
 	LastName         string `gorm:"type:varchar(120)" json:"last_name"`
 	Level            int8   `gorm:"default:1"`
 	UserID           uint
+	AncestryID       uint
+	BackgroundID     uint
 	Attribute        Attribute        `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	CharacterSpell   []CharacterSpell `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CharacterItem    []CharacterItem  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Slot             []Slot           `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CharacterBoost   CharacterBoost   `gorm:"constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
@@ -20,6 +23,15 @@ type CreateCharacter struct {
 	Alias            string `json:"alias" query:"alias" form:"alias"`
 	LastName         string ` json:"last_name" query:"last_name" form:"last_name"`
 	CharacterClassID uint   ` json:"character_class_id" query:"character_class_id" form:"character_class_id"`
+	AncestryID       uint   `json:"ancestry_id" query:"ancestry_id" form:"ancestry_id" binding:"required"`
+	BackgroundID     uint   `json:"background_id" query:"background_id" form:"background_id" binding:"required"`
+}
+
+type CharacterUpdate struct {
+	Name     string `json:"name" query:"name" form:"name"`
+	Alias    string `json:"alias" query:"alias" form:"alias"`
+	LastName string `json:"last_name" query:"last_name" form:"last_name"`
+	Level    int8   `json:"level" query:"level" form:"level"`
 }
 
 type CharacterExternal struct {
@@ -34,11 +46,6 @@ type CharacterExternal struct {
 	Slot             []Slot          `json:"slot" query:"slot" form:"slot"`
 	CharacterBoost   CharacterBoost  `json:"character_boost" query:"character_boost" form:"character_boost"`
 	CharacterClassID uint            `json:"character_class_id" query:"character_class_id" form:"character_class_id"`
-}
-
-type CharacterUpdate struct {
-	Name     string `json:"name" query:"name" form:"name"`
-	Alias    string `json:"alias" query:"alias" form:"alias"`
-	LastName string `json:"last_name" query:"last_name" form:"last_name"`
-	Level    int8   `json:"level" query:"level" form:"level"`
+	AncestryID       uint            `json:"ancestry_id" query:"ancestry_id" form:"ancestry_id"`
+	BackgroundID     uint            `json:"background_id" query:"background_id" form:"background_id"`
 }
