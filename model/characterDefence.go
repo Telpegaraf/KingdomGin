@@ -40,6 +40,7 @@ type CharacterDefenceUpdate struct {
 type CharacterDefenceExternal struct {
 	ID                uint         `json:"id"`
 	ArmorClass        uint8        `json:"armorClass"`
+	Unarmed           MasteryLevel `json:"unarmed"`
 	LightArmor        MasteryLevel `json:"light_armor"`
 	MediumArmor       MasteryLevel `json:"medium_armor"`
 	HeavyArmor        MasteryLevel `json:"heavy_armor"`
