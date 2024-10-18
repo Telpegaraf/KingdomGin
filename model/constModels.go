@@ -1,17 +1,9 @@
 package model
 
-type Tradition string
 type School string
 type HitPoint string
 type SquareSize string
 type MasteryLevel string
-
-const (
-	Arcane Tradition = "Arcane"
-	Divine Tradition = "Divine"
-	Occult Tradition = "Occult"
-	Primal Tradition = "Primal"
-)
 
 const (
 	Abjuration    School = "Abjuration"

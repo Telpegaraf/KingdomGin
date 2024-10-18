@@ -1,21 +1,21 @@
 package model
 
 type CharacterClass struct {
-	ID                   uint      `gorm:"primary_key;AUTO_INCREMENT"`
-	Name                 string    `gorm:"type:varchar(127);unique;not null"`
-	Health               int8      `gorm:"not null;default:6"`
-	PerceptionMastery    string    `gorm:"type:varchar(20);default:'None';not null"`
-	FortitudeMastery     string    `gorm:"type:varchar(20);default:'None';not null"`
-	ReflexMastery        string    `gorm:"type:varchar(20);default:'None';not null"`
-	WillMastery          string    `gorm:"type:varchar(20);default:'None';not null"`
-	UnarmedMastery       string    `gorm:"type:varchar(20);default:'None';not null"`
-	LightArmorMastery    string    `gorm:"type:varchar(20);default:'None';not null"`
-	MediumArmorMastery   string    `gorm:"type:varchar(20);default:'None';not null"`
-	HeavyArmorMastery    string    `gorm:"type:varchar(20);default:'None';not null"`
-	UnArmedWeaponMastery string    `gorm:"type:varchar(20);default:'None';not null"`
-	CommonWeaponMastery  string    `gorm:"type:varchar(20);default:'None';not null"`
-	MartialWeaponMastery string    `gorm:"type:varchar(20);default:'None';not null"`
-	Tradition            Tradition `gorm:"type:tradition;default:'None';not null"`
+	ID                   uint   `gorm:"primary_key;AUTO_INCREMENT"`
+	Name                 string `gorm:"type:varchar(127);unique;not null"`
+	Health               int8   `gorm:"not null;default:6"`
+	PerceptionMastery    string `gorm:"type:varchar(20);default:'None';not null"`
+	FortitudeMastery     string `gorm:"type:varchar(20);default:'None';not null"`
+	ReflexMastery        string `gorm:"type:varchar(20);default:'None';not null"`
+	WillMastery          string `gorm:"type:varchar(20);default:'None';not null"`
+	UnarmedMastery       string `gorm:"type:varchar(20);default:'None';not null"`
+	LightArmorMastery    string `gorm:"type:varchar(20);default:'None';not null"`
+	MediumArmorMastery   string `gorm:"type:varchar(20);default:'None';not null"`
+	HeavyArmorMastery    string `gorm:"type:varchar(20);default:'None';not null"`
+	UnArmedWeaponMastery string `gorm:"type:varchar(20);default:'None';not null"`
+	CommonWeaponMastery  string `gorm:"type:varchar(20);default:'None';not null"`
+	MartialWeaponMastery string `gorm:"type:varchar(20);default:'None';not null"`
+	TraditionID          uint
 
 	Character Character `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }

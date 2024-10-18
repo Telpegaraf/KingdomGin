@@ -14,13 +14,6 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'tradition') THEN
-        CREATE TYPE tradition AS ENUM ('None', 'Arcane', 'Divine', 'Occult', 'Primal');
-    END IF;
-END $$;
-
-DO $$
-BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'school') THEN
         CREATE TYPE school AS ENUM
             ('Abjuration', 'Conjuration', 'Divination', 'Enchantment',
