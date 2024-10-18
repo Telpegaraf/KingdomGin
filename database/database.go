@@ -34,6 +34,8 @@ func New(
 		new(model.Character),
 		new(model.Domain),
 		new(model.God),
+		new(model.Tradition),
+		new(model.Action),
 		new(model.CharacterClass),
 		new(model.Attribute),
 		new(model.Item),

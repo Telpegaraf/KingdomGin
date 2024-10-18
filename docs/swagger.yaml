@@ -228,8 +228,8 @@ definitions:
         type: string
       reflexMastery:
         type: string
-      tradition:
-        $ref: '#/definitions/model.Tradition'
+      traditionID:
+        type: integer
       unArmedWeaponMastery:
         type: string
       unarmedMastery:
@@ -925,18 +925,6 @@ definitions:
     - Large
     - Huge
     - Gargantuan
-  model.Tradition:
-    enum:
-    - Arcane
-    - Divine
-    - Occult
-    - Primal
-    type: string
-    x-enum-varnames:
-    - Arcane
-    - Divine
-    - Occult
-    - Primal
   model.UpdateArmor:
     properties:
       armor_class:

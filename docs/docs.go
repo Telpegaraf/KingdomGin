@@ -2924,8 +2924,8 @@ const docTemplate = `{
                 "reflexMastery": {
                     "type": "string"
                 },
-                "tradition": {
-                    "$ref": "#/definitions/model.Tradition"
+                "traditionID": {
+                    "type": "integer"
                 },
                 "unArmedWeaponMastery": {
                     "type": "string"
@@ -3950,21 +3950,6 @@ const docTemplate = `{
                 "Large",
                 "Huge",
                 "Gargantuan"
-            ]
-        },
-        "model.Tradition": {
-            "type": "string",
-            "enum": [
-                "Arcane",
-                "Divine",
-                "Occult",
-                "Primal"
-            ],
-            "x-enum-varnames": [
-                "Arcane",
-                "Divine",
-                "Occult",
-                "Primal"
             ]
         },
         "model.UpdateArmor": {
