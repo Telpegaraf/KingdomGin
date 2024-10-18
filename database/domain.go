@@ -34,7 +34,8 @@ func (d *GormDatabase) UpdateDomain(domain *model.Domain) error { return d.DB.Sa
 
 // DeleteDomain deletes Domain
 func (d *GormDatabase) DeleteDomain(id uint) error {
-	return d.DB.Where("id = ?", id).Delete(&model.Domain{}).Error
+	return d.DB.Where("id = ?", id).
+		Delete(&model.Domain{}).Error
 }
 
 // FindDomains Return Domain's ID in God object
