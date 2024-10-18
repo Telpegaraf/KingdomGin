@@ -33,16 +33,6 @@ func New(
 	}
 	fmt.Println("SQL script executed successfully.")
 
-	//if err := db.Exec("CREATE TYPE tradition AS ENUM ('Arcane', 'Divine', 'Occult', 'Primal');").Error; err != nil {
-	//	log.Println(err)
-	//	return nil, err
-	//}
-
-	//if err := db.Exec("CREATE TYPE school AS ENUM ('Abjuration', 'Conjuration', 'Divination', 'Enchantment', 'Evocation', 'Illusion', 'Necromancy', 'Transmutation');").Error; err != nil {
-	//	log.Println(err)
-	//	return nil, err
-	//}
-
 	if err := db.AutoMigrate(
 		new(model.User),
 		new(model.Character),
