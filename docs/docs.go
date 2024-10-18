@@ -3429,6 +3429,9 @@ const docTemplate = `{
                 "characterDefence": {
                     "$ref": "#/definitions/model.CharacterDefence"
                 },
+                "characterFeat": {
+                    "$ref": "#/definitions/model.CharacterFeat"
+                },
                 "characterItem": {
                     "type": "array",
                     "items": {
@@ -3452,6 +3455,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "raceID": {
+                    "type": "integer"
                 },
                 "slot": {
                     "type": "array",
@@ -3540,11 +3546,11 @@ const docTemplate = `{
                 "fortitudeMastery": {
                     "type": "string"
                 },
-                "health": {
-                    "type": "integer"
-                },
                 "heavyArmorMastery": {
                     "type": "string"
+                },
+                "hitPoint": {
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
@@ -3696,6 +3702,9 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "race_id": {
+                    "type": "integer"
+                },
                 "slot": {
                     "type": "array",
                     "items": {
@@ -3703,6 +3712,20 @@ const docTemplate = `{
                     }
                 },
                 "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.CharacterFeat": {
+            "type": "object",
+            "properties": {
+                "characterID": {
+                    "type": "integer"
+                },
+                "featID": {
+                    "type": "integer"
+                },
+                "id": {
                     "type": "integer"
                 }
             }
@@ -3873,6 +3896,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "race_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -4100,6 +4126,12 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.Background"
+                    }
+                },
+                "characterFeat": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterFeat"
                     }
                 },
                 "description": {
@@ -4332,21 +4364,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.HitPoint": {
-            "type": "string",
-            "enum": [
-                "Six",
-                "Eight",
-                "Ten",
-                "Twelve"
-            ],
-            "x-enum-varnames": [
-                "Six",
-                "Eight",
-                "Ten",
-                "Twelve"
-            ]
-        },
         "model.Item": {
             "type": "object",
             "properties": {
@@ -4448,7 +4465,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "hitPoint": {
-                    "$ref": "#/definitions/model.HitPoint"
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
@@ -4484,7 +4501,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "hit_points": {
-                    "$ref": "#/definitions/model.HitPoint"
+                    "type": "integer"
                 },
                 "language": {
                     "type": "string"
@@ -4510,7 +4527,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "hit_points": {
-                    "$ref": "#/definitions/model.HitPoint"
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
@@ -4539,7 +4556,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "hit_points": {
-                    "$ref": "#/definitions/model.HitPoint"
+                    "type": "integer"
                 },
                 "language": {
                     "type": "string"

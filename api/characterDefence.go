@@ -26,6 +26,14 @@ func (a *CharacterApi) CreateCharacterDefence(ctx *gin.Context, character *model
 	internal := &model.CharacterDefence{
 		CharacterID: character.ID,
 		HitPoint:    race.HitPoint + characterClass.HitPoint,
+		Perception:  characterClass.Perception,
+		Fortitude:   characterClass.Fortitude,
+		Reflex:      characterClass.Reflex,
+		Will:        characterClass.Will,
+		Unarmed:     characterClass.UnarmedArmor,
+		LightArmor:  characterClass.LightArmor,
+		MediumArmor: characterClass.MediumArmor,
+		HeavyArmor:  characterClass.HeavyArmor,
 	}
 	if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacterDefence(internal)); !success {
 		return

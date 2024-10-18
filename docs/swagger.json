@@ -3425,6 +3425,9 @@
                 "characterDefence": {
                     "$ref": "#/definitions/model.CharacterDefence"
                 },
+                "characterFeat": {
+                    "$ref": "#/definitions/model.CharacterFeat"
+                },
                 "characterItem": {
                     "type": "array",
                     "items": {
@@ -3448,6 +3451,9 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "raceID": {
+                    "type": "integer"
                 },
                 "slot": {
                     "type": "array",
@@ -3536,11 +3542,11 @@
                 "fortitudeMastery": {
                     "type": "string"
                 },
-                "health": {
-                    "type": "integer"
-                },
                 "heavyArmorMastery": {
                     "type": "string"
+                },
+                "hitPoint": {
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
@@ -3692,6 +3698,9 @@
                 "name": {
                     "type": "string"
                 },
+                "race_id": {
+                    "type": "integer"
+                },
                 "slot": {
                     "type": "array",
                     "items": {
@@ -3699,6 +3708,20 @@
                     }
                 },
                 "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.CharacterFeat": {
+            "type": "object",
+            "properties": {
+                "characterID": {
+                    "type": "integer"
+                },
+                "featID": {
+                    "type": "integer"
+                },
+                "id": {
                     "type": "integer"
                 }
             }
@@ -3869,6 +3892,9 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "race_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -4096,6 +4122,12 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.Background"
+                    }
+                },
+                "characterFeat": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterFeat"
                     }
                 },
                 "description": {
@@ -4328,21 +4360,6 @@
                 }
             }
         },
-        "model.HitPoint": {
-            "type": "string",
-            "enum": [
-                "Six",
-                "Eight",
-                "Ten",
-                "Twelve"
-            ],
-            "x-enum-varnames": [
-                "Six",
-                "Eight",
-                "Ten",
-                "Twelve"
-            ]
-        },
         "model.Item": {
             "type": "object",
             "properties": {
@@ -4444,7 +4461,7 @@
                     "type": "string"
                 },
                 "hitPoint": {
-                    "$ref": "#/definitions/model.HitPoint"
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
@@ -4480,7 +4497,7 @@
                     "type": "string"
                 },
                 "hit_points": {
-                    "$ref": "#/definitions/model.HitPoint"
+                    "type": "integer"
                 },
                 "language": {
                     "type": "string"
@@ -4506,7 +4523,7 @@
                     "type": "string"
                 },
                 "hit_points": {
-                    "$ref": "#/definitions/model.HitPoint"
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
@@ -4535,7 +4552,7 @@
                     "type": "string"
                 },
                 "hit_points": {
-                    "$ref": "#/definitions/model.HitPoint"
+                    "type": "integer"
                 },
                 "language": {
                     "type": "string"
