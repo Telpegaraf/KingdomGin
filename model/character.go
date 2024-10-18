@@ -9,13 +9,14 @@ type Character struct {
 	UserID           uint
 	AncestryID       uint
 	BackgroundID     uint
+	CharacterClassID uint
 	Attribute        Attribute        `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CharacterSpell   []CharacterSpell `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CharacterItem    []CharacterItem  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Slot             []Slot           `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CharacterBoost   CharacterBoost   `gorm:"constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
 	CharacterDefence CharacterDefence `gorm:"constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
-	CharacterClassID uint
+	CharacterFeat    CharacterFeat    `gorm:"constraint:OnUpdate:CASCADE;onDelete:CASCADE;"`
 }
 
 type CreateCharacter struct {
