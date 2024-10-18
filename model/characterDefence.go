@@ -19,3 +19,39 @@ type CharacterDefence struct {
 	Speed             uint8        `gorm:"default:0"`
 	CharacterID       uint
 }
+
+type CharacterDefenceUpdate struct {
+	ArmorClass        uint8        `json:"armorClass"`
+	LightArmor        MasteryLevel `json:"light_armor"`
+	MediumArmor       MasteryLevel `json:"medium_armor"`
+	HeavyArmor        MasteryLevel `json:"heavy_armor"`
+	Fortitude         MasteryLevel `json:"fortitude"`
+	Reflex            MasteryLevel `json:"reflex"`
+	Will              MasteryLevel `json:"will"`
+	Perception        MasteryLevel `json:"perception"`
+	MaxHitPoint       uint16       `json:"max_hit_point"`
+	HitPoint          int16        `json:"hit_point"`
+	TemporaryHitPoint uint16       `json:"temporary_hit_point"`
+	Dying             uint8        `json:"dying"`
+	Wounded           bool         `json:"wounded"`
+	Speed             uint8        `json:"speed"`
+}
+
+type CharacterDefenceExternal struct {
+	ID                uint         `json:"id"`
+	ArmorClass        uint8        `json:"armorClass"`
+	LightArmor        MasteryLevel `json:"light_armor"`
+	MediumArmor       MasteryLevel `json:"medium_armor"`
+	HeavyArmor        MasteryLevel `json:"heavy_armor"`
+	Fortitude         MasteryLevel `json:"fortitude"`
+	Reflex            MasteryLevel `json:"reflex"`
+	Will              MasteryLevel `json:"will"`
+	Perception        MasteryLevel `json:"perception"`
+	MaxHitPoint       uint16       `json:"max_hit_point"`
+	HitPoint          int16        `json:"hit_point"`
+	TemporaryHitPoint uint16       `json:"temporary_hit_point"`
+	Dying             uint8        `json:"dying"`
+	Wounded           bool         `json:"wounded"`
+	Speed             uint8        `json:"speed"`
+	CharacterID       uint         `json:"character_id"`
+}
