@@ -16,7 +16,7 @@ type UpdateTrait struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
-type UpdateExternal struct {
+type TraitExternal struct {
 	ID          uint   `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`

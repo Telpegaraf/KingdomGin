@@ -25,7 +25,7 @@ type DomainApi struct {
 // @Tags Domain
 // @Accept json
 // @Produce json
-// @Param character body model.CreateDomain true "Domain data"
+// @Param domain body model.CreateDomain true "Domain data"
 // @Success 201 {object} model.DomainExternal "Domain details"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 403 {string} string "You can't access for this API"
@@ -150,9 +150,9 @@ func (a *DomainApi) DeleteDomain(ctx *gin.Context) {
 			if success := SuccessOrAbort(ctx, 500, a.DB.DeleteDomain(id)); !success {
 				return
 			}
-			ctx.JSON(http.StatusNoContent, gin.H{"error": "Character was deleted"})
+			ctx.JSON(http.StatusNoContent, gin.H{"error": "Domain was deleted"})
 		} else {
-			ctx.JSON(http.StatusNotFound, gin.H{"error": "Character doesn't exist"})
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Domain doesn't exist"})
 		}
 	})
 }

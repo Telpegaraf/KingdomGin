@@ -1,4 +1,22 @@
 definitions:
+  model.Action:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      spells:
+        items:
+          $ref: '#/definitions/model.Spell'
+        type: array
+    type: object
+  model.ActionExternal:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   model.Ancestry:
     properties:
       description:
@@ -133,8 +151,12 @@ definitions:
     properties:
       alias:
         type: string
+      ancestryID:
+        type: integer
       attribute:
         $ref: '#/definitions/model.Attribute'
+      backgroundID:
+        type: integer
       characterBoost:
         $ref: '#/definitions/model.CharacterBoost'
       characterClassID:
@@ -144,6 +166,10 @@ definitions:
       characterItem:
         items:
           $ref: '#/definitions/model.CharacterItem'
+        type: array
+      characterSpell:
+        items:
+          $ref: '#/definitions/model.CharacterSpell'
         type: array
       id:
         type: integer
@@ -290,8 +316,12 @@ definitions:
     properties:
       alias:
         type: string
+      ancestry_id:
+        type: integer
       attribute:
         $ref: '#/definitions/model.Attribute'
+      background_id:
+        type: integer
       character_boost:
         $ref: '#/definitions/model.CharacterBoost'
       character_class_id:
@@ -364,6 +394,15 @@ definitions:
         example: 1
         type: integer
     type: object
+  model.CharacterSpell:
+    properties:
+      characterID:
+        type: integer
+      id:
+        type: integer
+      spellID:
+        type: integer
+    type: object
   model.CharacterUpdate:
     properties:
       alias:
@@ -374,6 +413,13 @@ definitions:
         type: integer
       name:
         type: string
+    type: object
+  model.CreateAction:
+    properties:
+      name:
+        type: string
+    required:
+    - name
     type: object
   model.CreateArmor:
     properties:
@@ -398,6 +444,10 @@ definitions:
     properties:
       alias:
         type: string
+      ancestry_id:
+        type: integer
+      background_id:
+        type: integer
       character_class_id:
         type: integer
       last_name:
@@ -405,6 +455,8 @@ definitions:
       name:
         type: string
     required:
+    - ancestry_id
+    - background_id
     - name
     type: object
   model.CreateCharacterItem:
@@ -459,6 +511,25 @@ definitions:
     - description
     - name
     - price
+    type: object
+  model.CreateTradition:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - description
+    - name
+    type: object
+  model.CreateTrait:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - name
     type: object
   model.CreateUser:
     properties:
@@ -851,6 +922,26 @@ definitions:
       speed:
         type: integer
     type: object
+  model.School:
+    enum:
+    - Abjuration
+    - Conjuration
+    - Divination
+    - Enchantment
+    - Evocation
+    - Illusion
+    - Necromancy
+    - Transmutation
+    type: string
+    x-enum-varnames:
+    - Abjuration
+    - Conjuration
+    - Divination
+    - Enchantment
+    - Evocation
+    - Illusion
+    - Necromancy
+    - Transmutation
   model.Skill:
     properties:
       background:
@@ -909,6 +1000,47 @@ definitions:
       second_weapon_id:
         type: integer
     type: object
+  model.Spell:
+    properties:
+      area:
+        type: string
+      cast:
+        items:
+          $ref: '#/definitions/model.Action'
+        type: array
+      characterSpell:
+        items:
+          $ref: '#/definitions/model.CharacterSpell'
+        type: array
+      description:
+        type: string
+      duration:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      range:
+        type: string
+      rank:
+        type: integer
+      ritual:
+        type: boolean
+      school:
+        $ref: '#/definitions/model.School'
+      source:
+        type: string
+      target:
+        type: string
+      traditional:
+        items:
+          $ref: '#/definitions/model.Tradition'
+        type: array
+      traits:
+        items:
+          $ref: '#/definitions/model.Trait'
+        type: array
+    type: object
   model.SquareSize:
     enum:
     - Tiny
@@ -925,6 +1057,57 @@ definitions:
     - Large
     - Huge
     - Gargantuan
+  model.Tradition:
+    properties:
+      characterClass:
+        $ref: '#/definitions/model.CharacterClass'
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      spells:
+        items:
+          $ref: '#/definitions/model.Spell'
+        type: array
+    type: object
+  model.TraditionExternal:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.Trait:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      spells:
+        items:
+          $ref: '#/definitions/model.Spell'
+        type: array
+    type: object
+  model.TraitExternal:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.UpdateAction:
+    properties:
+      name:
+        type: string
+    type: object
   model.UpdateArmor:
     properties:
       armor_class:
@@ -1027,6 +1210,20 @@ definitions:
       name:
         type: string
       price:
+        type: string
+    type: object
+  model.UpdateTradition:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  model.UpdateTrait:
+    properties:
+      description:
+        type: string
+      name:
         type: string
     type: object
   model.UpdateWeapon:
@@ -1199,6 +1396,139 @@ paths:
       summary: Deletes Race by ID or returns nil
       tags:
       - Race
+  /action:
+    get:
+      consumes:
+      - application/json
+      description: Return all Actions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Action details
+          schema:
+            $ref: '#/definitions/model.Action'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all Actions
+      tags:
+      - Action
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Action data
+        in: body
+        name: action
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateAction'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Action details
+          schema:
+            $ref: '#/definitions/model.ActionExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Action or nil
+      tags:
+      - Action
+  /action/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Action id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Action doesn't exist
+          schema:
+            type: string
+      summary: Deletes Action by ID or returns nil
+      tags:
+      - Action
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Action details using its ID
+      parameters:
+      - description: Action id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Action details
+          schema:
+            $ref: '#/definitions/model.Action'
+        "404":
+          description: Action not found
+          schema:
+            type: string
+      summary: Returns Action by id
+      tags:
+      - Action
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Action id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Action data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateAction'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Action details
+          schema:
+            $ref: '#/definitions/model.ActionExternal'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Action doesn't exist
+          schema:
+            type: string
+      summary: Updates Action by ID or nil
+      tags:
+      - Action
   /ancestry:
     get:
       consumes:
@@ -1730,7 +2060,7 @@ paths:
       parameters:
       - description: Domain data
         in: body
-        name: character
+        name: domain
         required: true
         schema:
           $ref: '#/definitions/model.CreateDomain'
@@ -2673,6 +3003,272 @@ paths:
       summary: Updates Slot by ID or nil
       tags:
       - Slot
+  /tradition:
+    get:
+      consumes:
+      - application/json
+      description: Return all Traditions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tradition details
+          schema:
+            $ref: '#/definitions/model.Tradition'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all Traditions
+      tags:
+      - Tradition
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Tradition data
+        in: body
+        name: tradition
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateTradition'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Tradition details
+          schema:
+            $ref: '#/definitions/model.TraditionExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Tradition or nil
+      tags:
+      - Tradition
+  /tradition/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Tradition id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Tradition doesn't exist
+          schema:
+            type: string
+      summary: Deletes Tradition by ID or returns nil
+      tags:
+      - Tradition
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Tradition details using its ID
+      parameters:
+      - description: Tradition id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tradition details
+          schema:
+            $ref: '#/definitions/model.Tradition'
+        "404":
+          description: Tradition not found
+          schema:
+            type: string
+      summary: Returns Tradition by id
+      tags:
+      - Tradition
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Tradition id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Tradition data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateTradition'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tradition details
+          schema:
+            $ref: '#/definitions/model.TraditionExternal'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Tradition doesn't exist
+          schema:
+            type: string
+      summary: Updates Tradition by ID or nil
+      tags:
+      - Tradition
+  /trait:
+    get:
+      consumes:
+      - application/json
+      description: Return all Traits
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Trait details
+          schema:
+            $ref: '#/definitions/model.Trait'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all Traits
+      tags:
+      - Trait
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Trait data
+        in: body
+        name: trait
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateTrait'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Trait details
+          schema:
+            $ref: '#/definitions/model.TraitExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Trait or nil
+      tags:
+      - Trait
+  /trait/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Trait id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Trait doesn't exist
+          schema:
+            type: string
+      summary: Deletes Trait by ID or returns nil
+      tags:
+      - Trait
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Trait details using its ID
+      parameters:
+      - description: Trait id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Trait details
+          schema:
+            $ref: '#/definitions/model.Trait'
+        "404":
+          description: Trait not found
+          schema:
+            type: string
+      summary: Returns Trait by id
+      tags:
+      - Trait
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Trait id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Trait data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateTrait'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Trait details
+          schema:
+            $ref: '#/definitions/model.TraitExternal'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Trait doesn't exist
+          schema:
+            type: string
+      summary: Updates Trait by ID or nil
+      tags:
+      - Trait
   /user:
     get:
       consumes:

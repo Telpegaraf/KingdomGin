@@ -102,6 +102,207 @@ const docTemplate = `{
                 }
             }
         },
+        "/action": {
+            "get": {
+                "description": "Return all Actions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "Returns all Actions",
+                "responses": {
+                    "200": {
+                        "description": "Action details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Action"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "Create and returns Action or nil",
+                "parameters": [
+                    {
+                        "description": "Action data",
+                        "name": "action",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateAction"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Action details",
+                        "schema": {
+                            "$ref": "#/definitions/model.ActionExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/action/{id}": {
+            "get": {
+                "description": "Retrieve Action details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "Returns Action by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Action id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Action details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Action"
+                        }
+                    },
+                    "404": {
+                        "description": "Action not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "Deletes Action by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Action id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Action doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "Updates Action by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Action id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Action data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateAction"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Action details",
+                        "schema": {
+                            "$ref": "#/definitions/model.ActionExternal"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Action doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/ancestry": {
             "get": {
                 "description": "Return all GetAncestries",
@@ -909,7 +1110,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "Domain data",
-                        "name": "character",
+                        "name": "domain",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -2333,6 +2534,408 @@ const docTemplate = `{
                 }
             }
         },
+        "/tradition": {
+            "get": {
+                "description": "Return all Traditions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tradition"
+                ],
+                "summary": "Returns all Traditions",
+                "responses": {
+                    "200": {
+                        "description": "Tradition details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Tradition"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tradition"
+                ],
+                "summary": "Create and returns Tradition or nil",
+                "parameters": [
+                    {
+                        "description": "Tradition data",
+                        "name": "tradition",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateTradition"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Tradition details",
+                        "schema": {
+                            "$ref": "#/definitions/model.TraditionExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/tradition/{id}": {
+            "get": {
+                "description": "Retrieve Tradition details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tradition"
+                ],
+                "summary": "Returns Tradition by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tradition id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tradition details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Tradition"
+                        }
+                    },
+                    "404": {
+                        "description": "Tradition not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tradition"
+                ],
+                "summary": "Deletes Tradition by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tradition id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Tradition doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tradition"
+                ],
+                "summary": "Updates Tradition by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tradition id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Tradition data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateTradition"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tradition details",
+                        "schema": {
+                            "$ref": "#/definitions/model.TraditionExternal"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Tradition doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/trait": {
+            "get": {
+                "description": "Return all Traits",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trait"
+                ],
+                "summary": "Returns all Traits",
+                "responses": {
+                    "200": {
+                        "description": "Trait details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Trait"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trait"
+                ],
+                "summary": "Create and returns Trait or nil",
+                "parameters": [
+                    {
+                        "description": "Trait data",
+                        "name": "trait",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateTrait"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Trait details",
+                        "schema": {
+                            "$ref": "#/definitions/model.TraitExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/trait/{id}": {
+            "get": {
+                "description": "Retrieve Trait details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trait"
+                ],
+                "summary": "Returns Trait by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Trait id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Trait details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Trait"
+                        }
+                    },
+                    "404": {
+                        "description": "Trait not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trait"
+                ],
+                "summary": "Deletes Trait by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Trait id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Trait doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trait"
+                ],
+                "summary": "Updates Trait by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Trait id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Trait data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateTrait"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Trait details",
+                        "schema": {
+                            "$ref": "#/definitions/model.TraitExternal"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Trait doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "description": "Returns all users",
@@ -2576,6 +3179,34 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.Action": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "spells": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Spell"
+                    }
+                }
+            }
+        },
+        "model.ActionExternal": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Ancestry": {
             "type": "object",
             "properties": {
@@ -2780,8 +3411,14 @@ const docTemplate = `{
                 "alias": {
                     "type": "string"
                 },
+                "ancestryID": {
+                    "type": "integer"
+                },
                 "attribute": {
                     "$ref": "#/definitions/model.Attribute"
+                },
+                "backgroundID": {
+                    "type": "integer"
                 },
                 "characterBoost": {
                     "$ref": "#/definitions/model.CharacterBoost"
@@ -2796,6 +3433,12 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.CharacterItem"
+                    }
+                },
+                "characterSpell": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterSpell"
                     }
                 },
                 "id": {
@@ -3020,8 +3663,14 @@ const docTemplate = `{
                 "alias": {
                     "type": "string"
                 },
+                "ancestry_id": {
+                    "type": "integer"
+                },
                 "attribute": {
                     "$ref": "#/definitions/model.Attribute"
+                },
+                "background_id": {
+                    "type": "integer"
                 },
                 "character_boost": {
                     "$ref": "#/definitions/model.CharacterBoost"
@@ -3129,6 +3778,20 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CharacterSpell": {
+            "type": "object",
+            "properties": {
+                "characterID": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "spellID": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.CharacterUpdate": {
             "type": "object",
             "properties": {
@@ -3141,6 +3804,17 @@ const docTemplate = `{
                 "level": {
                     "type": "integer"
                 },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateAction": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
                 "name": {
                     "type": "string"
                 }
@@ -3177,11 +3851,19 @@ const docTemplate = `{
         "model.CreateCharacter": {
             "type": "object",
             "required": [
+                "ancestry_id",
+                "background_id",
                 "name"
             ],
             "properties": {
                 "alias": {
                     "type": "string"
+                },
+                "ancestry_id": {
+                    "type": "integer"
+                },
+                "background_id": {
+                    "type": "integer"
                 },
                 "character_class_id": {
                     "type": "integer"
@@ -3268,6 +3950,35 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "price": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateTradition": {
+            "type": "object",
+            "required": [
+                "description",
+                "name"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateTrait": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -3844,6 +4555,29 @@ const docTemplate = `{
                 }
             }
         },
+        "model.School": {
+            "type": "string",
+            "enum": [
+                "Abjuration",
+                "Conjuration",
+                "Divination",
+                "Enchantment",
+                "Evocation",
+                "Illusion",
+                "Necromancy",
+                "Transmutation"
+            ],
+            "x-enum-varnames": [
+                "Abjuration",
+                "Conjuration",
+                "Divination",
+                "Enchantment",
+                "Evocation",
+                "Illusion",
+                "Necromancy",
+                "Transmutation"
+            ]
+        },
         "model.Skill": {
             "type": "object",
             "properties": {
@@ -3933,6 +4667,68 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Spell": {
+            "type": "object",
+            "properties": {
+                "area": {
+                    "type": "string"
+                },
+                "cast": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Action"
+                    }
+                },
+                "characterSpell": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterSpell"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "range": {
+                    "type": "string"
+                },
+                "rank": {
+                    "type": "integer"
+                },
+                "ritual": {
+                    "type": "boolean"
+                },
+                "school": {
+                    "$ref": "#/definitions/model.School"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "string"
+                },
+                "traditional": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Tradition"
+                    }
+                },
+                "traits": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Trait"
+                    }
+                }
+            }
+        },
         "model.SquareSize": {
             "type": "string",
             "enum": [
@@ -3951,6 +4747,85 @@ const docTemplate = `{
                 "Huge",
                 "Gargantuan"
             ]
+        },
+        "model.Tradition": {
+            "type": "object",
+            "properties": {
+                "characterClass": {
+                    "$ref": "#/definitions/model.CharacterClass"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "spells": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Spell"
+                    }
+                }
+            }
+        },
+        "model.TraditionExternal": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Trait": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "spells": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Spell"
+                    }
+                }
+            }
+        },
+        "model.TraitExternal": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateAction": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
         },
         "model.UpdateArmor": {
             "type": "object",
@@ -4100,6 +4975,28 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "price": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateTradition": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateTrait": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }

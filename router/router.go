@@ -44,6 +44,9 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	featHandler := api.FeatAPI{DB: db}
 	raceHandler := api.RaceApi{DB: db}
 	ancestryHandler := api.AncestryApi{DB: db}
+	traditionHandler := api.TraditionApi{DB: db}
+	actionHandler := api.ActionApi{DB: db}
+	traitHandler := api.TraitApi{DB: db}
 
 	authHandler := api.Controller{DB: db}
 
@@ -117,6 +120,33 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		ancestryGroup.GET("", ancestryHandler.GetAncestries)
 		ancestryGroup.GET("/:id", ancestryHandler.GetAncestryByID)
 		ancestryGroup.DELETE("/:id", ancestryHandler.DeleteAncestry)
+	}
+
+	actionGroup := g.Group("/action").Use(authentication.RequireJWT)
+	{
+		actionGroup.POST("", actionHandler.CreateAction)
+		actionGroup.PATCH("/:id", actionHandler.UpdateAction)
+		actionGroup.GET("", actionHandler.GetActions)
+		actionGroup.GET("/:id", actionHandler.GetActionByID)
+		actionGroup.DELETE("/:id", actionHandler.DeleteAction)
+	}
+
+	traditionGroup := g.Group("/tradition").Use(authentication.RequireJWT)
+	{
+		traditionGroup.POST("", traditionHandler.CreateTradition)
+		traditionGroup.PATCH("/:id", traditionHandler.UpdateTradition)
+		traditionGroup.GET("", traditionHandler.GetTraditions)
+		traditionGroup.GET("/:id", traditionHandler.GetTraditionByID)
+		traditionGroup.DELETE("/:id", traditionHandler.DeleteTradition)
+	}
+
+	traitGroup := g.Group("/trait").Use(authentication.RequireJWT)
+	{
+		traitGroup.POST("", traitHandler.CreateTrait)
+		traitGroup.PATCH("/:id", traitHandler.UpdateTrait)
+		traitGroup.GET("", traitHandler.GetTraits)
+		traitGroup.GET("/:id", traitHandler.GetTraitByID)
+		traitGroup.DELETE("/:id", traitHandler.DeleteTrait)
 	}
 
 	characterClassGroup := g.Group("/class").Use(authentication.RequireJWT)
