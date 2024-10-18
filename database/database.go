@@ -49,6 +49,7 @@ func New(
 		new(model.Slot),
 		new(model.CharacterBoost),
 		new(model.Spell),
+		new(model.CharacterDefence),
 	); err != nil {
 		return nil, err
 	}

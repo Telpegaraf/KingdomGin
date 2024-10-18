@@ -11,6 +11,52 @@
         "version": "0.1.0"
     },
     "paths": {
+        "/Ancestry": {
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ancestry"
+                ],
+                "summary": "Create and returns Ancestry or nil",
+                "parameters": [
+                    {
+                        "description": "Feat data",
+                        "name": "ancestry",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AncestryCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Feat details",
+                        "schema": {
+                            "$ref": "#/definitions/model.AncestryExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/Race/{id}": {
             "delete": {
                 "description": "Permissions for Admin",
@@ -45,6 +91,163 @@
                     },
                     "404": {
                         "description": "Domain doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/ancestry": {
+            "get": {
+                "description": "Return all GetAncestries",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ancestry"
+                ],
+                "summary": "Returns all Ancestries",
+                "responses": {
+                    "200": {
+                        "description": "Ancestry details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Ancestry"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/ancestry/{id}": {
+            "get": {
+                "description": "Permissions for auth users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ancestry"
+                ],
+                "summary": "Returns Ancestry by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Ancestry id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ancestry details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Ancestry"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ancestry"
+                ],
+                "summary": "Deletes Ancestry by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Ancestry id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Domain doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ancestry"
+                ],
+                "summary": "Updates Ancestry by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Ancestry id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Ancestry data",
+                        "name": "Ancestry",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AncestryUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ancestry details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Ancestry"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Ancestry doesn't exist",
                         "schema": {
                             "type": "string"
                         }
@@ -516,7 +719,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.CharacterUpdateExternal"
+                            "$ref": "#/definitions/model.CharacterUpdate"
                         }
                     }
                 ],
@@ -1891,7 +2094,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Item"
+                    "Race"
                 ],
                 "summary": "Returns all Races",
                 "responses": {
@@ -1924,7 +2127,7 @@
                 "parameters": [
                     {
                         "description": "Feat data",
-                        "name": "feat",
+                        "name": "race",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -1964,7 +2167,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Item"
+                    "Race"
                 ],
                 "summary": "Returns Race by ID",
                 "parameters": [
@@ -2000,7 +2203,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Item"
+                    "Race"
                 ],
                 "summary": "Updates Race by ID or nil",
                 "parameters": [
@@ -2386,6 +2589,56 @@
                 }
             }
         },
+        "model.AncestryCreate": {
+            "type": "object",
+            "required": [
+                "description",
+                "name",
+                "race_id"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "race_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.AncestryExternal": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "race_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.AncestryUpdate": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "race_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.Armor": {
             "type": "object",
             "properties": {
@@ -2523,8 +2776,14 @@
                 "alias": {
                     "type": "string"
                 },
+                "attribute": {
+                    "$ref": "#/definitions/model.Attribute"
+                },
                 "characterBoost": {
                     "$ref": "#/definitions/model.CharacterBoost"
+                },
+                "characterDefence": {
+                    "$ref": "#/definitions/model.CharacterDefence"
                 },
                 "characterItem": {
                     "type": "array",
@@ -2549,9 +2808,6 @@
                     "items": {
                         "$ref": "#/definitions/model.Slot"
                     }
-                },
-                "stat": {
-                    "$ref": "#/definitions/model.Attribute"
                 },
                 "userID": {
                     "type": "integer"
@@ -2686,6 +2942,62 @@
                 }
             }
         },
+        "model.CharacterDefence": {
+            "type": "object",
+            "properties": {
+                "armorClass": {
+                    "type": "integer"
+                },
+                "characterID": {
+                    "type": "integer"
+                },
+                "dying": {
+                    "type": "integer"
+                },
+                "fortitude": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "heavyArmor": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "hitPoint": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lightArmor": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "maxHitPoint": {
+                    "type": "integer"
+                },
+                "mediumArmor": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "perception": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "reflex": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "speed": {
+                    "type": "integer"
+                },
+                "temporaryHitPoint": {
+                    "type": "integer"
+                },
+                "unarmed": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "will": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "wounded": {
+                    "type": "boolean"
+                }
+            }
+        },
         "model.CharacterExternal": {
             "type": "object",
             "required": [
@@ -2695,14 +3007,35 @@
                 "alias": {
                     "type": "string"
                 },
+                "attribute": {
+                    "$ref": "#/definitions/model.Attribute"
+                },
+                "character_boost": {
+                    "$ref": "#/definitions/model.CharacterBoost"
+                },
+                "character_item": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterItem"
+                    }
+                },
                 "id": {
                     "type": "integer"
                 },
                 "last_name": {
                     "type": "string"
                 },
+                "level": {
+                    "type": "integer"
+                },
                 "name": {
                     "type": "string"
+                },
+                "slot": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Slot"
+                    }
                 },
                 "user_id": {
                     "type": "integer"
@@ -2780,7 +3113,7 @@
                 }
             }
         },
-        "model.CharacterUpdateExternal": {
+        "model.CharacterUpdate": {
             "type": "object",
             "properties": {
                 "alias": {
@@ -2788,6 +3121,9 @@
                 },
                 "last_name": {
                     "type": "string"
+                },
+                "level": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -3266,6 +3602,21 @@
                 }
             }
         },
+        "model.HitPoint": {
+            "type": "string",
+            "enum": [
+                "Six",
+                "Eight",
+                "Ten",
+                "Twelve"
+            ],
+            "x-enum-varnames": [
+                "Six",
+                "Eight",
+                "Ten",
+                "Twelve"
+            ]
+        },
         "model.Item": {
             "type": "object",
             "properties": {
@@ -3334,6 +3685,23 @@
                 }
             }
         },
+        "model.MasteryLevel": {
+            "type": "string",
+            "enum": [
+                "None",
+                "Train",
+                "Expert",
+                "Master",
+                "Legend"
+            ],
+            "x-enum-varnames": [
+                "None",
+                "Train",
+                "Expert",
+                "Master",
+                "Legend"
+            ]
+        },
         "model.Race": {
             "type": "object",
             "properties": {
@@ -3349,8 +3717,8 @@
                 "description": {
                     "type": "string"
                 },
-                "hitPoints": {
-                    "type": "integer"
+                "hitPoint": {
+                    "$ref": "#/definitions/model.HitPoint"
                 },
                 "id": {
                     "type": "integer"
@@ -3362,7 +3730,7 @@
                     "type": "string"
                 },
                 "size": {
-                    "type": "string"
+                    "$ref": "#/definitions/model.SquareSize"
                 },
                 "speed": {
                     "type": "integer"
@@ -3386,7 +3754,7 @@
                     "type": "string"
                 },
                 "hit_points": {
-                    "type": "integer"
+                    "$ref": "#/definitions/model.HitPoint"
                 },
                 "language": {
                     "type": "string"
@@ -3395,7 +3763,7 @@
                     "type": "string"
                 },
                 "size": {
-                    "type": "string"
+                    "$ref": "#/definitions/model.SquareSize"
                 },
                 "speed": {
                     "type": "integer"
@@ -3412,7 +3780,7 @@
                     "type": "string"
                 },
                 "hit_points": {
-                    "type": "integer"
+                    "$ref": "#/definitions/model.HitPoint"
                 },
                 "id": {
                     "type": "integer"
@@ -3424,7 +3792,7 @@
                     "type": "string"
                 },
                 "size": {
-                    "type": "string"
+                    "$ref": "#/definitions/model.SquareSize"
                 },
                 "speed": {
                     "type": "integer"
@@ -3441,7 +3809,7 @@
                     "type": "string"
                 },
                 "hit_points": {
-                    "type": "integer"
+                    "$ref": "#/definitions/model.HitPoint"
                 },
                 "language": {
                     "type": "string"
@@ -3450,7 +3818,7 @@
                     "type": "string"
                 },
                 "size": {
-                    "type": "string"
+                    "$ref": "#/definitions/model.SquareSize"
                 },
                 "speed": {
                     "type": "integer"
@@ -3545,6 +3913,25 @@
                     "type": "integer"
                 }
             }
+        },
+        "model.SquareSize": {
+            "type": "string",
+            "enum": [
+                "Tiny",
+                "Small",
+                "Medium",
+                "Large",
+                "Huge",
+                "Gargantuan"
+            ],
+            "x-enum-varnames": [
+                "Tiny",
+                "Small",
+                "Medium",
+                "Large",
+                "Huge",
+                "Gargantuan"
+            ]
         },
         "model.UpdateArmor": {
             "type": "object",

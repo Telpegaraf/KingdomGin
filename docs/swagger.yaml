@@ -10,6 +10,39 @@ definitions:
       raceID:
         type: integer
     type: object
+  model.AncestryCreate:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      race_id:
+        type: integer
+    required:
+    - description
+    - name
+    - race_id
+    type: object
+  model.AncestryExternal:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      race_id:
+        type: integer
+    type: object
+  model.AncestryUpdate:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      race_id:
+        type: integer
+    type: object
   model.Armor:
     properties:
       armorClass:
@@ -100,8 +133,12 @@ definitions:
     properties:
       alias:
         type: string
+      attribute:
+        $ref: '#/definitions/model.Attribute'
       characterBoost:
         $ref: '#/definitions/model.CharacterBoost'
+      characterDefence:
+        $ref: '#/definitions/model.CharacterDefence'
       characterItem:
         items:
           $ref: '#/definitions/model.CharacterItem'
@@ -118,8 +155,6 @@ definitions:
         items:
           $ref: '#/definitions/model.Slot'
         type: array
-      stat:
-        $ref: '#/definitions/model.Attribute'
       userID:
         type: integer
     type: object
@@ -208,16 +243,67 @@ definitions:
         example: Train
         type: string
     type: object
+  model.CharacterDefence:
+    properties:
+      armorClass:
+        type: integer
+      characterID:
+        type: integer
+      dying:
+        type: integer
+      fortitude:
+        $ref: '#/definitions/model.MasteryLevel'
+      heavyArmor:
+        $ref: '#/definitions/model.MasteryLevel'
+      hitPoint:
+        type: integer
+      id:
+        type: integer
+      lightArmor:
+        $ref: '#/definitions/model.MasteryLevel'
+      maxHitPoint:
+        type: integer
+      mediumArmor:
+        $ref: '#/definitions/model.MasteryLevel'
+      perception:
+        $ref: '#/definitions/model.MasteryLevel'
+      reflex:
+        $ref: '#/definitions/model.MasteryLevel'
+      speed:
+        type: integer
+      temporaryHitPoint:
+        type: integer
+      unarmed:
+        $ref: '#/definitions/model.MasteryLevel'
+      will:
+        $ref: '#/definitions/model.MasteryLevel'
+      wounded:
+        type: boolean
+    type: object
   model.CharacterExternal:
     properties:
       alias:
         type: string
+      attribute:
+        $ref: '#/definitions/model.Attribute'
+      character_boost:
+        $ref: '#/definitions/model.CharacterBoost'
+      character_item:
+        items:
+          $ref: '#/definitions/model.CharacterItem'
+        type: array
       id:
         type: integer
       last_name:
         type: string
+      level:
+        type: integer
       name:
         type: string
+      slot:
+        items:
+          $ref: '#/definitions/model.Slot'
+        type: array
       user_id:
         type: integer
     required:
@@ -270,12 +356,14 @@ definitions:
         example: 1
         type: integer
     type: object
-  model.CharacterUpdateExternal:
+  model.CharacterUpdate:
     properties:
       alias:
         type: string
       last_name:
         type: string
+      level:
+        type: integer
       name:
         type: string
     type: object
@@ -600,6 +688,18 @@ definitions:
       worships:
         type: string
     type: object
+  model.HitPoint:
+    enum:
+    - Six
+    - Eight
+    - Ten
+    - Twelve
+    type: string
+    x-enum-varnames:
+    - Six
+    - Eight
+    - Ten
+    - Twelve
   model.Item:
     properties:
       bulk:
@@ -645,6 +745,20 @@ definitions:
     - name
     - price
     type: object
+  model.MasteryLevel:
+    enum:
+    - None
+    - Train
+    - Expert
+    - Master
+    - Legend
+    type: string
+    x-enum-varnames:
+    - None
+    - Train
+    - Expert
+    - Master
+    - Legend
   model.Race:
     properties:
       abilityBoost:
@@ -655,8 +769,8 @@ definitions:
         type: array
       description:
         type: string
-      hitPoints:
-        type: integer
+      hitPoint:
+        $ref: '#/definitions/model.HitPoint'
       id:
         type: integer
       language:
@@ -664,7 +778,7 @@ definitions:
       name:
         type: string
       size:
-        type: string
+        $ref: '#/definitions/model.SquareSize'
       speed:
         type: integer
     type: object
@@ -675,13 +789,13 @@ definitions:
       description:
         type: string
       hit_points:
-        type: integer
+        $ref: '#/definitions/model.HitPoint'
       language:
         type: string
       name:
         type: string
       size:
-        type: string
+        $ref: '#/definitions/model.SquareSize'
       speed:
         type: integer
     required:
@@ -698,7 +812,7 @@ definitions:
       description:
         type: string
       hit_points:
-        type: integer
+        $ref: '#/definitions/model.HitPoint'
       id:
         type: integer
       language:
@@ -706,7 +820,7 @@ definitions:
       name:
         type: string
       size:
-        type: string
+        $ref: '#/definitions/model.SquareSize'
       speed:
         type: integer
     type: object
@@ -717,13 +831,13 @@ definitions:
       description:
         type: string
       hit_points:
-        type: integer
+        $ref: '#/definitions/model.HitPoint'
       language:
         type: string
       name:
         type: string
       size:
-        type: string
+        $ref: '#/definitions/model.SquareSize'
       speed:
         type: integer
     type: object
@@ -785,6 +899,22 @@ definitions:
       second_weapon_id:
         type: integer
     type: object
+  model.SquareSize:
+    enum:
+    - Tiny
+    - Small
+    - Medium
+    - Large
+    - Huge
+    - Gargantuan
+    type: string
+    x-enum-varnames:
+    - Tiny
+    - Small
+    - Medium
+    - Large
+    - Huge
+    - Gargantuan
   model.UpdateArmor:
     properties:
       armor_class:
@@ -1002,6 +1132,36 @@ info:
   title: Kingdom Api
   version: 0.1.0
 paths:
+  /Ancestry:
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Feat data
+        in: body
+        name: ancestry
+        required: true
+        schema:
+          $ref: '#/definitions/model.AncestryCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Feat details
+          schema:
+            $ref: '#/definitions/model.AncestryExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Ancestry or nil
+      tags:
+      - Ancestry
   /Race/{id}:
     delete:
       consumes:
@@ -1029,6 +1189,110 @@ paths:
       summary: Deletes Race by ID or returns nil
       tags:
       - Race
+  /ancestry:
+    get:
+      consumes:
+      - application/json
+      description: Return all GetAncestries
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Ancestry details
+          schema:
+            $ref: '#/definitions/model.Ancestry'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all Ancestries
+      tags:
+      - Ancestry
+  /ancestry/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Ancestry id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Domain doesn't exist
+          schema:
+            type: string
+      summary: Deletes Ancestry by ID or returns nil
+      tags:
+      - Ancestry
+    get:
+      consumes:
+      - application/json
+      description: Permissions for auth users
+      parameters:
+      - description: Ancestry id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Ancestry details
+          schema:
+            $ref: '#/definitions/model.Ancestry'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns Ancestry by ID
+      tags:
+      - Ancestry
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Ancestry id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Ancestry data
+        in: body
+        name: Ancestry
+        required: true
+        schema:
+          $ref: '#/definitions/model.AncestryUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Ancestry details
+          schema:
+            $ref: '#/definitions/model.Ancestry'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Ancestry doesn't exist
+          schema:
+            type: string
+      summary: Updates Ancestry by ID or nil
+      tags:
+      - Ancestry
   /attribute/{id}:
     get:
       consumes:
@@ -1334,7 +1598,7 @@ paths:
         name: character
         required: true
         schema:
-          $ref: '#/definitions/model.CharacterUpdateExternal'
+          $ref: '#/definitions/model.CharacterUpdate'
       produces:
       - application/json
       responses:
@@ -2255,7 +2519,7 @@ paths:
             type: string
       summary: Returns all Races
       tags:
-      - Item
+      - Race
     post:
       consumes:
       - application/json
@@ -2263,7 +2527,7 @@ paths:
       parameters:
       - description: Feat data
         in: body
-        name: feat
+        name: race
         required: true
         schema:
           $ref: '#/definitions/model.RaceCreate'
@@ -2309,7 +2573,7 @@ paths:
             type: string
       summary: Returns Race by ID
       tags:
-      - Item
+      - Race
     patch:
       consumes:
       - application/json
@@ -2343,7 +2607,7 @@ paths:
             type: string
       summary: Updates Race by ID or nil
       tags:
-      - Item
+      - Race
   /slot/{id}:
     get:
       consumes:
