@@ -4,6 +4,7 @@ type Tradition string
 type School string
 type HitPoint string
 type SquareSize string
+type MasteryLevel string
 
 const (
 	Arcane Tradition = "Arcane"
@@ -37,4 +38,12 @@ const (
 	Large      SquareSize = "Large"
 	Huge       SquareSize = "Huge"
 	Gargantuan SquareSize = "Gargantuan"
+)
+
+const (
+	None   MasteryLevel = "None"
+	Train  MasteryLevel = "Train"
+	Expert MasteryLevel = "Expert"
+	Master MasteryLevel = "Master"
+	Legend MasteryLevel = "Legend"
 )

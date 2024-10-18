@@ -1,12 +1,11 @@
 package database
 
 import (
-	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"io/ioutil"
 	"kingdom/auth/password"
 	"kingdom/model"
+	"os"
 )
 
 func New(
@@ -21,17 +20,14 @@ func New(
 		return nil, err
 	}
 
-	sqlData, err := ioutil.ReadFile("sqlSchema.sql")
+	sqlData, err := os.ReadFile("sqlSchema.sql")
 	if err != nil {
-		fmt.Println("Failed to read sql schema", err)
 		return nil, err
 	}
 
 	if err := db.Exec(string(sqlData)).Error; err != nil {
-		fmt.Println("Failed to create schema", err)
 		return nil, err
 	}
-	fmt.Println("SQL script executed successfully.")
 
 	if err := db.AutoMigrate(
 		new(model.User),
