@@ -12,25 +12,28 @@ type Character struct {
 	Slot             []Slot           `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CharacterBoost   CharacterBoost   `gorm:"constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
 	CharacterDefence CharacterDefence `gorm:"constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
+	CharacterClassID uint
 }
 
 type CreateCharacter struct {
-	Name     string `binding:"required" json:"name" query:"name" form:"name"`
-	Alias    string `json:"alias" query:"alias" form:"alias"`
-	LastName string ` json:"last_name" query:"last_name" form:"last_name"`
+	Name             string `binding:"required" json:"name" query:"name" form:"name"`
+	Alias            string `json:"alias" query:"alias" form:"alias"`
+	LastName         string ` json:"last_name" query:"last_name" form:"last_name"`
+	CharacterClassID uint   ` json:"character_class_id" query:"character_class_id" form:"character_class_id"`
 }
 
 type CharacterExternal struct {
-	ID             uint            `json:"id"`
-	Name           string          `binding:"required" json:"name" query:"name" form:"name"`
-	Alias          string          `json:"alias" query:"alias" form:"alias"`
-	LastName       string          ` json:"last_name" query:"last_name" form:"last_name"`
-	Level          int8            `json:"level" query:"level" form:"level"`
-	UserID         uint            ` json:"user_id" query:"user_id" form:"user_id"`
-	Attribute      Attribute       `json:"attribute" query:"attribute" form:"attribute"`
-	CharacterItem  []CharacterItem `json:"character_item" query:"character_item" form:"character_item"`
-	Slot           []Slot          `json:"slot" query:"slot" form:"slot"`
-	CharacterBoost CharacterBoost  `json:"character_boost" query:"character_boost" form:"character_boost"`
+	ID               uint            `json:"id"`
+	Name             string          `binding:"required" json:"name" query:"name" form:"name"`
+	Alias            string          `json:"alias" query:"alias" form:"alias"`
+	LastName         string          ` json:"last_name" query:"last_name" form:"last_name"`
+	Level            int8            `json:"level" query:"level" form:"level"`
+	UserID           uint            ` json:"user_id" query:"user_id" form:"user_id"`
+	Attribute        Attribute       `json:"attribute" query:"attribute" form:"attribute"`
+	CharacterItem    []CharacterItem `json:"character_item" query:"character_item" form:"character_item"`
+	Slot             []Slot          `json:"slot" query:"slot" form:"slot"`
+	CharacterBoost   CharacterBoost  `json:"character_boost" query:"character_boost" form:"character_boost"`
+	CharacterClassID uint            `json:"character_class_id" query:"character_class_id" form:"character_class_id"`
 }
 
 type CharacterUpdate struct {

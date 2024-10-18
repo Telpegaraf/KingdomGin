@@ -94,10 +94,11 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 	character := &model.CreateCharacter{}
 	if err := ctx.Bind(character); err == nil {
 		internal := &model.Character{
-			Name:     character.Name,
-			Alias:    character.Alias,
-			LastName: character.LastName,
-			UserID:   userID.(uint),
+			Name:             character.Name,
+			Alias:            character.Alias,
+			LastName:         character.LastName,
+			UserID:           userID.(uint),
+			CharacterClassID: character.CharacterClassID,
 		}
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacter(internal)); !success {
 			return
@@ -139,11 +140,12 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 					return
 				}
 				internal := &model.Character{
-					ID:       oldCharacter.ID,
-					Name:     character.Name,
-					Alias:    character.Alias,
-					LastName: character.LastName,
-					UserID:   oldCharacter.UserID,
+					ID:               oldCharacter.ID,
+					CharacterClassID: oldCharacter.CharacterClassID,
+					Name:             character.Name,
+					Alias:            character.Alias,
+					LastName:         character.LastName,
+					UserID:           oldCharacter.UserID,
 				}
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateCharacter(internal)); success {
 					return
@@ -193,15 +195,16 @@ func (a *CharacterApi) DeleteCharacter(ctx *gin.Context) {
 
 func ToExternalCharacter(character *model.Character) *model.CharacterExternal {
 	return &model.CharacterExternal{
-		ID:             character.ID,
-		Name:           character.Name,
-		Alias:          character.Alias,
-		LastName:       character.LastName,
-		UserID:         character.UserID,
-		Level:          character.Level,
-		CharacterItem:  character.CharacterItem,
-		CharacterBoost: character.CharacterBoost,
-		Attribute:      character.Attribute,
-		Slot:           character.Slot,
+		ID:               character.ID,
+		Name:             character.Name,
+		Alias:            character.Alias,
+		LastName:         character.LastName,
+		UserID:           character.UserID,
+		Level:            character.Level,
+		CharacterItem:    character.CharacterItem,
+		CharacterBoost:   character.CharacterBoost,
+		Attribute:        character.Attribute,
+		Slot:             character.Slot,
+		CharacterClassID: character.CharacterClassID,
 	}
 }

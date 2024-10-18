@@ -2786,6 +2786,9 @@ const docTemplate = `{
                 "characterBoost": {
                     "$ref": "#/definitions/model.CharacterBoost"
                 },
+                "characterClassID": {
+                    "type": "integer"
+                },
                 "characterDefence": {
                     "$ref": "#/definitions/model.CharacterDefence"
                 },
@@ -2885,6 +2888,9 @@ const docTemplate = `{
         "model.CharacterClass": {
             "type": "object",
             "properties": {
+                "character": {
+                    "$ref": "#/definitions/model.Character"
+                },
                 "commonWeaponMastery": {
                     "type": "string"
                 },
@@ -2917,6 +2923,9 @@ const docTemplate = `{
                 },
                 "reflexMastery": {
                     "type": "string"
+                },
+                "tradition": {
+                    "$ref": "#/definitions/model.Tradition"
                 },
                 "unArmedWeaponMastery": {
                     "type": "string"
@@ -3016,6 +3025,9 @@ const docTemplate = `{
                 },
                 "character_boost": {
                     "$ref": "#/definitions/model.CharacterBoost"
+                },
+                "character_class_id": {
+                    "type": "integer"
                 },
                 "character_item": {
                     "type": "array",
@@ -3170,6 +3182,9 @@ const docTemplate = `{
             "properties": {
                 "alias": {
                     "type": "string"
+                },
+                "character_class_id": {
+                    "type": "integer"
                 },
                 "last_name": {
                     "type": "string"
@@ -3935,6 +3950,21 @@ const docTemplate = `{
                 "Large",
                 "Huge",
                 "Gargantuan"
+            ]
+        },
+        "model.Tradition": {
+            "type": "string",
+            "enum": [
+                "Arcane",
+                "Divine",
+                "Occult",
+                "Primal"
+            ],
+            "x-enum-varnames": [
+                "Arcane",
+                "Divine",
+                "Occult",
+                "Primal"
             ]
         },
         "model.UpdateArmor": {

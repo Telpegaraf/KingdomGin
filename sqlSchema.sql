@@ -15,7 +15,7 @@ END $$;
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'tradition') THEN
-        CREATE TYPE tradition AS ENUM ('Arcane', 'Divine', 'Occult', 'Primal');
+        CREATE TYPE tradition AS ENUM ('None', 'Arcane', 'Divine', 'Occult', 'Primal');
     END IF;
 END $$;
 
