@@ -47,6 +47,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	traditionHandler := api.TraditionApi{DB: db}
 	actionHandler := api.ActionApi{DB: db}
 	traitHandler := api.TraitApi{DB: db}
+	characterSkillHandler := api.CharacterSkillApi{DB: db}
 
 	authHandler := api.Controller{DB: db}
 
@@ -179,6 +180,14 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		characterItemGroup.GET("/list/:character_id", characterItemHandler.GetCharacterItems)
 		characterItemGroup.DELETE("/:id", characterItemHandler.DeleteCharacterItem)
 		characterItemGroup.PATCH("/:id", characterItemHandler.UpdateCharacterItem)
+	}
+
+	characterSkillGroup := g.Group("/character-skill").Use(authentication.RequireJWT)
+	{
+		characterSkillGroup.POST("", characterSkillHandler.CharacterSkillCreate)
+		characterSkillGroup.GET("/:id", characterSkillHandler.GetCharacterSkillByID)
+		characterSkillGroup.GET("", characterSkillHandler.GetCharacterSkills)
+		characterSkillGroup.PATCH("/:id", characterSkillHandler.UpdateCharacterSkill)
 	}
 
 	g.GET("/slot/:id", slotHandler.GetSlotByID).Use(authentication.RequireJWT)
