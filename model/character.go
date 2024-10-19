@@ -18,6 +18,7 @@ type Character struct {
 	CharacterBoost   CharacterBoost   `gorm:"constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
 	CharacterDefence CharacterDefence `gorm:"constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
 	CharacterFeat    CharacterFeat    `gorm:"constraint:OnUpdate:CASCADE;onDelete:CASCADE;"`
+	CharacterSkill   []CharacterSkill `gorm:"constraint:OnUpdate:CASCADE;onDelete:CASCADE;"`
 }
 
 type CreateCharacter struct {

@@ -14,9 +14,7 @@ type CharacterSkillCreate struct {
 }
 
 type CharacterSkillUpdate struct {
-	CharacterID uint         `json:"character_id" query:"character_id"`
-	SkillID     uint         `json:"skill_id" query:"skill_id"`
-	Mastery     MasteryLevel `json:"mastery" query:"mastery"`
+	Mastery MasteryLevel `json:"mastery" query:"mastery"`
 }
 
 type CharacterSkillExternal struct {
