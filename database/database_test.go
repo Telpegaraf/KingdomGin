@@ -24,7 +24,12 @@ type DatabaseSuite struct {
 func (s *DatabaseSuite) BeforeTest(suiteName, testName string) {
 	s.tmpDir = test.NewTmpDir("kingdom_databasesuite")
 	db, err := gorm.Open(sqlite.Open(s.tmpDir.Path("test.db")), &gorm.Config{})
-	db.AutoMigrate(new(model.User), new(model.Character), new(model.Domain), new(model.God))
+	db.AutoMigrate(
+		new(model.User),
+		new(model.Tradition),
+		new(model.Character),
+		new(model.Domain),
+		new(model.God))
 	userCount := int64(0)
 	db.Find(new(model.User)).Count(&userCount)
 	if userCount == 0 {

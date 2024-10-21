@@ -13,7 +13,10 @@ func (d *GormDatabase) GetTraditionByID(id uint) (*model.Tradition, error) {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
-	return tradition, nil
+	if tradition.ID == id {
+		return tradition, err
+	}
+	return nil, err
 }
 
 // CreateTradition create new Tradition
@@ -36,5 +39,5 @@ func (d *GormDatabase) UpdateTradition(tradition *model.Tradition) error {
 // DeleteTradition deletes Tradition
 func (d *GormDatabase) DeleteTradition(id uint) error {
 	return d.DB.Where("id = ?", id).
-		Delete(&model.Domain{}).Error
+		Delete(&model.Tradition{}).Error
 }
