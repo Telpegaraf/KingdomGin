@@ -16,12 +16,12 @@ func (d *GormDatabase) GetItems() ([]*model.Item, error) {
 // GetItemByID Returns Item by ID
 func (d *GormDatabase) GetItemByID(id uint) (*model.Item, error) {
 	item := new(model.Item)
-	err := d.DB.First(item, id).Error
+	err := d.DB.Find(item, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
 	if item.ID == id {
-		return item, nil
+		return item, err
 	}
 	return nil, err
 }

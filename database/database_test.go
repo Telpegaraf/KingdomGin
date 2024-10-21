@@ -31,6 +31,10 @@ func (s *DatabaseSuite) BeforeTest(suiteName, testName string) {
 		new(model.Action),
 		new(model.Skill),
 		new(model.Race),
+		new(model.Item),
+		new(model.Armor),
+		new(model.Weapon),
+		new(model.Gear),
 		new(model.Character),
 		new(model.Domain),
 		new(model.God))
