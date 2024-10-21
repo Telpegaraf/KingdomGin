@@ -22,6 +22,10 @@ type CharacterDatabase interface {
 	GetCharacterClassByID(id uint) (*model.CharacterClass, error)
 	GetCharacterDefenceByID(id uint) (*model.CharacterDefence, error)
 	UpdateHitPoint(defence *model.CharacterDefence) error
+	GetSkills() ([]*model.Skill, error)
+	CharacterSkillCreate(characterSkill *model.CharacterSkill) error
+	GetBackgroundByID(id uint) (*model.Background, error)
+	CreateCharacterFeat(characterFeat *model.CharacterFeat) error
 }
 
 type CharacterApi struct {
@@ -110,12 +114,17 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacter(internal)); !success {
 			return
 		}
+		newCharacter, _ := a.DB.GetCharacterByID(internal.ID)
 		go func() {
-			a.CreateAttribute(ctx, internal.ID)
+			race, _ := a.DB.GetRaceByID(character.RaceID)
+			characterClass, _ := a.DB.GetCharacterClassByID(character.CharacterClassID)
+			a.CreateAttribute(ctx, newCharacter.ID, race)
 			a.CreateSlot(ctx, internal.ID)
-			a.CreateCharacterBoost(ctx, internal.ID)
+			a.CreateCharacterBoost(ctx, newCharacter.ID, race)
+			a.CreateSkills(ctx, newCharacter)
+			a.CreateCharacterDefence(ctx, newCharacter.ID, race, characterClass)
 		}()
-		ctx.JSON(http.StatusCreated, ToExternalCharacter(internal))
+		ctx.JSON(http.StatusCreated, ToExternalCharacter(newCharacter))
 	}
 }
 
@@ -160,7 +169,7 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 				ctx.JSON(http.StatusOK, ToExternalCharacter(internal))
 				if character.Level != oldCharacter.Level {
 					go func() {
-						a.ChangeHitPoint(ctx, internal, (character.Level - oldCharacter.Level))
+						a.ChangeHitPoint(ctx, internal, character.Level-oldCharacter.Level)
 					}()
 				}
 			}
@@ -241,5 +250,22 @@ func ToExternalCharacter(character *model.Character) *model.CharacterExternal {
 		RaceID:           character.RaceID,
 		AncestryID:       character.AncestryID,
 		BackgroundID:     character.BackgroundID,
+	}
+}
+
+func (a *CharacterApi) CreateSkills(ctx *gin.Context, character *model.Character) {
+	backgroundCharacter, _ := a.DB.GetBackgroundByID(character.BackgroundID)
+	skills, _ := a.DB.GetSkills()
+	for _, skill := range skills {
+		mastery := model.None
+		if backgroundCharacter.FirstSkillID == skill.ID || backgroundCharacter.SecondSkillID == skill.ID {
+			mastery = model.Train
+		}
+		characterSkill := &model.CharacterSkill{
+			CharacterID: character.ID,
+			SkillID:     skill.ID,
+			Mastery:     mastery,
+		}
+		a.DB.CharacterSkillCreate(characterSkill)
 	}
 }

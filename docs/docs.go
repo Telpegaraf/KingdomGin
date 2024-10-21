@@ -3337,6 +3337,25 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.Ability": {
+            "type": "string",
+            "enum": [
+                "Strength",
+                "Dexterity",
+                "Constitution",
+                "Intelligence",
+                "Wisdom",
+                "Charisma"
+            ],
+            "x-enum-varnames": [
+                "Strength",
+                "Dexterity",
+                "Constitution",
+                "Intelligence",
+                "Wisdom",
+                "Charisma"
+            ]
+        },
         "model.Action": {
             "type": "object",
             "properties": {
@@ -3549,17 +3568,17 @@ const docTemplate = `{
                 "featID": {
                     "type": "integer"
                 },
+                "firstSkillID": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "name": {
                     "type": "string"
                 },
-                "skill": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Skill"
-                    }
+                "secondSkillID": {
+                    "type": "integer"
                 }
             }
         },
@@ -3638,13 +3657,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "ancestryBoost": {
-                    "type": "boolean"
+                    "type": "integer"
                 },
                 "backgroundBoost": {
                     "type": "boolean"
                 },
                 "characterID": {
                     "type": "integer"
+                },
+                "classBoost": {
+                    "type": "boolean"
                 },
                 "freeBoost": {
                     "type": "integer"
@@ -3673,6 +3695,12 @@ const docTemplate = `{
                 },
                 "commonWeapon": {
                     "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "feat": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Feat"
+                    }
                 },
                 "fortitude": {
                     "$ref": "#/definitions/model.MasteryLevel"
@@ -4412,6 +4440,9 @@ const docTemplate = `{
                         "$ref": "#/definitions/model.Background"
                     }
                 },
+                "characterClassId": {
+                    "type": "integer"
+                },
                 "characterFeat": {
                     "type": "array",
                     "items": {
@@ -4429,6 +4460,12 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "prerequisiteMastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "prerequisiteSkillID": {
+                    "type": "integer"
                 }
             }
         },
@@ -4737,13 +4774,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "abilityBoost": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "ancestry": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.Ancestry"
                     }
+                },
+                "attributeFlaw": {
+                    "$ref": "#/definitions/model.Ability"
                 },
                 "description": {
                     "type": "string"
@@ -4779,7 +4819,10 @@ const docTemplate = `{
             ],
             "properties": {
                 "ability_boost": {
-                    "type": "string"
+                    "type": "integer"
+                },
+                "attribute_flaw": {
+                    "$ref": "#/definitions/model.Ability"
                 },
                 "description": {
                     "type": "string"
@@ -4805,7 +4848,10 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "ability_boost": {
-                    "type": "string"
+                    "type": "integer"
+                },
+                "attribute_flaw": {
+                    "$ref": "#/definitions/model.Ability"
                 },
                 "description": {
                     "type": "string"
@@ -4834,7 +4880,10 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "ability_boost": {
-                    "type": "string"
+                    "type": "integer"
+                },
+                "attribute_flaw": {
+                    "$ref": "#/definitions/model.Ability"
                 },
                 "description": {
                     "type": "string"
@@ -4878,26 +4927,6 @@ const docTemplate = `{
                 "Necromancy",
                 "Transmutation"
             ]
-        },
-        "model.Skill": {
-            "type": "object",
-            "properties": {
-                "background": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Background"
-                    }
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
         },
         "model.Slot": {
             "type": "object",

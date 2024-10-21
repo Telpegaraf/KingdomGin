@@ -31,12 +31,13 @@ func New(
 
 	if err := db.AutoMigrate(
 		new(model.User),
+		new(model.Tradition),
+		new(model.Skill),
+		new(model.CharacterClass),
 		new(model.Character),
 		new(model.Domain),
 		new(model.God),
-		new(model.Tradition),
 		new(model.Action),
-		new(model.CharacterClass),
 		new(model.Attribute),
 		new(model.Item),
 		new(model.Feat),
@@ -54,6 +55,7 @@ func New(
 		new(model.CharacterDefence),
 		new(model.CharacterSpell),
 		new(model.CharacterFeat),
+		new(model.CharacterSkill),
 	); err != nil {
 		return nil, err
 	}

@@ -4,6 +4,7 @@ type School string
 type HitPoint string
 type SquareSize string
 type MasteryLevel string
+type Ability string
 
 const (
 	Abjuration    School = "Abjuration"
@@ -38,4 +39,13 @@ const (
 	Expert MasteryLevel = "Expert"
 	Master MasteryLevel = "Master"
 	Legend MasteryLevel = "Legend"
+)
+
+const (
+	Strength     Ability = "Strength"
+	Dexterity    Ability = "Dexterity"
+	Constitution Ability = "Constitution"
+	Intelligence Ability = "Intelligence"
+	Wisdom       Ability = "Wisdom"
+	Charisma     Ability = "Charisma"
 )

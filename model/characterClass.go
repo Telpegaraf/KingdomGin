@@ -18,6 +18,7 @@ type CharacterClass struct {
 	TraditionID   uint
 
 	Character Character `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Feat      []Feat    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type CharacterClassCreate struct {

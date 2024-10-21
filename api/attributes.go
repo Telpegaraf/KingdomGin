@@ -15,13 +15,29 @@ type AttributeApi struct {
 	DB AttributeDatabase
 }
 
-func (a *CharacterApi) CreateAttribute(ctx *gin.Context, characterID uint) {
+func (a *CharacterApi) CreateAttribute(
+	ctx *gin.Context,
+	characterID uint,
+	race *model.Race,
+) {
 	internal := &model.Attribute{
 		CharacterID: characterID,
 	}
-	if success := SuccessOrAbort(ctx, 500, a.DB.CreateAttribute(internal)); !success {
-		return
+	switch race.AttributeFlaw {
+	case model.Strength:
+		internal.Strength = 8
+	case model.Dexterity:
+		internal.Dexterity = 8
+	case model.Constitution:
+		internal.Constitution = 8
+	case model.Intelligence:
+		internal.Intelligence = 8
+	case model.Wisdom:
+		internal.Wisdom = 8
+	case model.Charisma:
+		internal.Charisma = 8
 	}
+	a.DB.CreateAttribute(internal)
 }
 
 // GetAttributeByID godoc

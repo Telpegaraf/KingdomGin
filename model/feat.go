@@ -1,12 +1,15 @@
 package model
 
 type Feat struct {
-	ID            uint   `gorm:"primary_key;AUTO_INCREMENT"`
-	Name          string `gorm:"unique;not null"`
-	Description   string
-	Level         uint8 `gorm:"default:1;not null"`
-	Background    []Background
-	CharacterFeat []CharacterFeat `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	ID                  uint   `gorm:"primary_key;AUTO_INCREMENT"`
+	Name                string `gorm:"unique;not null"`
+	Description         string
+	Level               uint8 `gorm:"default:1;not null"`
+	PrerequisiteSkillID uint
+	PrerequisiteMastery MasteryLevel `gorm:"type:mastery_level"`
+	Background          []Background
+	CharacterFeat       []CharacterFeat `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	CharacterClassId    uint
 }
 
 type CreateFeat struct {

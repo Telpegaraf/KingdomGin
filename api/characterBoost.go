@@ -15,9 +15,13 @@ type CharacterBoostApi struct {
 	DB CharacterBoostDatabase
 }
 
-func (a *CharacterApi) CreateCharacterBoost(ctx *gin.Context, characterID uint) {
+func (a *CharacterApi) CreateCharacterBoost(ctx *gin.Context,
+	characterID uint,
+	race *model.Race) {
+
 	internal := &model.CharacterBoost{
-		CharacterID: characterID,
+		CharacterID:   characterID,
+		AncestryBoost: race.AbilityBoost,
 	}
 	if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacterBoost(internal)); !success {
 		return

@@ -2,10 +2,11 @@ package model
 
 type CharacterBoost struct {
 	ID              uint  `gorm:"primary_key;AUTO_INCREMENT"`
-	AncestryBoost   bool  `gorm:"default:true"`
-	BackgroundBoost bool  `gorm:"default:0"`
-	FreeBoost       uint8 `gorm:"default:0"`
-	CharacterID     uint  `gorm:"unique"`
+	AncestryBoost   uint8 `gorm:"default:2"`
+	BackgroundBoost bool  `gorm:"default:true"`
+	ClassBoost      bool  `gorm:"default:true"`
+	FreeBoost       uint8 `gorm:"default:1"`
+	CharacterID     uint  `gorm:"foreignKey:CharacterID;unique"`
 }
 
 type CreateCharacterBoost struct {

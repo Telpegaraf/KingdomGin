@@ -1,4 +1,20 @@
 definitions:
+  model.Ability:
+    enum:
+    - Strength
+    - Dexterity
+    - Constitution
+    - Intelligence
+    - Wisdom
+    - Charisma
+    type: string
+    x-enum-varnames:
+    - Strength
+    - Dexterity
+    - Constitution
+    - Intelligence
+    - Wisdom
+    - Charisma
   model.Action:
     properties:
       id:
@@ -138,14 +154,14 @@ definitions:
         type: string
       featID:
         type: integer
+      firstSkillID:
+        type: integer
       id:
         type: integer
       name:
         type: string
-      skill:
-        items:
-          $ref: '#/definitions/model.Skill'
-        type: array
+      secondSkillID:
+        type: integer
     type: object
   model.Character:
     properties:
@@ -197,11 +213,13 @@ definitions:
   model.CharacterBoost:
     properties:
       ancestryBoost:
-        type: boolean
+        type: integer
       backgroundBoost:
         type: boolean
       characterID:
         type: integer
+      classBoost:
+        type: boolean
       freeBoost:
         type: integer
       id:
@@ -220,6 +238,10 @@ definitions:
         $ref: '#/definitions/model.Character'
       commonWeapon:
         $ref: '#/definitions/model.MasteryLevel'
+      feat:
+        items:
+          $ref: '#/definitions/model.Feat'
+        type: array
       fortitude:
         $ref: '#/definitions/model.MasteryLevel'
       heavyArmor:
@@ -697,6 +719,8 @@ definitions:
         items:
           $ref: '#/definitions/model.Background'
         type: array
+      characterClassId:
+        type: integer
       characterFeat:
         items:
           $ref: '#/definitions/model.CharacterFeat'
@@ -709,6 +733,10 @@ definitions:
         type: integer
       name:
         type: string
+      prerequisiteMastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      prerequisiteSkillID:
+        type: integer
     type: object
   model.FeatExternal:
     properties:
@@ -919,11 +947,13 @@ definitions:
   model.Race:
     properties:
       abilityBoost:
-        type: string
+        type: integer
       ancestry:
         items:
           $ref: '#/definitions/model.Ancestry'
         type: array
+      attributeFlaw:
+        $ref: '#/definitions/model.Ability'
       description:
         type: string
       hitPoint:
@@ -942,7 +972,9 @@ definitions:
   model.RaceCreate:
     properties:
       ability_boost:
-        type: string
+        type: integer
+      attribute_flaw:
+        $ref: '#/definitions/model.Ability'
       description:
         type: string
       hit_points:
@@ -965,7 +997,9 @@ definitions:
   model.RaceExternal:
     properties:
       ability_boost:
-        type: string
+        type: integer
+      attribute_flaw:
+        $ref: '#/definitions/model.Ability'
       description:
         type: string
       hit_points:
@@ -984,7 +1018,9 @@ definitions:
   model.RaceUpdate:
     properties:
       ability_boost:
-        type: string
+        type: integer
+      attribute_flaw:
+        $ref: '#/definitions/model.Ability'
       description:
         type: string
       hit_points:
@@ -1018,19 +1054,6 @@ definitions:
     - Illusion
     - Necromancy
     - Transmutation
-  model.Skill:
-    properties:
-      background:
-        items:
-          $ref: '#/definitions/model.Background'
-        type: array
-      description:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-    type: object
   model.Slot:
     properties:
       armor:

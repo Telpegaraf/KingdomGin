@@ -15,17 +15,12 @@ type CharacterDefenceApi struct {
 	DB CharacterDefenceDatabase
 }
 
-func (a *CharacterApi) CreateCharacterDefence(ctx *gin.Context, character *model.Character) {
-	race, err := a.DB.GetRaceByID(character.RaceID)
-	if success := SuccessOrAbort(ctx, 500, err); !success {
-		return
-	}
-	characterClass, err := a.DB.GetCharacterClassByID(character.BackgroundID)
-	if success := SuccessOrAbort(ctx, 500, err); !success {
-		return
-	}
+func (a *CharacterApi) CreateCharacterDefence(ctx *gin.Context,
+	characterId uint,
+	race *model.Race,
+	characterClass *model.CharacterClass) {
 	internal := &model.CharacterDefence{
-		CharacterID: character.ID,
+		CharacterID: characterId,
 		HitPoint:    race.HitPoint + characterClass.HitPoint,
 		MaxHitPoint: race.HitPoint + characterClass.HitPoint,
 		Perception:  characterClass.Perception,
@@ -37,9 +32,7 @@ func (a *CharacterApi) CreateCharacterDefence(ctx *gin.Context, character *model
 		MediumArmor: characterClass.MediumArmor,
 		HeavyArmor:  characterClass.HeavyArmor,
 	}
-	if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacterDefence(internal)); !success {
-		return
-	}
+	a.DB.CreateCharacterDefence(internal)
 }
 
 func (a *CharacterDefenceApi) GetCharacterDefence(ctx *gin.Context) {
