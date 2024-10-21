@@ -1,5 +1,10 @@
 package model
 
+import (
+	"errors"
+	"gorm.io/gorm"
+)
+
 type Race struct {
 	ID           uint       `gorm:"primary_key;AUTO_INCREMENT"`
 	Name         string     `gorm:"unique;not null"`
@@ -41,4 +46,19 @@ type RaceExternal struct {
 	Speed        int8       `json:"speed" query:"speed" form:"speed"`
 	AbilityBoost string     `json:"ability_boost" query:"ability_boost" form:"ability_boost"`
 	Language     string     `json:"language" query:"language" form:"language"`
+}
+
+func (r *Race) BeforeSave(tx *gorm.DB) (err error) {
+	if !isValidSquareSize(r.Size) {
+		return errors.New("invalid Square Size vale")
+	}
+	return
+}
+
+func isValidSquareSize(value SquareSize) bool {
+	switch value {
+	case Tiny, Small, Medium, Large, Huge, Gargantuan:
+		return true
+	}
+	return false
 }
