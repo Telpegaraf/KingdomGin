@@ -118,11 +118,13 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 		go func() {
 			race, _ := a.DB.GetRaceByID(character.RaceID)
 			characterClass, _ := a.DB.GetCharacterClassByID(character.CharacterClassID)
+			background, _ := a.DB.GetBackgroundByID(character.BackgroundID)
 			a.CreateAttribute(ctx, newCharacter.ID, race)
 			a.CreateSlot(ctx, internal.ID)
 			a.CreateCharacterBoost(ctx, newCharacter.ID, race)
 			a.CreateSkills(ctx, newCharacter)
 			a.CreateCharacterDefence(ctx, newCharacter.ID, race, characterClass)
+			a.CreateCharacterFeat(newCharacter.ID, background)
 		}()
 		ctx.JSON(http.StatusCreated, ToExternalCharacter(newCharacter))
 	}
