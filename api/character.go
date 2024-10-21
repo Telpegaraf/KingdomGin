@@ -20,6 +20,8 @@ type CharacterDatabase interface {
 	CreateCharacterDefence(characterDefence *model.CharacterDefence) error
 	GetRaceByID(id uint) (*model.Race, error)
 	GetCharacterClassByID(id uint) (*model.CharacterClass, error)
+	GetCharacterDefenceByID(id uint) (*model.CharacterDefence, error)
+	UpdateHitPoint(defence *model.CharacterDefence) error
 }
 
 type CharacterApi struct {
@@ -156,11 +158,36 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 					return
 				}
 				ctx.JSON(http.StatusOK, ToExternalCharacter(internal))
+				if character.Level != oldCharacter.Level {
+					go func() {
+						a.ChangeHitPoint(ctx, internal, (character.Level - oldCharacter.Level))
+					}()
+				}
 			}
 		} else {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "Character doesn't exist"})
 		}
 	})
+}
+
+func (a *CharacterApi) ChangeHitPoint(ctx *gin.Context, character *model.Character, levelCount int8) {
+	characterClass, _ := a.DB.GetCharacterClassByID(character.CharacterClassID)
+	characterDefence, _ := a.DB.GetCharacterDefenceByID(character.ID)
+	maxHtPoint := characterDefence.MaxHitPoint + (characterClass.HitPoint)*uint16(levelCount)
+	hitPoint := characterDefence.HitPoint
+	if maxHtPoint < characterDefence.HitPoint {
+		hitPoint = maxHtPoint
+	}
+	internal := &model.CharacterDefence{
+		ID:          character.ID,
+		MaxHitPoint: maxHtPoint,
+		HitPoint:    hitPoint,
+	}
+	err := a.DB.UpdateHitPoint(internal)
+	if err != nil {
+		return
+	}
+
 }
 
 // DeleteCharacter Deletes Character by ID

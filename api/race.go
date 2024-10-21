@@ -147,7 +147,7 @@ func (a *RaceApi) UpdateRace(ctx *gin.Context) {
 // @Success 204
 // @Failure 404 {string} string "Domain doesn't exist"
 // @Failure 403 {string} string "You can't access for this API"
-// @Router /Race/{id} [delete]
+// @Router /race/{id} [delete]
 func (a *RaceApi) DeleteRace(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		race, err := a.DB.GetRaceByID(id)

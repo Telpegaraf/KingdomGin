@@ -40,3 +40,7 @@ func (d *GormDatabase) UpdateCharacter(character *model.Character) error {
 func (d *GormDatabase) DeleteCharacterByID(id uint) error {
 	return d.DB.Where("id = ?", id).Delete(&model.Character{}, id).Error
 }
+
+func (d *GormDatabase) UpdateHitPoint(defence *model.CharacterDefence) error {
+	return d.DB.Model(&defence).Select("max_hit_points").Updates(defence).Error
+}

@@ -29,7 +29,7 @@ type AncestryApi struct {
 // @Success 201 {object} model.AncestryExternal "Feat details"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 403 {string} string "You can't access for this API"
-// @Router /Ancestry [post]
+// @Router /ancestry [post]
 func (a *AncestryApi) CreateAncestry(ctx *gin.Context) {
 	ancestry := &model.Ancestry{}
 	if err := ctx.Bind(&ancestry); err == nil {
