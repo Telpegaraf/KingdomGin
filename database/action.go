@@ -13,7 +13,10 @@ func (d *GormDatabase) GetActionByID(id uint) (*model.Action, error) {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
-	return action, nil
+	if action.ID == id {
+		return action, err
+	}
+	return nil, err
 }
 
 // CreateAction create new Action
@@ -32,5 +35,5 @@ func (d *GormDatabase) UpdateAction(action *model.Action) error { return d.DB.Sa
 // DeleteAction deletes Action
 func (d *GormDatabase) DeleteAction(id uint) error {
 	return d.DB.Where("id = ?", id).
-		Delete(&model.Domain{}).Error
+		Delete(&model.Action{}).Error
 }
