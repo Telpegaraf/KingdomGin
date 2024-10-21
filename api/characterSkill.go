@@ -24,7 +24,7 @@ type CharacterSkillApi struct {
 // @Tags Character Skill
 // @Accept json
 // @Produce json
-// @Param character skill body model.CharacterSkillCreate true "Action data"
+// @Param characterSkill body model.CharacterSkillCreate true "Action data"
 // @Success 201 {object} model.CharacterSkillExternal "Action details"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 403 {string} string "You can't access for this API"
@@ -99,7 +99,7 @@ func (a *CharacterSkillApi) GetCharacterSkills(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Character Skill id"
-// @Param character skill body model.CharacterSkillUpdate true "Character Skill data"
+// @Param characterSkill body model.CharacterSkillUpdate true "Character Skill data"
 // @Success 200 {object} model.CharacterSkillExternal "Action details"
 // @Failure 403 {string} string "You can't access for this API"
 // @Failure 404 {string} string "Character Skill doesn't exist"

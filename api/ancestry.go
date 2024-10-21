@@ -31,7 +31,7 @@ type AncestryApi struct {
 // @Failure 403 {string} string "You can't access for this API"
 // @Router /ancestry [post]
 func (a *AncestryApi) CreateAncestry(ctx *gin.Context) {
-	ancestry := &model.Ancestry{}
+	ancestry := &model.AncestryCreate{}
 	if err := ctx.Bind(&ancestry); err == nil {
 		internal := &model.Ancestry{
 			Name:        ancestry.Name,
@@ -41,8 +41,8 @@ func (a *AncestryApi) CreateAncestry(ctx *gin.Context) {
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateAncestry(internal)); !success {
 			return
 		}
+		ctx.JSON(http.StatusCreated, ToExternalAncestry(internal))
 	}
-	ctx.JSON(http.StatusCreated, ToExternalAncestry(ancestry))
 }
 
 // GetAncestries godoc

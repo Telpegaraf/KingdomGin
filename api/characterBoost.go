@@ -71,15 +71,8 @@ func (a *CharacterBoostApi) UpdateCharacterBoost(ctx *gin.Context) {
 			}
 			if oldCharacterBoost != nil {
 				internal := &model.CharacterBoost{
-					ID:           oldCharacterBoost.ID,
-					Strength:     *CharacterBoost.Strength,
-					Dexterity:    *CharacterBoost.Dexterity,
-					Constitution: *CharacterBoost.Constitution,
-					Intelligence: *CharacterBoost.Intelligence,
-					Wisdom:       *CharacterBoost.Wisdom,
-					Charisma:     *CharacterBoost.Charisma,
-					Free:         *CharacterBoost.Free,
-					CharacterID:  id,
+					ID:          oldCharacterBoost.ID,
+					CharacterID: id,
 				}
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateCharacterBoost(internal)); !success {
 					return
@@ -92,14 +85,7 @@ func (a *CharacterBoostApi) UpdateCharacterBoost(ctx *gin.Context) {
 
 func ToExternalCharacterBoost(CharacterBoost *model.CharacterBoost) *model.CharacterBoostExternal {
 	return &model.CharacterBoostExternal{
-		ID:           CharacterBoost.ID,
-		CharacterID:  CharacterBoost.CharacterID,
-		Strength:     CharacterBoost.Strength,
-		Dexterity:    CharacterBoost.Dexterity,
-		Constitution: CharacterBoost.Constitution,
-		Intelligence: CharacterBoost.Intelligence,
-		Wisdom:       CharacterBoost.Wisdom,
-		Charisma:     CharacterBoost.Charisma,
-		Free:         CharacterBoost.Free,
+		ID:          CharacterBoost.ID,
+		CharacterID: CharacterBoost.CharacterID,
 	}
 }

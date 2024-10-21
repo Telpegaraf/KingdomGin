@@ -15,93 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/Ancestry": {
-            "post": {
-                "description": "Permissions for Admin",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ancestry"
-                ],
-                "summary": "Create and returns Ancestry or nil",
-                "parameters": [
-                    {
-                        "description": "Feat data",
-                        "name": "ancestry",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.AncestryCreate"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Feat details",
-                        "schema": {
-                            "$ref": "#/definitions/model.AncestryExternal"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "You can't access for this API",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/Race/{id}": {
-            "delete": {
-                "description": "Permissions for Admin",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Race"
-                ],
-                "summary": "Deletes Race by ID or returns nil",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Race id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "403": {
-                        "description": "You can't access for this API",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Domain doesn't exist",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/action": {
             "get": {
                 "description": "Return all Actions",
@@ -325,6 +238,50 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ancestry"
+                ],
+                "summary": "Create and returns Ancestry or nil",
+                "parameters": [
+                    {
+                        "description": "Feat data",
+                        "name": "ancestry",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AncestryCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Feat details",
+                        "schema": {
+                            "$ref": "#/definitions/model.AncestryExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
                         "schema": {
                             "type": "string"
                         }
@@ -815,6 +772,168 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "CharacterItem doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/character-skill": {
+            "get": {
+                "description": "Return all Character Skills",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character Skill"
+                ],
+                "summary": "Returns all Character Skills",
+                "responses": {
+                    "200": {
+                        "description": "Character Skill details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterSkill"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character Skill"
+                ],
+                "summary": "Create and returns Character Skill or nil",
+                "parameters": [
+                    {
+                        "description": "Action data",
+                        "name": "characterSkill",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterSkillCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Action details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterSkillExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/character-skill/{id}": {
+            "get": {
+                "description": "Retrieve Character skill details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character skill"
+                ],
+                "summary": "Returns Character skill by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Character skill id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Character skill details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterSkill"
+                        }
+                    },
+                    "404": {
+                        "description": "Character skill not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character Skill"
+                ],
+                "summary": "Updates Character Skill by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Character Skill id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Character Skill data",
+                        "name": "characterSkill",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterSkillUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Action details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterSkillExternal"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Character Skill doesn't exist",
                         "schema": {
                             "type": "string"
                         }
@@ -2399,6 +2518,45 @@ const docTemplate = `{
                     }
                 }
             },
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Race"
+                ],
+                "summary": "Deletes Race by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Race id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Domain doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "description": "Permissions for Admin",
                 "consumes": [
@@ -3438,6 +3596,12 @@ const docTemplate = `{
                         "$ref": "#/definitions/model.CharacterItem"
                     }
                 },
+                "characterSkill": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterSkill"
+                    }
+                },
                 "characterSpell": {
                     "type": "array",
                     "items": {
@@ -3473,31 +3637,19 @@ const docTemplate = `{
         "model.CharacterBoost": {
             "type": "object",
             "properties": {
+                "ancestryBoost": {
+                    "type": "boolean"
+                },
+                "backgroundBoost": {
+                    "type": "boolean"
+                },
                 "characterID": {
                     "type": "integer"
                 },
-                "charisma": {
-                    "type": "integer"
-                },
-                "constitution": {
-                    "type": "integer"
-                },
-                "dexterity": {
-                    "type": "integer"
-                },
-                "free": {
+                "freeBoost": {
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
-                },
-                "intelligence": {
-                    "type": "integer"
-                },
-                "strength": {
-                    "type": "integer"
-                },
-                "wisdom": {
                     "type": "integer"
                 }
             }
@@ -3508,28 +3660,7 @@ const docTemplate = `{
                 "characterID": {
                     "type": "integer"
                 },
-                "charisma": {
-                    "type": "integer"
-                },
-                "constitution": {
-                    "type": "integer"
-                },
-                "dexterity": {
-                    "type": "integer"
-                },
-                "free": {
-                    "type": "integer"
-                },
                 "id": {
-                    "type": "integer"
-                },
-                "intelligence": {
-                    "type": "integer"
-                },
-                "strength": {
-                    "type": "integer"
-                },
-                "wisdom": {
                     "type": "integer"
                 }
             }
@@ -3540,14 +3671,14 @@ const docTemplate = `{
                 "character": {
                     "$ref": "#/definitions/model.Character"
                 },
-                "commonWeaponMastery": {
-                    "type": "string"
+                "commonWeapon": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 },
-                "fortitudeMastery": {
-                    "type": "string"
+                "fortitude": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 },
-                "heavyArmorMastery": {
-                    "type": "string"
+                "heavyArmor": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 },
                 "hitPoint": {
                     "type": "integer"
@@ -3555,51 +3686,138 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "lightArmorMastery": {
-                    "type": "string"
+                "lightArmor": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 },
-                "martialWeaponMastery": {
-                    "type": "string"
+                "martialWeapon": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 },
-                "mediumArmorMastery": {
-                    "type": "string"
+                "mediumArmor": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 },
                 "name": {
                     "type": "string"
                 },
-                "perceptionMastery": {
-                    "type": "string"
+                "perception": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 },
-                "reflexMastery": {
-                    "type": "string"
+                "reflex": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 },
                 "traditionID": {
                     "type": "integer"
                 },
-                "unArmedWeaponMastery": {
-                    "type": "string"
+                "unArmedWeapon": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 },
-                "unarmedMastery": {
-                    "type": "string"
+                "unarmedArmor": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 },
-                "willMastery": {
-                    "type": "string"
+                "will": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 }
             }
         },
         "model.CharacterClassCreate": {
             "type": "object",
             "properties": {
+                "common_weapon": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "fortitude": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
                 "health": {
                     "type": "integer",
                     "example": 6
+                },
+                "heavy_armor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "light_armor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "martial_weapon": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "medium_armor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
                 },
                 "name": {
                     "type": "string",
                     "example": "Fighter"
                 },
-                "perception_mastery": {
-                    "type": "string",
+                "perception": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "reflex": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "tradition_id": {
+                    "type": "integer"
+                },
+                "un_armed_weapon": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "unarmed_armor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "will": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
                     "example": "Train"
                 }
             }
@@ -3798,6 +4016,72 @@ const docTemplate = `{
                 "quantity": {
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "model.CharacterSkill": {
+            "type": "object",
+            "properties": {
+                "characterID": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "mastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "skillID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.CharacterSkillCreate": {
+            "type": "object",
+            "required": [
+                "character_id",
+                "mastery",
+                "skill_id"
+            ],
+            "properties": {
+                "character_id": {
+                    "type": "integer"
+                },
+                "mastery": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "None"
+                },
+                "skill_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.CharacterSkillExternal": {
+            "type": "object",
+            "properties": {
+                "character_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "mastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "skill_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.CharacterSkillUpdate": {
+            "type": "object",
+            "properties": {
+                "mastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 }
             }
         },
@@ -4897,36 +5181,7 @@ const docTemplate = `{
             }
         },
         "model.UpdateCharacterBoost": {
-            "type": "object",
-            "properties": {
-                "charisma": {
-                    "type": "integer",
-                    "example": 10
-                },
-                "constitution": {
-                    "type": "integer",
-                    "example": 10
-                },
-                "dexterity": {
-                    "type": "integer",
-                    "example": 10
-                },
-                "free": {
-                    "type": "integer"
-                },
-                "intelligence": {
-                    "type": "integer",
-                    "example": 10
-                },
-                "strength": {
-                    "type": "integer",
-                    "example": 10
-                },
-                "wisdom": {
-                    "type": "integer",
-                    "example": 10
-                }
-            }
+            "type": "object"
         },
         "model.UpdateCharacterItem": {
             "type": "object",

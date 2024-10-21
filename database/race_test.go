@@ -58,9 +58,32 @@ func (s *DatabaseSuite) TestRace() {
 	assert.Equal(s.T(), testRace.AbilityBoost, testRace.AbilityBoost)
 	assert.Equal(s.T(), testRace.Language, "Test Language")
 
+	ancestries, err := s.db.GetAncestries()
+	require.NoError(s.T(), err)
+	assert.Empty(s.T(), ancestries)
+
+	testAncestry := &model.Ancestry{
+		Name:        "Test Ancestry",
+		Description: "Test Description",
+		RaceID:      1,
+	}
+	err = s.db.CreateAncestry(testAncestry)
+	require.NoError(s.T(), err)
+	assert.Equal(s.T(), testAncestry.Name, "Test Ancestry")
+
+	ancestries, err = s.db.GetAncestries()
+	require.NoError(s.T(), err)
+	assert.Len(s.T(), ancestries, 1)
+
 	err = s.db.DeleteRaceByID(1)
 	require.NoError(s.T(), err)
 	races, err = s.db.GetRaces()
 	require.NoError(s.T(), err)
 	assert.Empty(s.T(), races)
+
+	err = s.db.DeleteAncestry(1)
+	require.NoError(s.T(), err)
+	ancestries, err = s.db.GetAncestries()
+	require.NoError(s.T(), err)
+	assert.Empty(s.T(), ancestries)
 }

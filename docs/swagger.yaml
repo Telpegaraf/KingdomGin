@@ -169,6 +169,10 @@ definitions:
         items:
           $ref: '#/definitions/model.CharacterItem'
         type: array
+      characterSkill:
+        items:
+          $ref: '#/definitions/model.CharacterSkill'
+        type: array
       characterSpell:
         items:
           $ref: '#/definitions/model.CharacterSpell'
@@ -192,92 +196,113 @@ definitions:
     type: object
   model.CharacterBoost:
     properties:
+      ancestryBoost:
+        type: boolean
+      backgroundBoost:
+        type: boolean
       characterID:
         type: integer
-      charisma:
-        type: integer
-      constitution:
-        type: integer
-      dexterity:
-        type: integer
-      free:
+      freeBoost:
         type: integer
       id:
-        type: integer
-      intelligence:
-        type: integer
-      strength:
-        type: integer
-      wisdom:
         type: integer
     type: object
   model.CharacterBoostExternal:
     properties:
       characterID:
         type: integer
-      charisma:
-        type: integer
-      constitution:
-        type: integer
-      dexterity:
-        type: integer
-      free:
-        type: integer
       id:
-        type: integer
-      intelligence:
-        type: integer
-      strength:
-        type: integer
-      wisdom:
         type: integer
     type: object
   model.CharacterClass:
     properties:
       character:
         $ref: '#/definitions/model.Character'
-      commonWeaponMastery:
-        type: string
-      fortitudeMastery:
-        type: string
-      heavyArmorMastery:
-        type: string
+      commonWeapon:
+        $ref: '#/definitions/model.MasteryLevel'
+      fortitude:
+        $ref: '#/definitions/model.MasteryLevel'
+      heavyArmor:
+        $ref: '#/definitions/model.MasteryLevel'
       hitPoint:
         type: integer
       id:
         type: integer
-      lightArmorMastery:
-        type: string
-      martialWeaponMastery:
-        type: string
-      mediumArmorMastery:
-        type: string
+      lightArmor:
+        $ref: '#/definitions/model.MasteryLevel'
+      martialWeapon:
+        $ref: '#/definitions/model.MasteryLevel'
+      mediumArmor:
+        $ref: '#/definitions/model.MasteryLevel'
       name:
         type: string
-      perceptionMastery:
-        type: string
-      reflexMastery:
-        type: string
+      perception:
+        $ref: '#/definitions/model.MasteryLevel'
+      reflex:
+        $ref: '#/definitions/model.MasteryLevel'
       traditionID:
         type: integer
-      unArmedWeaponMastery:
-        type: string
-      unarmedMastery:
-        type: string
-      willMastery:
-        type: string
+      unArmedWeapon:
+        $ref: '#/definitions/model.MasteryLevel'
+      unarmedArmor:
+        $ref: '#/definitions/model.MasteryLevel'
+      will:
+        $ref: '#/definitions/model.MasteryLevel'
     type: object
   model.CharacterClassCreate:
     properties:
+      common_weapon:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      fortitude:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
       health:
         example: 6
         type: integer
+      heavy_armor:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      light_armor:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      martial_weapon:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      medium_armor:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
       name:
         example: Fighter
         type: string
-      perception_mastery:
+      perception:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
         example: Train
-        type: string
+      reflex:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      tradition_id:
+        type: integer
+      un_armed_weapon:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      unarmed_armor:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      will:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
     type: object
   model.CharacterDefence:
     properties:
@@ -408,6 +433,48 @@ definitions:
       quantity:
         example: 1
         type: integer
+    type: object
+  model.CharacterSkill:
+    properties:
+      characterID:
+        type: integer
+      id:
+        type: integer
+      mastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      skillID:
+        type: integer
+    type: object
+  model.CharacterSkillCreate:
+    properties:
+      character_id:
+        type: integer
+      mastery:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: None
+      skill_id:
+        type: integer
+    required:
+    - character_id
+    - mastery
+    - skill_id
+    type: object
+  model.CharacterSkillExternal:
+    properties:
+      character_id:
+        type: integer
+      id:
+        type: integer
+      mastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      skill_id:
+        type: integer
+    type: object
+  model.CharacterSkillUpdate:
+    properties:
+      mastery:
+        $ref: '#/definitions/model.MasteryLevel'
     type: object
   model.CharacterSpell:
     properties:
@@ -1154,27 +1221,6 @@ definitions:
         type: integer
     type: object
   model.UpdateCharacterBoost:
-    properties:
-      charisma:
-        example: 10
-        type: integer
-      constitution:
-        example: 10
-        type: integer
-      dexterity:
-        example: 10
-        type: integer
-      free:
-        type: integer
-      intelligence:
-        example: 10
-        type: integer
-      strength:
-        example: 10
-        type: integer
-      wisdom:
-        example: 10
-        type: integer
     type: object
   model.UpdateCharacterItem:
     properties:
@@ -1348,63 +1394,6 @@ info:
   title: Kingdom Api
   version: 0.1.0
 paths:
-  /Ancestry:
-    post:
-      consumes:
-      - application/json
-      description: Permissions for Admin
-      parameters:
-      - description: Feat data
-        in: body
-        name: ancestry
-        required: true
-        schema:
-          $ref: '#/definitions/model.AncestryCreate'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Feat details
-          schema:
-            $ref: '#/definitions/model.AncestryExternal'
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "403":
-          description: You can't access for this API
-          schema:
-            type: string
-      summary: Create and returns Ancestry or nil
-      tags:
-      - Ancestry
-  /Race/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Permissions for Admin
-      parameters:
-      - description: Race id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "403":
-          description: You can't access for this API
-          schema:
-            type: string
-        "404":
-          description: Domain doesn't exist
-          schema:
-            type: string
-      summary: Deletes Race by ID or returns nil
-      tags:
-      - Race
   /action:
     get:
       consumes:
@@ -1555,6 +1544,35 @@ paths:
           schema:
             type: string
       summary: Returns all Ancestries
+      tags:
+      - Ancestry
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Feat data
+        in: body
+        name: ancestry
+        required: true
+        schema:
+          $ref: '#/definitions/model.AncestryCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Feat details
+          schema:
+            $ref: '#/definitions/model.AncestryExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Ancestry or nil
       tags:
       - Ancestry
   /ancestry/{id}:
@@ -1881,6 +1899,113 @@ paths:
       summary: Returns all CharacterItems
       tags:
       - CharacterItem
+  /character-skill:
+    get:
+      consumes:
+      - application/json
+      description: Return all Character Skills
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Character Skill details
+          schema:
+            $ref: '#/definitions/model.CharacterSkill'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all Character Skills
+      tags:
+      - Character Skill
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Action data
+        in: body
+        name: characterSkill
+        required: true
+        schema:
+          $ref: '#/definitions/model.CharacterSkillCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Action details
+          schema:
+            $ref: '#/definitions/model.CharacterSkillExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Character Skill or nil
+      tags:
+      - Character Skill
+  /character-skill/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Character skill details using its ID
+      parameters:
+      - description: Character skill id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Character skill details
+          schema:
+            $ref: '#/definitions/model.CharacterSkill'
+        "404":
+          description: Character skill not found
+          schema:
+            type: string
+      summary: Returns Character skill by id
+      tags:
+      - Character skill
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Character Skill id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Character Skill data
+        in: body
+        name: characterSkill
+        required: true
+        schema:
+          $ref: '#/definitions/model.CharacterSkillUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Action details
+          schema:
+            $ref: '#/definitions/model.CharacterSkillExternal'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Character Skill doesn't exist
+          schema:
+            type: string
+      summary: Updates Character Skill by ID or nil
+      tags:
+      - Character Skill
   /character/{id}:
     delete:
       consumes:
@@ -2899,6 +3024,32 @@ paths:
       tags:
       - Race
   /race/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Race id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Domain doesn't exist
+          schema:
+            type: string
+      summary: Deletes Race by ID or returns nil
+      tags:
+      - Race
     get:
       consumes:
       - application/json
