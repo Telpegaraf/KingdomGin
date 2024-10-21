@@ -27,6 +27,7 @@ func (s *DatabaseSuite) BeforeTest(suiteName, testName string) {
 	db.AutoMigrate(
 		new(model.User),
 		new(model.Tradition),
+		new(model.Trait),
 		new(model.Character),
 		new(model.Domain),
 		new(model.God))

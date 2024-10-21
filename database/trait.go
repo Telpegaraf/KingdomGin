@@ -13,7 +13,10 @@ func (d *GormDatabase) GetTraitByID(id uint) (*model.Trait, error) {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
-	return trait, nil
+	if trait.ID == id {
+		return trait, nil
+	}
+	return nil, err
 }
 
 // CreateTrait create new Trait
@@ -32,5 +35,5 @@ func (d *GormDatabase) UpdateTrait(trait *model.Trait) error { return d.DB.Save(
 // DeleteTrait deletes Trait
 func (d *GormDatabase) DeleteTrait(id uint) error {
 	return d.DB.Where("id = ?", id).
-		Delete(&model.Domain{}).Error
+		Delete(&model.Trait{}).Error
 }
