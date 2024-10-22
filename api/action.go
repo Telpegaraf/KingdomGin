@@ -97,7 +97,7 @@ func (a *ActionApi) GetActions(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Action id"
-// @Param character body model.UpdateAction true "Action data"
+// @Param action body model.UpdateAction true "Action data"
 // @Success 200 {object} model.ActionExternal "Action details"
 // @Failure 403 {string} string "You can't access for this API"
 // @Failure 404 {string} string "Action doesn't exist"
