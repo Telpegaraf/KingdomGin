@@ -186,7 +186,7 @@ const docTemplate = `{
                     },
                     {
                         "description": "Action data",
-                        "name": "character",
+                        "name": "action",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -493,6 +493,207 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Attribute doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/background": {
+            "get": {
+                "description": "Return all Backgrounds",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Background"
+                ],
+                "summary": "Returns all Backgrounds",
+                "responses": {
+                    "200": {
+                        "description": "Background details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Background"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Background"
+                ],
+                "summary": "Create and returns Background or nil",
+                "parameters": [
+                    {
+                        "description": "Background data",
+                        "name": "Background",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.BackgroundCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Background details",
+                        "schema": {
+                            "$ref": "#/definitions/model.BackgroundExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/background/{id}": {
+            "get": {
+                "description": "Retrieve Background details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Background"
+                ],
+                "summary": "Returns Background by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Background id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Background details",
+                        "schema": {
+                            "$ref": "#/definitions/model.Background"
+                        }
+                    },
+                    "404": {
+                        "description": "Background not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Background"
+                ],
+                "summary": "Deletes Background by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Background id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Background doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Background"
+                ],
+                "summary": "Updates Background by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Background id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Background data",
+                        "name": "background",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.BackgroundUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Background details",
+                        "schema": {
+                            "$ref": "#/definitions/model.BackgroundExternal"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Background doesn't exist",
                         "schema": {
                             "type": "string"
                         }
@@ -3559,9 +3760,6 @@ const docTemplate = `{
         "model.Background": {
             "type": "object",
             "properties": {
-                "attributeBoost": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string"
                 },
@@ -3582,6 +3780,76 @@ const docTemplate = `{
                 }
             }
         },
+        "model.BackgroundCreate": {
+            "type": "object",
+            "required": [
+                "description",
+                "feat_id",
+                "first_skill_id",
+                "name",
+                "second_skill_id"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "feat_id": {
+                    "type": "integer"
+                },
+                "first_skill_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "second_skill_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.BackgroundExternal": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "feat_id": {
+                    "type": "integer"
+                },
+                "first_skill_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "second_skill_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.BackgroundUpdate": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "feat_id": {
+                    "type": "integer"
+                },
+                "first_skill_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "second_skill_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.Character": {
             "type": "object",
             "properties": {
@@ -3597,8 +3865,8 @@ const docTemplate = `{
                 "backgroundID": {
                     "type": "integer"
                 },
-                "characterBoost": {
-                    "$ref": "#/definitions/model.Boost"
+                "boost": {
+                    "$ref": "#/definitions/model.CharacterBoost"
                 },
                 "characterClassID": {
                     "type": "integer"
@@ -3653,7 +3921,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Boost": {
+        "model.CharacterBoost": {
             "type": "object",
             "properties": {
                 "ancestryBoost": {
@@ -3925,7 +4193,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "character_boost": {
-                    "$ref": "#/definitions/model.Boost"
+                    "$ref": "#/definitions/model.CharacterBoost"
                 },
                 "character_class_id": {
                     "type": "integer"

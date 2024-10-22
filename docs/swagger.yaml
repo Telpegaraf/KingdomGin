@@ -148,8 +148,6 @@ definitions:
     type: object
   model.Background:
     properties:
-      attributeBoost:
-        type: string
       description:
         type: string
       featID:
@@ -163,6 +161,53 @@ definitions:
       secondSkillID:
         type: integer
     type: object
+  model.BackgroundCreate:
+    properties:
+      description:
+        type: string
+      feat_id:
+        type: integer
+      first_skill_id:
+        type: integer
+      name:
+        type: string
+      second_skill_id:
+        type: integer
+    required:
+    - description
+    - feat_id
+    - first_skill_id
+    - name
+    - second_skill_id
+    type: object
+  model.BackgroundExternal:
+    properties:
+      description:
+        type: string
+      feat_id:
+        type: integer
+      first_skill_id:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      second_skill_id:
+        type: integer
+    type: object
+  model.BackgroundUpdate:
+    properties:
+      description:
+        type: string
+      feat_id:
+        type: integer
+      first_skill_id:
+        type: integer
+      name:
+        type: string
+      second_skill_id:
+        type: integer
+    type: object
   model.Character:
     properties:
       alias:
@@ -173,7 +218,7 @@ definitions:
         $ref: '#/definitions/model.Attribute'
       backgroundID:
         type: integer
-      characterBoost:
+      boost:
         $ref: '#/definitions/model.CharacterBoost'
       characterClassID:
         type: integer
@@ -1528,7 +1573,7 @@ paths:
         type: integer
       - description: Action data
         in: body
-        name: character
+        name: action
         required: true
         schema:
           $ref: '#/definitions/model.UpdateAction'
@@ -1738,6 +1783,139 @@ paths:
       summary: Updates Attribute by ID or nil
       tags:
       - Attribute
+  /background:
+    get:
+      consumes:
+      - application/json
+      description: Return all Backgrounds
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Background details
+          schema:
+            $ref: '#/definitions/model.Background'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all Backgrounds
+      tags:
+      - Background
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Background data
+        in: body
+        name: Background
+        required: true
+        schema:
+          $ref: '#/definitions/model.BackgroundCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Background details
+          schema:
+            $ref: '#/definitions/model.BackgroundExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Background or nil
+      tags:
+      - Background
+  /background/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Background id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Background doesn't exist
+          schema:
+            type: string
+      summary: Deletes Background by ID or returns nil
+      tags:
+      - Background
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Background details using its ID
+      parameters:
+      - description: Background id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Background details
+          schema:
+            $ref: '#/definitions/model.Background'
+        "404":
+          description: Background not found
+          schema:
+            type: string
+      summary: Returns Background by id
+      tags:
+      - Background
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Background id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Background data
+        in: body
+        name: background
+        required: true
+        schema:
+          $ref: '#/definitions/model.BackgroundUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Background details
+          schema:
+            $ref: '#/definitions/model.BackgroundExternal'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Background doesn't exist
+          schema:
+            type: string
+      summary: Updates Background by ID or nil
+      tags:
+      - Background
   /character:
     get:
       consumes:
@@ -2125,29 +2303,29 @@ paths:
       - application/json
       responses:
         "200":
-          description: CharacterBoost details
+          description: Boost details
           schema:
             $ref: '#/definitions/model.CharacterBoostExternal'
         "404":
-          description: CharacterBoost not found
+          description: Boost not found
           schema:
             type: string
-      summary: Returns CharacterBoost by id
+      summary: Returns Boost by id
       tags:
-      - CharacterBoost
+      - Boost
     patch:
       consumes:
       - application/json
       description: Permissions for Character's User or Admin
       parameters:
-      - description: CharacterBoost id
+      - description: Boost id
         in: path
         name: id
         required: true
         type: integer
-      - description: CharacterBoost data
+      - description: Boost data
         in: body
-        name: CharacterBoost
+        name: Boost
         required: true
         schema:
           $ref: '#/definitions/model.UpdateCharacterBoost'
@@ -2155,16 +2333,16 @@ paths:
       - application/json
       responses:
         "200":
-          description: CharacterBoost details
+          description: Boost details
           schema:
             $ref: '#/definitions/model.CharacterBoostExternal'
         "404":
-          description: CharacterBoost doesn't exist
+          description: Boost doesn't exist
           schema:
             type: string
-      summary: Updates CharacterBoost by ID or nil
+      summary: Updates Boost by ID or nil
       tags:
-      - CharacterBoost
+      - Boost
   /class:
     post:
       consumes:

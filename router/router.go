@@ -48,6 +48,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	actionHandler := api.ActionApi{DB: db}
 	traitHandler := api.TraitApi{DB: db}
 	characterSkillHandler := api.CharacterSkillApi{DB: db}
+	backgroundHandler := api.BackgroundApi{DB: db}
 
 	authHandler := api.Controller{DB: db}
 
@@ -130,6 +131,15 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		actionGroup.GET("", actionHandler.GetActions)
 		actionGroup.GET("/:id", actionHandler.GetActionByID)
 		actionGroup.DELETE("/:id", actionHandler.DeleteAction)
+	}
+
+	backgroundGroup := g.Group("/background").Use(authentication.RequireJWT)
+	{
+		backgroundGroup.POST("", backgroundHandler.CreateBackground)
+		backgroundGroup.PATCH("/:id", backgroundHandler.UpdateBackground)
+		backgroundGroup.GET("", backgroundHandler.GetBackgrounds)
+		backgroundGroup.GET("", backgroundHandler.GetBackgrounds)
+		backgroundGroup.DELETE("/:id", backgroundHandler.DeleteBackground)
 	}
 
 	traditionGroup := g.Group("/tradition").Use(authentication.RequireJWT)
