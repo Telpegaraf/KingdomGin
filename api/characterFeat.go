@@ -31,13 +31,13 @@ func (a *CharacterApi) CreateCharacterFeat(characterID uint, background *model.B
 func (a *CharacterApi) AddCharacterFeat(ctx *gin.Context) {
 	characterFeat := &model.CreateCharacterFeat{}
 	if err := ctx.ShouldBindJSON(characterFeat); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Character Feat not found"})
 		return
 	}
 
 	feat, err := a.DB.GetFeatByID(characterFeat.FeatID)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Feat not found"})
 		return
 	}
 

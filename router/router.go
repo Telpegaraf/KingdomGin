@@ -79,6 +79,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		characterGroup.PATCH("/:id", characterHandler.UpdateCharacter)
 		characterGroup.DELETE("/:id", characterHandler.DeleteCharacter)
 	}
+	g.POST("/character_feat", characterHandler.AddCharacterFeat)
 	godGroup := g.Group("/god").Use(authentication.RequireAdmin)
 	{
 		godGroup.POST("", godHandler.CreateGod)
