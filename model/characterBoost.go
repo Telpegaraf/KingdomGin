@@ -6,7 +6,7 @@ type CharacterBoost struct {
 	BackgroundBoost bool  `gorm:"default:true"`
 	ClassBoost      bool  `gorm:"default:true"`
 	FreeBoost       uint8 `gorm:"default:1"`
-	CharacterID     uint  `gorm:"foreignKey:CharacterID;unique"`
+	CharacterID     uint  `gorm:"unique"`
 }
 
 type CreateCharacterBoost struct {

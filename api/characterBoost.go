@@ -30,14 +30,14 @@ func (a *CharacterApi) CreateCharacterBoost(ctx *gin.Context,
 
 // GetCharacterBoostByID godoc
 //
-// @Summary Returns CharacterBoost by id
+// @Summary Returns Boost by id
 // @Description Permissions for auth user or admin
-// @Tags CharacterBoost
+// @Tags Boost
 // @Accept json
 // @Produce json
 // @Param id path int true "character_id"
-// @Success 200 {object} model.CharacterBoostExternal "CharacterBoost details"
-// @Failure 404 {string} string "CharacterBoost not found"
+// @Success 200 {object} model.CharacterBoostExternal "Boost details"
+// @Failure 404 {string} string "Boost not found"
 // @Router /character_boost/{id} [get]
 func (a *CharacterBoostApi) GetCharacterBoostByID(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
@@ -48,22 +48,22 @@ func (a *CharacterBoostApi) GetCharacterBoostByID(ctx *gin.Context) {
 		if CharacterBoost != nil {
 			ctx.JSON(http.StatusOK, ToExternalCharacterBoost(CharacterBoost))
 		} else {
-			ctx.JSON(http.StatusNotFound, gin.H{"error": "CharacterBoost doesn't exist"})
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Boost doesn't exist"})
 		}
 	})
 }
 
-// UpdateCharacterBoost Updates CharacterBoost by ID
+// UpdateCharacterBoost Updates Boost by ID
 //
-// @Summary Updates CharacterBoost by ID or nil
+// @Summary Updates Boost by ID or nil
 // @Description Permissions for Character's User or Admin
-// @Tags CharacterBoost
+// @Tags Boost
 // @Accept json
 // @Produce json
-// @Param id path int true "CharacterBoost id"
-// @Param CharacterBoost body model.UpdateCharacterBoost true "CharacterBoost data"
-// @Success 200 {object} model.CharacterBoostExternal "CharacterBoost details"
-// @Failure 404 {string} string "CharacterBoost doesn't exist"
+// @Param id path int true "Boost id"
+// @Param Boost body model.UpdateCharacterBoost true "Boost data"
+// @Success 200 {object} model.CharacterBoostExternal "Boost details"
+// @Failure 404 {string} string "Boost doesn't exist"
 // @Router /character_boost/{id} [patch]
 func (a *CharacterBoostApi) UpdateCharacterBoost(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {

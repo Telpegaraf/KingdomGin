@@ -1073,9 +1073,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CharacterBoost"
+                    "Boost"
                 ],
-                "summary": "Returns CharacterBoost by id",
+                "summary": "Returns Boost by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1087,13 +1087,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "CharacterBoost details",
+                        "description": "Boost details",
                         "schema": {
                             "$ref": "#/definitions/model.CharacterBoostExternal"
                         }
                     },
                     "404": {
-                        "description": "CharacterBoost not found",
+                        "description": "Boost not found",
                         "schema": {
                             "type": "string"
                         }
@@ -1109,20 +1109,20 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CharacterBoost"
+                    "Boost"
                 ],
-                "summary": "Updates CharacterBoost by ID or nil",
+                "summary": "Updates Boost by ID or nil",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "CharacterBoost id",
+                        "description": "Boost id",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "CharacterBoost data",
-                        "name": "CharacterBoost",
+                        "description": "Boost data",
+                        "name": "Boost",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -1132,13 +1132,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "CharacterBoost details",
+                        "description": "Boost details",
                         "schema": {
                             "$ref": "#/definitions/model.CharacterBoostExternal"
                         }
                     },
                     "404": {
-                        "description": "CharacterBoost doesn't exist",
+                        "description": "Boost doesn't exist",
                         "schema": {
                             "type": "string"
                         }
@@ -3598,7 +3598,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "characterBoost": {
-                    "$ref": "#/definitions/model.CharacterBoost"
+                    "$ref": "#/definitions/model.Boost"
                 },
                 "characterClassID": {
                     "type": "integer"
@@ -3653,7 +3653,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.CharacterBoost": {
+        "model.Boost": {
             "type": "object",
             "properties": {
                 "ancestryBoost": {
@@ -3925,7 +3925,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "character_boost": {
-                    "$ref": "#/definitions/model.CharacterBoost"
+                    "$ref": "#/definitions/model.Boost"
                 },
                 "character_class_id": {
                     "type": "integer"

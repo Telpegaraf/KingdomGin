@@ -11,7 +11,7 @@ type Race struct {
 	Description   string     `gorm:"not null"`
 	HitPoint      uint16     `gorm:"default:6"`
 	Size          SquareSize `gorm:"type:square_size;default:Medium"`
-	Speed         uint8      `gorm:"not null"`
+	Speed         uint8      `gorm:"not null;default:25"`
 	AbilityBoost  uint8      `gorm:"not null;default:2"`
 	AttributeFlaw Ability    `gorm:"type:ability"`
 	Language      string

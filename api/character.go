@@ -245,7 +245,7 @@ func ToExternalCharacter(character *model.Character) *model.CharacterExternal {
 		UserID:           character.UserID,
 		Level:            character.Level,
 		CharacterItem:    character.CharacterItem,
-		CharacterBoost:   character.CharacterBoost,
+		CharacterBoost:   character.Boost,
 		Attribute:        character.Attribute,
 		Slot:             character.Slot,
 		CharacterClassID: character.CharacterClassID,
@@ -268,6 +268,9 @@ func (a *CharacterApi) CreateSkills(ctx *gin.Context, character *model.Character
 			SkillID:     skill.ID,
 			Mastery:     mastery,
 		}
-		a.DB.CharacterSkillCreate(characterSkill)
+		err := a.DB.CharacterSkillCreate(characterSkill)
+		if err != nil {
+			return
+		}
 	}
 }

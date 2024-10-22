@@ -15,10 +15,10 @@ type Character struct {
 	CharacterSpell   []CharacterSpell `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CharacterItem    []CharacterItem  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Slot             []Slot           `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	CharacterBoost   CharacterBoost   `gorm:"foreignKey:CharacterID;constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
-	CharacterDefence CharacterDefence `gorm:"constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
-	CharacterFeat    CharacterFeat    `gorm:"constraint:OnUpdate:CASCADE;onDelete:CASCADE;"`
-	CharacterSkill   []CharacterSkill `gorm:"constraint:OnUpdate:CASCADE;onDelete:CASCADE;"`
+	Boost            CharacterBoost   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	CharacterDefence CharacterDefence `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	CharacterFeat    CharacterFeat    `gorm:"constraint:OnUpdate:CASCADE,onDelete:CASCADE;"`
+	CharacterSkill   []CharacterSkill `gorm:"constraint:OnUpdate:CASCADE,onDelete:CASCADE;"`
 }
 
 type CreateCharacter struct {
