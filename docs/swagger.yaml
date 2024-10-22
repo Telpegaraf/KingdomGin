@@ -454,6 +454,15 @@ definitions:
       id:
         type: integer
     type: object
+  model.CharacterFeatExternal:
+    properties:
+      character_id:
+        type: integer
+      feat_id:
+        type: integer
+      id:
+        type: integer
+    type: object
   model.CharacterItem:
     properties:
       armor:
@@ -610,6 +619,16 @@ definitions:
     - background_id
     - name
     type: object
+  model.CreateCharacterFeat:
+    properties:
+      character_id:
+        type: integer
+      feat_id:
+        type: integer
+    required:
+    - character_id
+    - feat_id
+    type: object
   model.CreateCharacterItem:
     properties:
       character_id:
@@ -641,6 +660,10 @@ definitions:
         type: integer
       name:
         type: string
+      prerequisite_skill_id:
+        type: integer
+      prerequisiteMastery:
+        $ref: '#/definitions/model.MasteryLevel'
     required:
     - name
     type: object
@@ -793,6 +816,10 @@ definitions:
         type: integer
       name:
         type: string
+      prerequisite_skill_id:
+        type: integer
+      prerequisiteMastery:
+        $ref: '#/definitions/model.MasteryLevel'
     type: object
   model.Gear:
     properties:
@@ -1320,6 +1347,10 @@ definitions:
         type: integer
       name:
         type: string
+      prerequisite_skill_id:
+        type: integer
+      prerequisiteMastery:
+        $ref: '#/definitions/model.MasteryLevel'
     type: object
   model.UpdateGear:
     properties:
@@ -1989,7 +2020,7 @@ paths:
             type: string
       summary: Create and returns CharacterItem or nil
       tags:
-      - CharacterItem
+      - Character Item
   /character-item/{id}:
     delete:
       consumes:
@@ -2016,7 +2047,7 @@ paths:
             type: string
       summary: Deletes CharacterItem by ID or returns nil
       tags:
-      - CharacterItem
+      - Character Item
     get:
       consumes:
       - application/json
@@ -2040,7 +2071,7 @@ paths:
             type: string
       summary: Returns CharacterItem by id
       tags:
-      - CharacterItem
+      - Character Item
     patch:
       consumes:
       - application/json
@@ -2074,7 +2105,7 @@ paths:
             type: string
       summary: Updates CharacterItem by ID or nil
       tags:
-      - CharacterItem
+      - Character Item
   /character-item/list/{character_id}:
     get:
       consumes:
@@ -2099,7 +2130,7 @@ paths:
             type: string
       summary: Returns all CharacterItems
       tags:
-      - CharacterItem
+      - Character Item
   /character-skill:
     get:
       consumes:
@@ -2149,30 +2180,6 @@ paths:
       tags:
       - Character Skill
   /character-skill/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve Character skill details using its ID
-      parameters:
-      - description: Character skill id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Character skill details
-          schema:
-            $ref: '#/definitions/model.CharacterSkill'
-        "404":
-          description: Character skill not found
-          schema:
-            type: string
-      summary: Returns Character skill by id
-      tags:
-      - Character skill
     patch:
       consumes:
       - application/json
@@ -2343,6 +2350,32 @@ paths:
       summary: Updates Boost by ID or nil
       tags:
       - Boost
+  /character_feat:
+    post:
+      consumes:
+      - application/json
+      description: Create new character
+      parameters:
+      - description: Character feat data
+        in: body
+        name: characterFeat
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateCharacterFeat'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Character feat details
+          schema:
+            $ref: '#/definitions/model.CharacterFeatExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Create and returns character feat or nil
+      tags:
+      - Character Feat
   /class:
     post:
       consumes:

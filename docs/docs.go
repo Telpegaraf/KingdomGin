@@ -778,7 +778,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CharacterItem"
+                    "Character Item"
                 ],
                 "summary": "Create and returns CharacterItem or nil",
                 "parameters": [
@@ -824,7 +824,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CharacterItem"
+                    "Character Item"
                 ],
                 "summary": "Returns all CharacterItems",
                 "parameters": [
@@ -862,7 +862,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CharacterItem"
+                    "Character Item"
                 ],
                 "summary": "Returns CharacterItem by id",
                 "parameters": [
@@ -898,7 +898,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CharacterItem"
+                    "Character Item"
                 ],
                 "summary": "Deletes CharacterItem by ID or returns nil",
                 "parameters": [
@@ -937,7 +937,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CharacterItem"
+                    "Character Item"
                 ],
                 "summary": "Updates CharacterItem by ID or nil",
                 "parameters": [
@@ -1054,42 +1054,6 @@ const docTemplate = `{
             }
         },
         "/character-skill/{id}": {
-            "get": {
-                "description": "Retrieve Character skill details using its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Character skill"
-                ],
-                "summary": "Returns Character skill by id",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Character skill id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Character skill details",
-                        "schema": {
-                            "$ref": "#/definitions/model.CharacterSkill"
-                        }
-                    },
-                    "404": {
-                        "description": "Character skill not found",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "patch": {
                 "description": "Permissions for Admin",
                 "consumes": [
@@ -1340,6 +1304,46 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Boost doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/character_feat": {
+            "post": {
+                "description": "Create new character",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character Feat"
+                ],
+                "summary": "Create and returns character feat or nil",
+                "parameters": [
+                    {
+                        "description": "Character feat data",
+                        "name": "characterFeat",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateCharacterFeat"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Character feat details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterFeatExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }
@@ -4244,6 +4248,20 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CharacterFeatExternal": {
+            "type": "object",
+            "properties": {
+                "character_id": {
+                    "type": "integer"
+                },
+                "feat_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.CharacterItem": {
             "type": "object",
             "properties": {
@@ -4482,6 +4500,21 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CreateCharacterFeat": {
+            "type": "object",
+            "required": [
+                "character_id",
+                "feat_id"
+            ],
+            "properties": {
+                "character_id": {
+                    "type": "integer"
+                },
+                "feat_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.CreateCharacterItem": {
             "type": "object",
             "required": [
@@ -4530,6 +4563,12 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "prerequisiteMastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "prerequisite_skill_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -4751,6 +4790,12 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "prerequisiteMastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "prerequisite_skill_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -5524,6 +5569,12 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "prerequisiteMastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "prerequisite_skill_id": {
+                    "type": "integer"
                 }
             }
         },

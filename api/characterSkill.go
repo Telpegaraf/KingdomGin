@@ -44,29 +44,6 @@ func (a *CharacterSkillApi) CharacterSkillCreate(ctx *gin.Context) {
 	}
 }
 
-// GetCharacterSkillByID godoc
-//
-// @Summary Returns Character skill by id
-// @Description Retrieve Character skill details using its ID
-// @Tags Character skill
-// @Accept json
-// @Produce json
-// @Param id path int true "Character skill id"
-// @Success 200 {object} model.CharacterSkill "Character skill details"
-// @Failure 404 {string} string "Character skill not found"
-// @Router /character-skill/{id} [get]
-func (a *CharacterSkillApi) GetCharacterSkillByID(ctx *gin.Context) {
-	withID(ctx, "id", func(id uint) {
-		characterSkill, err := a.DB.GetCharacterSkillByID(id)
-		if success := SuccessOrAbort(ctx, 404, err); success {
-			return
-		}
-		if characterSkill != nil {
-			ctx.JSON(http.StatusOK, ToExternalCharacterSkill(characterSkill))
-		}
-	})
-}
-
 // GetCharacterSkills godoc
 //
 // @Summary Returns all Character Skills

@@ -27,7 +27,7 @@ type CharacterDatabase interface {
 	GetBackgroundByID(id uint) (*model.Background, error)
 	CreateCharacterFeat(characterFeat *model.CharacterFeat) error
 	GetFeatByID(id uint) (*model.Feat, error)
-	GetCharacterSkillByID(characterId uint, skillID uint) (*model.CharacterSkill, error)
+	GetCharacterSkillByCharacterID(characterId uint, skillID uint) (*model.CharacterSkill, error)
 }
 
 type CharacterApi struct {
@@ -112,6 +112,7 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 			CharacterClassID: character.CharacterClassID,
 			AncestryID:       character.AncestryID,
 			BackgroundID:     character.BackgroundID,
+			RaceID:           character.RaceID,
 		}
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacter(internal)); !success {
 			return

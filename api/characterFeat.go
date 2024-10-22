@@ -17,6 +17,17 @@ func (a *CharacterApi) CreateCharacterFeat(characterID uint, background *model.B
 	}
 }
 
+// AddCharacterFeat godoc
+//
+// @Summary Create and returns character feat or nil
+// @Description Create new character
+// @Tags Character Feat
+// @Accept json
+// @Produce json
+// @Param characterFeat body model.CreateCharacterFeat true "Character feat data"
+// @Success 201 {object} model.CharacterFeatExternal "Character feat details"
+// @Failure 401 {string} string "Unauthorized"
+// @Router /character_feat [post]
 func (a *CharacterApi) AddCharacterFeat(ctx *gin.Context) {
 	characterFeat := &model.CreateCharacterFeat{}
 	if err := ctx.ShouldBindJSON(characterFeat); err != nil {
@@ -31,7 +42,7 @@ func (a *CharacterApi) AddCharacterFeat(ctx *gin.Context) {
 	}
 
 	if feat.PrerequisiteSkillID != nil {
-		characterSkill, err := a.DB.GetCharacterSkillByID(characterFeat.CharacterID, *feat.PrerequisiteSkillID)
+		characterSkill, err := a.DB.GetCharacterSkillByCharacterID(characterFeat.CharacterID, *feat.PrerequisiteSkillID)
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return

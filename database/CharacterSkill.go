@@ -12,7 +12,17 @@ func (d *GormDatabase) CharacterSkillCreate(characterSkill *model.CharacterSkill
 }
 
 // GetCharacterSkillByID returns Character Skill object by ID
-func (d *GormDatabase) GetCharacterSkillByID(characterId uint, skillID uint) (*model.CharacterSkill, error) {
+func (d *GormDatabase) GetCharacterSkillByID(id uint) (*model.CharacterSkill, error) {
+	characterSkill := new(model.CharacterSkill)
+	err := d.DB.Find(&characterSkill).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return characterSkill, nil
+}
+
+// GetCharacterSkillByCharacterID returns Character Skill object by ID
+func (d *GormDatabase) GetCharacterSkillByCharacterID(characterId uint, skillID uint) (*model.CharacterSkill, error) {
 	characterSkill := new(model.CharacterSkill)
 	err := d.DB.Where("character_id = ? AND skill_id = ?", characterId, skillID).First(&characterSkill).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {

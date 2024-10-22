@@ -22,7 +22,7 @@ type CharacterItemApi struct {
 //
 // @Summary Create and returns CharacterItem or nil
 // @Description Permissions for Admin
-// @Tags CharacterItem
+// @Tags Character Item
 // @Accept json
 // @Produce json
 // @Param characterItem body model.CreateCharacterItem true "CharacterItem data"
@@ -49,7 +49,7 @@ func (a *CharacterItemApi) CreateCharacterItem(ctx *gin.Context) {
 //
 // @Summary Returns CharacterItem by id
 // @Description Retrieve CharacterItem details using its ID
-// @Tags CharacterItem
+// @Tags Character Item
 // @Accept json
 // @Produce json
 // @Param id path int true "CharacterItem id"
@@ -73,7 +73,7 @@ func (a *CharacterItemApi) GetCharacterItemByID(ctx *gin.Context) {
 //
 // @Summary Returns all CharacterItems
 // @Description Return all CharacterItems
-// @Tags CharacterItem
+// @Tags Character Item
 // @Accept json
 // @Produce json
 // @Param character_id path int true "Character id"
@@ -105,7 +105,7 @@ func (a *CharacterItemApi) GetCharacterItems(ctx *gin.Context) {
 //
 // @Summary Updates CharacterItem by ID or nil
 // @Description Permissions for Admin
-// @Tags CharacterItem
+// @Tags Character Item
 // @Accept json
 // @Produce json
 // @Param id path int true "CharacterItem id"
@@ -144,7 +144,7 @@ func (a *CharacterItemApi) UpdateCharacterItem(ctx *gin.Context) {
 //
 // @Summary Deletes CharacterItem by ID or returns nil
 // @Description Permissions for Admin
-// @Tags CharacterItem
+// @Tags Character Item
 // @Accept json
 // @Produce json
 // @Param id path int true "CharacterItem id"

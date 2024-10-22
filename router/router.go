@@ -137,7 +137,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	{
 		backgroundGroup.POST("", backgroundHandler.CreateBackground)
 		backgroundGroup.PATCH("/:id", backgroundHandler.UpdateBackground)
-		backgroundGroup.GET("", backgroundHandler.GetBackgrounds)
+		backgroundGroup.GET("/:id", backgroundHandler.GetBackgroundByID)
 		backgroundGroup.GET("", backgroundHandler.GetBackgrounds)
 		backgroundGroup.DELETE("/:id", backgroundHandler.DeleteBackground)
 	}
@@ -195,7 +195,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	characterSkillGroup := g.Group("/character-skill").Use(authentication.RequireJWT)
 	{
 		characterSkillGroup.POST("", characterSkillHandler.CharacterSkillCreate)
-		characterSkillGroup.GET("/:id", characterSkillHandler.GetCharacterSkillByID)
 		characterSkillGroup.GET("", characterSkillHandler.GetCharacterSkills)
 		characterSkillGroup.PATCH("/:id", characterSkillHandler.UpdateCharacterSkill)
 	}
