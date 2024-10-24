@@ -20,9 +20,8 @@ type CreateCharacterItem struct {
 }
 
 type UpdateCharacterItem struct {
-	CharacterID uint `json:"character_id" query:"character_id" form:"character_id"`
-	ItemID      uint `json:"item_id" query:"item_id" form:"item_id"`
-	Quantity    uint `json:"quantity" query:"quantity" binding:"required" form:"quantity" example:"1"`
+	ItemID   uint `json:"item_id" query:"item_id" form:"item_id"`
+	Quantity uint `json:"quantity" query:"quantity" binding:"required" form:"quantity" example:"1"`
 }
 
 type CharacterItemExternal struct {

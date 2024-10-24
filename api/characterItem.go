@@ -137,7 +137,7 @@ func (a *CharacterItemApi) UpdateCharacterItem(ctx *gin.Context) {
 			if oldCharacterItem != nil {
 				internal := &model.CharacterItem{
 					ID:          oldCharacterItem.ID,
-					CharacterID: oldCharacterItem.CharacterID,
+					CharacterID: id,
 					Quantity:    characterItem.Quantity,
 				}
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateCharacterItem(internal)); !success {

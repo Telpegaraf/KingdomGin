@@ -226,6 +226,8 @@ definitions:
         $ref: '#/definitions/model.CharacterDefence'
       characterFeat:
         $ref: '#/definitions/model.CharacterFeat'
+      characterInfo:
+        $ref: '#/definitions/model.CharacterInfo'
       characterItem:
         items:
           $ref: '#/definitions/model.CharacterItem'
@@ -462,6 +464,21 @@ definitions:
         type: integer
       id:
         type: integer
+    type: object
+  model.CharacterInfo:
+    properties:
+      bulk:
+        type: number
+      characterID:
+        type: integer
+      classDC:
+        type: integer
+      heroPoint:
+        type: integer
+      id:
+        type: integer
+      maxBulk:
+        type: number
     type: object
   model.CharacterItem:
     properties:
@@ -1319,8 +1336,6 @@ definitions:
     type: object
   model.UpdateCharacterItem:
     properties:
-      character_id:
-        type: integer
       item_id:
         type: integer
       quantity:

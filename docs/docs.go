@@ -3881,6 +3881,9 @@ const docTemplate = `{
                 "characterFeat": {
                     "$ref": "#/definitions/model.CharacterFeat"
                 },
+                "characterInfo": {
+                    "$ref": "#/definitions/model.CharacterInfo"
+                },
                 "characterItem": {
                     "type": "array",
                     "items": {
@@ -4259,6 +4262,29 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "model.CharacterInfo": {
+            "type": "object",
+            "properties": {
+                "bulk": {
+                    "type": "number"
+                },
+                "characterID": {
+                    "type": "integer"
+                },
+                "classDC": {
+                    "type": "integer"
+                },
+                "heroPoint": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "maxBulk": {
+                    "type": "number"
                 }
             }
         },
@@ -5531,9 +5557,6 @@ const docTemplate = `{
                 "quantity"
             ],
             "properties": {
-                "character_id": {
-                    "type": "integer"
-                },
                 "item_id": {
                     "type": "integer"
                 },
