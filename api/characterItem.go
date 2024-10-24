@@ -12,6 +12,8 @@ type CharacterItemDatabase interface {
 	GetCharacterItems(characterId uint) ([]*model.CharacterItem, error)
 	UpdateCharacterItem(item *model.CharacterItem) error
 	DeleteCharacterItem(id uint) error
+	GetCharacterInfoByID(characterID uint) (*model.CharacterInfo, error)
+	UpdateCharacterInfo(characterInfo *model.CharacterInfo) error
 }
 
 type CharacterItemApi struct {
@@ -31,17 +33,20 @@ type CharacterItemApi struct {
 // @Failure 403 {string} string "You can't access for this API"
 // @Router /character-item [post]
 func (a *CharacterItemApi) CreateCharacterItem(ctx *gin.Context) {
-	CharacterItem := &model.CreateCharacterItem{}
-	if err := ctx.ShouldBindJSON(CharacterItem); err == nil {
+	characterItem := &model.CreateCharacterItem{}
+	if err := ctx.ShouldBindJSON(characterItem); err == nil {
 		internal := &model.CharacterItem{
-			CharacterID: CharacterItem.CharacterID,
-			ItemID:      CharacterItem.ItemID,
-			Quantity:    CharacterItem.Quantity,
+			CharacterID: characterItem.CharacterID,
+			ItemID:      characterItem.ItemID,
+			Quantity:    characterItem.Quantity,
 		}
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacterItem(internal)); !success {
 			return
 		}
 		ctx.JSON(http.StatusCreated, ToExternalCharacterItem(internal, &internal.Character, &internal.Item))
+		go func() {
+			a.UpdateCharacterBulk(characterItem.CharacterID, internal.Item.Bulk*float64(characterItem.Quantity))
+		}()
 	}
 }
 

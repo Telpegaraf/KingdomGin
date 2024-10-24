@@ -13,3 +13,12 @@ func (a *CharacterApi) CreateCharacterInfo(strength uint8) {
 		return
 	}
 }
+
+func (a *CharacterItemApi) UpdateCharacterBulk(characterId uint, bulk float64) {
+	characterInfo, _ := a.DB.GetCharacterInfoByID(characterId)
+	characterInfo.Bulk += bulk
+	err := a.DB.UpdateCharacterInfo(characterInfo)
+	if err != nil {
+		return
+	}
+}
