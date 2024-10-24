@@ -157,7 +157,7 @@ func (a *CharacterItemApi) UpdateCharacterItem(ctx *gin.Context) {
 						different = oldCharacterItem.Quantity - newCharacterItem.Quantity
 					}
 					a.UpdateCharacterBulk(
-						characterItem.CharacterID,
+						newCharacterItem.CharacterID,
 						newCharacterItem.Item.Bulk*float64(different),
 						isRemove)
 				}()
