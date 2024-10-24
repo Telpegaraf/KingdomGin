@@ -15,4 +15,14 @@ until postgres_ready; do
 done
 >&2 echo 'PostgreSQL is available'
 
+DB_NAME="${POSTGRES_DB}"
+
+if ! PGPASSWORD="${POSTGRES_PASSWORD}" psql -h "${POSTGRES_HOST}" -U "${POSTGRES_USER}" -lqt | cut -d \| -f 1 | grep -qw "${DB_NAME}"; then
+  >&2 echo "Database ${DB_NAME} does not exist. Creating it now..."
+  PGPASSWORD="${POSTGRES_PASSWORD}" psql -h "${POSTGRES_HOST}" -U "${POSTGRES_USER}" -c "CREATE DATABASE ${DB_NAME};"
+  >&2 echo "Database ${DB_NAME} created successfully."
+else
+  >&2 echo "Database ${DB_NAME} already exists."
+fi
+
 exec "$@"

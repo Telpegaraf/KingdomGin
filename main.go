@@ -33,7 +33,7 @@ func main() {
 	dsn := "host=" + os.Getenv("POSTGRES_HOST") +
 		" user=" + os.Getenv("POSTGRES_USER") +
 		" password=" + os.Getenv("POSTGRES_PASSWORD") +
-		" dbname=" + os.Getenv("POSTGRES_NAME") +
+		" dbname=" + os.Getenv("POSTGRES_DB") +
 		" port=" + os.Getenv("POSTGRES_PORT") +
 		" sslmode=" + os.Getenv("POSTGRES_SSLMODE")
 	username := os.Getenv("ADMIN_USERNAME")
