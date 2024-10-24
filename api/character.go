@@ -28,6 +28,7 @@ type CharacterDatabase interface {
 	CreateCharacterFeat(characterFeat *model.CharacterFeat) error
 	GetFeatByID(id uint) (*model.Feat, error)
 	GetCharacterSkillByCharacterID(characterId uint, skillID uint) (*model.CharacterSkill, error)
+	CreateCharacterInfo(*model.CharacterInfo) error
 }
 
 type CharacterApi struct {

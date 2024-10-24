@@ -38,6 +38,9 @@ func (a *CharacterApi) CreateAttribute(
 		internal.Charisma = 8
 	}
 	a.DB.CreateAttribute(internal)
+	go func() {
+		a.CreateCharacterInfo(internal.Strength)
+	}()
 }
 
 // GetAttributeByID godoc
