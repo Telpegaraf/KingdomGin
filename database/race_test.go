@@ -16,9 +16,9 @@ func (s *DatabaseSuite) TestRace() {
 		Name:         "Test Race",
 		Description:  "Test Description",
 		HitPoint:     6,
-		Size:         "Medium",
+		Size:         model.Medium,
 		Speed:        30,
-		AbilityBoost: "Test Boost",
+		AbilityBoost: 2,
 		Language:     "Test Language",
 	}
 	err = s.db.CreateRace(testRace)
@@ -29,9 +29,9 @@ func (s *DatabaseSuite) TestRace() {
 		Name:         "Test Race2",
 		Description:  "Test Description",
 		HitPoint:     6,
-		Size:         "Medium Medium",
+		Size:         "medium",
 		Speed:        30,
-		AbilityBoost: "Test Boost",
+		AbilityBoost: 3,
 		Language:     "Test Language",
 	}
 	err = s.db.CreateRace(testRace2)
@@ -45,17 +45,17 @@ func (s *DatabaseSuite) TestRace() {
 	testRace.Name = "Test Race 2"
 	testRace.Description = "Test Description 2"
 	testRace.HitPoint = 6
-	testRace.Size = "Small"
+	testRace.Size = model.Small
 	testRace.Speed = 35
-	testRace.AbilityBoost = "Test Boost 2"
+	testRace.AbilityBoost = 2
 	err = s.db.UpdateRace(testRace)
 	require.NoError(s.T(), err)
 	assert.Equal(s.T(), testRace.Name, "Test Race 2")
 	assert.Equal(s.T(), testRace.Description, "Test Description 2")
-	assert.Equal(s.T(), testRace.HitPoint, testRace.HitPoint)
-	assert.Equal(s.T(), testRace.Size, testRace.Size)
-	assert.Equal(s.T(), testRace.Speed, testRace.Speed)
-	assert.Equal(s.T(), testRace.AbilityBoost, testRace.AbilityBoost)
+	assert.Equal(s.T(), testRace.HitPoint, uint16(6))
+	assert.Equal(s.T(), testRace.Size, model.Small)
+	assert.Equal(s.T(), testRace.Speed, uint8(35))
+	assert.Equal(s.T(), testRace.AbilityBoost, uint8(2))
 	assert.Equal(s.T(), testRace.Language, "Test Language")
 
 	ancestries, err := s.db.GetAncestries()

@@ -1,6 +1,7 @@
 package testdb
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -33,4 +34,16 @@ func NewDBWithDefaultUser(t *testing.T) *Database {
 		DB: db,
 	}
 	return &Database{GormDatabase: tdb, t: t}
+}
+
+// NewUser creates a user and returns the user.
+func (d *Database) NewUser(id uint) *model.User {
+	return d.NewUserWithName(id, "user"+fmt.Sprint(id), "email"+fmt.Sprint(id)+"@example.com")
+}
+
+// NewUserWithName creates a user with a name and returns the user.
+func (d *Database) NewUserWithName(id uint, name string, email string) *model.User {
+	user := &model.User{ID: id, Username: name, Email: email}
+	d.CreateUser(user)
+	return user
 }
