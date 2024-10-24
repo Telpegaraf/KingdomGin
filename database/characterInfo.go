@@ -16,5 +16,5 @@ func (d *GormDatabase) GetCharacterInfoByID(characterID uint) (*model.CharacterI
 
 // UpdateCharacterInfo updates character info object
 func (d *GormDatabase) UpdateCharacterInfo(characterInfo *model.CharacterInfo) error {
-	return d.DB.Updates(characterInfo).Error
+	return d.DB.Model(characterInfo).Select("bulk").Updates(characterInfo).Error
 }

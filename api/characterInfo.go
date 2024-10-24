@@ -15,9 +15,13 @@ func (a *CharacterApi) CreateCharacterInfo(characterID uint, strength uint8) {
 	}
 }
 
-func (a *CharacterItemApi) UpdateCharacterBulk(characterId uint, bulk float64) {
+func (a *CharacterItemApi) UpdateCharacterBulk(characterId uint, bulk float64, isRemove bool) {
 	characterInfo, _ := a.DB.GetCharacterInfoByID(characterId)
-	characterInfo.Bulk += bulk
+	if isRemove {
+		characterInfo.Bulk -= bulk
+	} else {
+		characterInfo.Bulk += bulk
+	}
 	err := a.DB.UpdateCharacterInfo(characterInfo)
 	if err != nil {
 		return

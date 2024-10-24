@@ -49,7 +49,10 @@ func (a *CharacterItemApi) CreateCharacterItem(ctx *gin.Context) {
 		}
 		ctx.JSON(http.StatusCreated, ToExternalCharacterItem(newCharacterItem, &newCharacterItem.Character, &newCharacterItem.Item))
 		go func() {
-			a.UpdateCharacterBulk(newCharacterItem.CharacterID, newCharacterItem.Item.Bulk*float64(newCharacterItem.Quantity))
+			a.UpdateCharacterBulk(
+				newCharacterItem.CharacterID,
+				newCharacterItem.Item.Bulk*float64(newCharacterItem.Quantity),
+				false)
 		}()
 	}
 }
@@ -125,8 +128,8 @@ func (a *CharacterItemApi) GetCharacterItems(ctx *gin.Context) {
 // @Router /character-item/{id} [patch]
 func (a *CharacterItemApi) UpdateCharacterItem(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
-		var CharacterItem *model.UpdateCharacterItem
-		if err := ctx.Bind(&CharacterItem); err == nil {
+		var characterItem *model.UpdateCharacterItem
+		if err := ctx.Bind(&characterItem); err == nil {
 			oldCharacterItem, err := a.DB.GetCharacterItemByID(id)
 			if success := SuccessOrAbort(ctx, 500, err); !success {
 				return
@@ -134,18 +137,35 @@ func (a *CharacterItemApi) UpdateCharacterItem(ctx *gin.Context) {
 			if oldCharacterItem != nil {
 				internal := &model.CharacterItem{
 					ID:          oldCharacterItem.ID,
-					CharacterID: CharacterItem.CharacterID,
-					ItemID:      CharacterItem.ItemID,
-					Quantity:    CharacterItem.Quantity,
+					CharacterID: oldCharacterItem.CharacterID,
+					Quantity:    characterItem.Quantity,
 				}
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateCharacterItem(internal)); !success {
 					return
 				}
-				ctx.JSON(http.StatusOK, ToExternalCharacterItem(internal, &internal.Character, &internal.Item))
+				newCharacterItem, _ := a.DB.GetCharacterItemByID(oldCharacterItem.ID)
+				ctx.JSON(http.StatusOK, ToExternalCharacterItem(newCharacterItem,
+					&newCharacterItem.Character,
+					&newCharacterItem.Item))
+				go func() {
+					var different uint = 0
+					isRemove := true
+					if newCharacterItem.Quantity > oldCharacterItem.Quantity {
+						different = newCharacterItem.Quantity - oldCharacterItem.Quantity
+						isRemove = false
+					} else if newCharacterItem.Quantity < oldCharacterItem.Quantity {
+						different = oldCharacterItem.Quantity - newCharacterItem.Quantity
+					}
+					a.UpdateCharacterBulk(
+						characterItem.CharacterID,
+						newCharacterItem.Item.Bulk*float64(different),
+						isRemove)
+				}()
 			}
 		} else {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "CharacterItem doesn't exist"})
 		}
+
 	})
 }
 
@@ -163,18 +183,24 @@ func (a *CharacterItemApi) UpdateCharacterItem(ctx *gin.Context) {
 // @Router /character-item/{id} [delete]
 func (a *CharacterItemApi) DeleteCharacterItem(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
-		CharacterItem, err := a.DB.GetCharacterItemByID(id)
+		characterItem, err := a.DB.GetCharacterItemByID(id)
 		if success := SuccessOrAbort(ctx, 500, err); !success {
 			return
 		}
-		if CharacterItem != nil {
+		if characterItem != nil {
 			if success := SuccessOrAbort(ctx, 500, a.DB.DeleteCharacterItem(id)); !success {
 				return
 			}
-			ctx.JSON(http.StatusNoContent, gin.H{"error": "Character was deleted"})
+			ctx.JSON(http.StatusNoContent, gin.H{"error": "Character Item was deleted"})
 		} else {
-			ctx.JSON(http.StatusNotFound, gin.H{"error": "Character doesn't exist"})
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Character Item doesn't exist"})
 		}
+		go func() {
+			a.UpdateCharacterBulk(
+				characterItem.CharacterID,
+				characterItem.Item.Bulk*float64(characterItem.Quantity),
+				true)
+		}()
 	})
 }
 
