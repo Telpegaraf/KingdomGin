@@ -39,7 +39,7 @@ func (a *CharacterApi) CreateAttribute(
 	}
 	a.DB.CreateAttribute(internal)
 	go func() {
-		a.CreateCharacterInfo(internal.Strength)
+		a.CreateCharacterInfo(characterID, internal.Strength)
 	}()
 }
 

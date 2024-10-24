@@ -43,9 +43,13 @@ func (a *CharacterItemApi) CreateCharacterItem(ctx *gin.Context) {
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacterItem(internal)); !success {
 			return
 		}
-		ctx.JSON(http.StatusCreated, ToExternalCharacterItem(internal, &internal.Character, &internal.Item))
+		newCharacterItem, err := a.DB.GetCharacterItemByID(internal.CharacterID)
+		if err != nil {
+			return
+		}
+		ctx.JSON(http.StatusCreated, ToExternalCharacterItem(newCharacterItem, &newCharacterItem.Character, &newCharacterItem.Item))
 		go func() {
-			a.UpdateCharacterBulk(characterItem.CharacterID, internal.Item.Bulk*float64(characterItem.Quantity))
+			a.UpdateCharacterBulk(newCharacterItem.CharacterID, newCharacterItem.Item.Bulk*float64(newCharacterItem.Quantity))
 		}()
 	}
 }
