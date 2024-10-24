@@ -24,17 +24,18 @@ import (
 //	@description                 JWT security accessToken. Please add it in the format "Bearer {AccessToken}" to authorize your requests.
 func main() {
 	err := godotenv.Load()
+	log.Println(err)
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 	conf := config.Get()
 
-	dsn := "host=" + os.Getenv("DB_HOST") +
-		" user=" + os.Getenv("DB_USER") +
-		" password=" + os.Getenv("DB_PASSWORD") +
-		" dbname=" + os.Getenv("DB_NAME") +
-		" port=" + os.Getenv("DB_PORT") +
-		" sslmode=" + os.Getenv("DB_SSLMODE")
+	dsn := "host=" + os.Getenv("POSTGRES_HOST") +
+		" user=" + os.Getenv("POSTGRES_USER") +
+		" password=" + os.Getenv("POSTGRES_PASSWORD") +
+		" dbname=" + os.Getenv("POSTGRES_NAME") +
+		" port=" + os.Getenv("POSTGRES_PORT") +
+		" sslmode=" + os.Getenv("POSTGRES_SSLMODE")
 	username := os.Getenv("ADMIN_USERNAME")
 	password := os.Getenv("ADMIN_PASSWORD")
 	email := os.Getenv("ADMIN_EMAIL")
