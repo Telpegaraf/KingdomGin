@@ -59,6 +59,24 @@ type UserApi struct {
 	Registration       bool
 }
 
+// GetCurrentUser godoc
+//
+// @Summary Returns current user
+// @Description Returns current user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.UserExternal "User current"
+// @Failure 500
+// @Router /user/current [get]
+func (a *UserApi) GetCurrentUser(ctx *gin.Context) {
+	user, err := a.DB.GetUserByID(auth.GetUserID(ctx))
+	if success := SuccessOrAbort(ctx, 500, err); !success {
+		return
+	}
+	ctx.JSON(200, toExternalUser(user))
+}
+
 // GetUsers godoc
 //
 // @Summary Returns all users
@@ -78,7 +96,6 @@ func (a *UserApi) GetUsers(ctx *gin.Context) {
 	for _, user := range users {
 		resp = append(resp, toExternalUser(user))
 	}
-
 	ctx.JSON(200, resp)
 }
 

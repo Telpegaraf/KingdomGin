@@ -36,6 +36,17 @@ func NewDBWithDefaultUser(t *testing.T) *Database {
 	return &Database{GormDatabase: tdb, t: t}
 }
 
+func NewDB(t *testing.T) *Database {
+	db, err := gorm.Open(sqlite.Open("file:%s?mode=memory&cache=shared"), &gorm.Config{})
+	db.AutoMigrate(new(model.User), new(model.Character), new(model.Domain), new(model.God))
+	assert.Nil(t, err)
+	assert.NotNil(t, db)
+	tdb := &database.GormDatabase{
+		DB: db,
+	}
+	return &Database{GormDatabase: tdb, t: t}
+}
+
 // NewUser creates a user and returns the user.
 func (d *Database) NewUser(id uint) *model.User {
 	return d.NewUserWithName(id, "user"+fmt.Sprint(id), "email"+fmt.Sprint(id)+"@example.com")
@@ -43,7 +54,12 @@ func (d *Database) NewUser(id uint) *model.User {
 
 // NewUserWithName creates a user with a name and returns the user.
 func (d *Database) NewUserWithName(id uint, name string, email string) *model.User {
-	user := &model.User{ID: id, Username: name, Email: email}
+	user := &model.User{
+		ID:       id,
+		Username: name,
+		Email:    email,
+		Password: password.CreatePassword(name, 10),
+	}
 	d.CreateUser(user)
 	return user
 }
