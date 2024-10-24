@@ -56,6 +56,7 @@ func New(
 		new(model.CharacterSpell),
 		new(model.CharacterFeat),
 		new(model.CharacterSkill),
+		new(model.CharacterInfo),
 	); err != nil {
 		return nil, err
 	}
