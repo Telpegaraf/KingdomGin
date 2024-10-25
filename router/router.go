@@ -67,6 +67,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	g.GET("/validate", authHandler.Validate)
 
 	g.POST("/a/rabbit", userRabbitHandler.CreateUserRabbit)
+	g.POST("/a/verification", userRabbitHandler.VerificationUser)
 
 	userGroup := g.Group("/user").Use(authentication.RequireJWT)
 	{

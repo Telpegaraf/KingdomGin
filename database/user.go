@@ -19,6 +19,19 @@ func (d *GormDatabase) GetUserByUsername(name string) (*model.User, error) {
 	return nil, err
 }
 
+// GetUserByEmail returns the user by the given name or nil.
+func (d *GormDatabase) GetUserByEmail(email string) (*model.User, error) {
+	user := new(model.User)
+	err := d.DB.Where("email = ?", email).Find(user).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	if user.Email == email {
+		return user, err
+	}
+	return nil, err
+}
+
 // GetUserByID returns the user by the given id or nil.
 func (d *GormDatabase) GetUserByID(id uint) (*model.User, error) {
 	user := new(model.User)
@@ -60,6 +73,11 @@ func (d *GormDatabase) DeleteUserByID(id uint) error {
 // UpdateUser updates a user.
 func (d *GormDatabase) UpdateUser(user *model.User) error {
 	return d.DB.Save(user).Error
+}
+
+// UpdateUserVerification updates a user verification.
+func (d *GormDatabase) UpdateUserVerification(user *model.User) error {
+	return d.DB.Model(user).Select("verification").Updates(user).Error
 }
 
 // CreateUser creates a user.

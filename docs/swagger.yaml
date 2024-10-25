@@ -1416,6 +1416,16 @@ definitions:
       price:
         type: string
     type: object
+  model.UserCodeVerification:
+    properties:
+      code:
+        type: string
+      email:
+        type: string
+    required:
+    - code
+    - email
+    type: object
   model.UserExternal:
     properties:
       admin:
@@ -1520,6 +1530,28 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.CreateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user details
+          schema:
+            $ref: '#/definitions/model.UserExternal'
+      summary: Returns all users
+      tags:
+      - A
+  /a/verification:
+    post:
+      consumes:
+      - application/json
+      description: Returns all users
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserCodeVerification'
       produces:
       - application/json
       responses:

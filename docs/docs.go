@@ -49,6 +49,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/a/verification": {
+            "post": {
+                "description": "Returns all users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "A"
+                ],
+                "summary": "Returns all users",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserCodeVerification"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user details",
+                        "schema": {
+                            "$ref": "#/definitions/model.UserExternal"
+                        }
+                    }
+                }
+            }
+        },
         "/action": {
             "get": {
                 "description": "Return all Actions",
@@ -5732,6 +5766,21 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "price": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserCodeVerification": {
+            "type": "object",
+            "required": [
+                "code",
+                "email"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "email": {
                     "type": "string"
                 }
             }

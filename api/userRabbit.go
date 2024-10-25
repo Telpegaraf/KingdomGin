@@ -8,16 +8,20 @@ import (
 	"kingdom/model"
 	"net/http"
 	"net/mail"
+	"time"
 )
 
 type UserRabbitDatabase interface {
 	GetUsers() ([]*model.User, error)
 	GetUserByID(id uint) (*model.User, error)
 	GetUserByUsername(username string) (*model.User, error)
+	GetUserByEmail(email string) (*model.User, error)
 	DeleteUserByID(id uint) error
 	UpdateUser(user *model.User) error
 	CreateUser(user *model.User) error
 	CountUser(condition ...interface{}) (int, error)
+	GetUSerCodeByEmail(email string) (*model.UserCode, error)
+	UpdateUserVerification(user *model.User) error
 }
 
 type UserConsumer interface {
@@ -25,7 +29,7 @@ type UserConsumer interface {
 }
 
 type UserRabbitApi struct {
-	DB                 UserDatabase
+	DB                 UserRabbitDatabase
 	PasswordStrength   int
 	UserChangeNotifier *UserChangeNotifier
 	Registration       bool
@@ -73,6 +77,44 @@ func (a *UserRabbitApi) CreateUserRabbit(ctx *gin.Context) {
 			return
 		} else {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "user already exists"})
+			return
+		}
+	}
+}
+
+// VerificationUser godoc
+//
+// @Summary Returns all users
+// @Description Returns all users
+// @Tags A
+// @Accept json
+// @Produce json
+// @Param user body model.UserCodeVerification true "User data"
+// @Success 200 {object} model.UserExternal "user details"
+// @Router /a/verification [post]
+func (a *UserRabbitApi) VerificationUser(ctx *gin.Context) {
+	verificationUserCode := model.UserCodeVerification{}
+	if err := ctx.ShouldBindJSON(&verificationUserCode); err == nil {
+		userCode, err := a.DB.GetUSerCodeByEmail(verificationUserCode.Email)
+		if err != nil {
+			ctx.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+		if userCode.Code != verificationUserCode.Code {
+			ctx.JSON(400, gin.H{"error": "wrong code"})
+			return
+		}
+		if time.Now().Sub(userCode.CreatedAt).Minutes() >= 5 {
+			ctx.JSON(400, gin.H{"error": "user code has expired"})
+			return
+		}
+		user, err := a.DB.GetUserByEmail(userCode.Email)
+		if err != nil {
+			ctx.JSON(400, gin.H{"error": "User not found"})
+		}
+		user.Verification = true
+		err = a.DB.UpdateUserVerification(user)
+		if err != nil {
 			return
 		}
 	}
