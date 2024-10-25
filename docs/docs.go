@@ -15,6 +15,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/a/rabbit": {
+            "post": {
+                "description": "Returns all users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "A"
+                ],
+                "summary": "Returns all users",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user details",
+                        "schema": {
+                            "$ref": "#/definitions/model.UserExternal"
+                        }
+                    }
+                }
+            }
+        },
         "/action": {
             "get": {
                 "description": "Return all Actions",
@@ -3359,6 +3393,32 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    }
+                }
+            }
+        },
+        "/user/current": {
+            "get": {
+                "description": "Returns current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Returns current user",
+                "responses": {
+                    "200": {
+                        "description": "User current",
+                        "schema": {
+                            "$ref": "#/definitions/model.UserExternal"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }

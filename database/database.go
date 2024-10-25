@@ -8,6 +8,10 @@ import (
 	"os"
 )
 
+type GormDatabase struct {
+	DB *gorm.DB
+}
+
 func New(
 	dsn,
 	defaultUser string,
@@ -72,8 +76,4 @@ func New(
 	}
 
 	return &GormDatabase{DB: db}, nil
-}
-
-type GormDatabase struct {
-	DB *gorm.DB
 }

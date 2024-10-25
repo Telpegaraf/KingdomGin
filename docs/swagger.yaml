@@ -1508,6 +1508,28 @@ info:
   title: Kingdom Api
   version: 0.1.0
 paths:
+  /a/rabbit:
+    post:
+      consumes:
+      - application/json
+      description: Returns all users
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user details
+          schema:
+            $ref: '#/definitions/model.UserExternal'
+      summary: Returns all users
+      tags:
+      - A
   /action:
     get:
       consumes:
@@ -3807,6 +3829,23 @@ paths:
           schema:
             type: string
       summary: Update User
+      tags:
+      - User
+  /user/current:
+    get:
+      consumes:
+      - application/json
+      description: Returns current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User current
+          schema:
+            $ref: '#/definitions/model.UserExternal'
+        "500":
+          description: Internal Server Error
+      summary: Returns current user
       tags:
       - User
   /user/password:

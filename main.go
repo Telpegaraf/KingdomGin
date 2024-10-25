@@ -5,6 +5,7 @@ import (
 	"github.com/joho/godotenv"
 	"io"
 	"kingdom/config"
+	consumer2 "kingdom/consumer"
 	"kingdom/database"
 	"kingdom/router"
 	"log"
@@ -25,6 +26,26 @@ import (
 func main() {
 	err := godotenv.Load()
 	log.Println(err)
+
+	consumer, err := consumer2.New(os.Getenv("RMQ_URL"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//userQueue := consumer.RMQConsumer{
+	//	"UserQueue",
+	//	os.Getenv("RMQ_URL"),
+	//	consumer.Handler,
+	//}
+	//
+	//forever := make(chan bool)
+	//
+	//go func() {
+	//	go userQueue.Consume()
+	//
+	//	<-forever
+	//}()
+
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -48,7 +69,7 @@ func main() {
 		panic(err)
 	}
 
-	engine, _ := router.Create(db, conf)
+	engine, _ := router.Create(db, conf, consumer)
 
 	err = engine.Run(":8080")
 	if err != nil {

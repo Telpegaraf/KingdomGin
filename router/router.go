@@ -8,12 +8,13 @@ import (
 	"kingdom/api"
 	"kingdom/auth"
 	"kingdom/config"
+	"kingdom/consumer"
 	"kingdom/database"
 	"kingdom/docs"
 	gerror "kingdom/error"
 )
 
-func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine, func()) {
+func Create(db *database.GormDatabase, conf *config.Configuration, consumer *consumer.RConsumer) (*gin.Engine, func()) {
 	g := gin.New()
 	g.RemoteIPHeaders = []string{"X-Forwarded-For"}
 	g.SetTrustedProxies(conf.Server.TrustedProxies)
@@ -52,6 +53,8 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 
 	authHandler := api.Controller{DB: db}
 
+	userRabbitHandler := api.UserRabbitApi{DB: db, Consumer: consumer}
+
 	g.NoRoute(gerror.NotFound())
 
 	g.Use(cors.New(auth.CorsConfig(conf)))
@@ -62,6 +65,8 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.POST("/user", userHandler.CreateUser)
 	g.POST("/login", authHandler.Login)
 	g.GET("/validate", authHandler.Validate)
+
+	g.POST("/a/rabbit", userRabbitHandler.CreateUserRabbit)
 
 	userGroup := g.Group("/user").Use(authentication.RequireJWT)
 	{
