@@ -43,3 +43,8 @@ type UserUpdateExternal struct {
 type UserPasswordUpdate struct {
 	Password string `json:"password,omitempty" query:"password" form:"password" binding:"required"`
 }
+
+type UserMessage struct {
+	ID    uint   `json:"id"`
+	Email string `json:"email"`
+}

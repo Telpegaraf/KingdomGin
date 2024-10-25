@@ -21,7 +21,7 @@ type UserRabbitDatabase interface {
 }
 
 type UserConsumer interface {
-	Publish(username string, email string)
+	Publish(email string)
 }
 
 type UserRabbitApi struct {
@@ -68,13 +68,12 @@ func (a *UserRabbitApi) CreateUserRabbit(ctx *gin.Context) {
 			}
 			ctx.JSON(201, toExternalUser(internal))
 
-			a.Consumer.Publish(internal.Username, internal.Email)
+			a.Consumer.Publish(internal.Email)
 
 			return
 		} else {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "user already exists"})
 			return
 		}
-
 	}
 }

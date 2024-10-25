@@ -14,7 +14,7 @@ import (
 	gerror "kingdom/error"
 )
 
-func Create(db *database.GormDatabase, conf *config.Configuration, consumer *consumer.RConsumer) (*gin.Engine, func()) {
+func Create(db *database.GormDatabase, conf *config.Configuration, consumer *consumer.RMQConsumer) (*gin.Engine, func()) {
 	g := gin.New()
 	g.RemoteIPHeaders = []string{"X-Forwarded-For"}
 	g.SetTrustedProxies(conf.Server.TrustedProxies)

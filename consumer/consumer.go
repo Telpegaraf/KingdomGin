@@ -1,61 +1,28 @@
 package consumer
 
 import (
+	"fmt"
 	"github.com/streadway/amqp"
+	"kingdom/model"
 	"log"
+	"math/rand"
+	"net/smtp"
+	"os"
+	"time"
 )
 
-type RConsumer struct {
+type RMQConsumerDatabase interface {
+	CreateUserCode(code *model.UserCode) error
+}
+
+type RMQConsumer struct {
 	Queue      string
 	Channel    *amqp.Channel
 	Connection *amqp.Connection
+	DB         RMQConsumerDatabase
 }
 
-//type RMQConsumer struct {
-//	Queue            string
-//	ConnectionString string
-//	MsgHandler       func(queue string, msg amqp.Delivery, err error)
-//}
-//
-//func (r *RMQConsumer) OnError(err error, msg string) {
-//	if err != nil {
-//		r.MsgHandler(r.Queue, amqp.Delivery{}, err)
-//	}
-//}
-//
-//func (r *RMQConsumer) Consume() {
-//	conn, err := amqp.Dial(r.ConnectionString)
-//	r.OnError(err, "Failed to connect to RabbitMQ")
-//	defer conn.Close()
-//
-//	ch, err := conn.Channel()
-//	r.OnError(err, "Failed to open a channel")
-//	defer ch.Close()
-//
-//	q, err := ch.QueueDeclare(
-//		r.Queue,
-//		false,
-//		false,
-//		false,
-//		false,
-//		nil)
-//	r.OnError(err, "Failed to declare a queue")
-//
-//	msgs, err := ch.Consume(
-//		q.Name, "", false, false, false, false, nil)
-//	r.OnError(err, "Failed to register a consumer")
-//
-//	forever := make(chan bool)
-//	go func() {
-//		for d := range msgs {
-//			r.MsgHandler(r.Queue, d, nil)
-//		}
-//	}()
-//	log.Println("Started listening for messages on '%s' queue", q)
-//	<-forever
-//}
-
-func New(connectionString string) (rmg *RConsumer, err error) {
+func New(connectionString string) (rmg *RMQConsumer, err error) {
 	conn, err := amqp.Dial(connectionString)
 	if err != nil {
 		log.Println("Failed to connect to RabbitMQ")
@@ -82,28 +49,36 @@ func New(connectionString string) (rmg *RConsumer, err error) {
 		panic(err)
 	}
 
-	//msgs, err := ch.Consume(
-	//	queue.Name, "", false, false, false, false, nil)
-	//if err != nil {
-	//	log.Println("Failed to register a consumer")
-	//	panic(err)
-	//}
-	//forever := make(chan bool)
-	//go func() {
-	//	for d := range msgs {
-	//		log.Printf("Received a message: %s", d.Body)
-	//	}
-	//}()
-	//log.Println("Started listening for messages on '%s' queue", queue)
-	//go func() {
-	//	<-forever
-	//}()
+	rmq := &RMQConsumer{Queue: queue.Name, Channel: ch, Connection: conn}
+	go func() { rmq.HandleMessage() }()
 
-	return &RConsumer{Queue: queue.Name, Channel: ch, Connection: conn}, nil
+	return rmq, nil
 }
 
-func (r *RConsumer) Publish(username string, email string) {
-	message := "" + username + " " + email
+func (r *RMQConsumer) HandleMessage() {
+	msgs, err := r.Channel.Consume(
+		r.Queue, "", true, false, false, false, nil)
+	if err != nil {
+		log.Println("Failed to register a consumer")
+	}
+	forever := make(chan bool)
+
+	go func() {
+		for d := range msgs {
+
+			log.Printf("Received a message, email: %s", string(d.Body))
+			if err != nil {
+				log.Println("Failed to unmarshal the message", err)
+				continue
+			}
+			r.SendEmail(string(d.Body))
+		}
+	}()
+	log.Printf(" [*] Waiting for User messages.")
+	<-forever
+}
+
+func (r *RMQConsumer) Publish(email string) {
 
 	if r.Channel == nil {
 		log.Println("Failed to connect to RabbitMQ")
@@ -119,11 +94,56 @@ func (r *RConsumer) Publish(username string, email string) {
 		r.Queue,
 		false,
 		false,
-		amqp.Publishing{ContentType: "text/plain", Body: []byte(message)},
+		amqp.Publishing{ContentType: "text/plain", Body: []byte(email)},
 	)
 	if err != nil {
 		log.Println("Failed to publish a message")
 		return
 	}
 	log.Println("Message published successfully")
+}
+
+func (r *RMQConsumer) SendEmail(email string) {
+	code := GenerateCode()
+
+	userCode := &model.UserCode{
+		Code:  code,
+		Email: email,
+	}
+
+	log.Printf("Sending email to %s with code %s", email, code)
+	emailFrom := os.Getenv("EMAIL_FROM")
+	emailPassword := os.Getenv("EMAIL_PASSWORD")
+	smtpHost := os.Getenv("SMTP_HOST")
+	smtpPort := os.Getenv("SMTP_PORT")
+
+	log.Println(smtpHost, smtpPort)
+
+	message := "From: " + emailFrom + "\n" +
+		"To: " + email + "\n" +
+		"Subject: " + "Kingdom Register" + "\n" +
+		"Your code for register is " + code + "\n"
+
+	auth := smtp.PlainAuth("", emailFrom, emailPassword, smtpHost)
+	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, emailFrom, []string{email}, []byte(message))
+	if err != nil {
+		log.Println("Failed to send email:", err)
+	} else {
+		log.Println("Email sent successfully")
+	}
+
+	err = r.DB.CreateUserCode(userCode)
+	if err != nil {
+		log.Println("Failed to create a user code")
+	}
+}
+
+func GenerateCode() string {
+	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
+	code := ""
+	for i := 0; i < 6; i++ {
+		digit := rng.Intn(9) + 1
+		code += fmt.Sprintf("%d", digit)
+	}
+	return code
 }

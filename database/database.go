@@ -61,6 +61,7 @@ func New(
 		new(model.CharacterFeat),
 		new(model.CharacterSkill),
 		new(model.CharacterInfo),
+		new(model.UserCode),
 	); err != nil {
 		return nil, err
 	}
