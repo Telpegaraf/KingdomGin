@@ -1867,7 +1867,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Returns all users
+      description: Create User and sent verification code to email
       parameters:
       - description: User data
         in: body
@@ -1882,14 +1882,14 @@ paths:
           description: user details
           schema:
             $ref: '#/definitions/model.UserExternal'
-      summary: Returns all users
+      summary: Create User and sent verification code to email
       tags:
       - Auth
   /auth/verification:
     post:
       consumes:
       - application/json
-      description: Returns all users
+      description: Verification user after email with code
       parameters:
       - description: User data
         in: body
@@ -1904,7 +1904,7 @@ paths:
           description: user details
           schema:
             $ref: '#/definitions/model.UserExternal'
-      summary: Returns all users
+      summary: Verification user after email with code
       tags:
       - Auth
   /background:

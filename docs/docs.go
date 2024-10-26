@@ -539,7 +539,7 @@ const docTemplate = `{
         },
         "/auth/rabbit": {
             "post": {
-                "description": "Returns all users",
+                "description": "Create User and sent verification code to email",
                 "consumes": [
                     "application/json"
                 ],
@@ -549,7 +549,7 @@ const docTemplate = `{
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Returns all users",
+                "summary": "Create User and sent verification code to email",
                 "parameters": [
                     {
                         "description": "User data",
@@ -573,7 +573,7 @@ const docTemplate = `{
         },
         "/auth/verification": {
             "post": {
-                "description": "Returns all users",
+                "description": "Verification user after email with code",
                 "consumes": [
                     "application/json"
                 ],
@@ -583,7 +583,7 @@ const docTemplate = `{
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Returns all users",
+                "summary": "Verification user after email with code",
                 "parameters": [
                     {
                         "description": "User data",

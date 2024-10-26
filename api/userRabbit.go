@@ -38,8 +38,8 @@ type UserRabbitApi struct {
 
 // CreateUserRabbit godoc
 //
-// @Summary Returns all users
-// @Description Returns all users
+// @Summary Create User and sent verification code to email
+// @Description Create User and sent verification code to email
 // @Tags Auth
 // @Accept json
 // @Produce json
@@ -84,8 +84,8 @@ func (a *UserRabbitApi) CreateUserRabbit(ctx *gin.Context) {
 
 // VerificationUser godoc
 //
-// @Summary Returns all users
-// @Description Returns all users
+// @Summary Verification user after email with code
+// @Description Verification user after email with code
 // @Tags Auth
 // @Accept json
 // @Produce json
