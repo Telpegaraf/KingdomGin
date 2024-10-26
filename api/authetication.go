@@ -29,7 +29,7 @@ type Controller struct {
 // @Param user body model.UserLogin true "User data"
 // @Success 200
 // @Failure 401 {string} string "Unauthorized"
-// @Router /login [post]
+// @Router /auth/login [post]
 func (a *Controller) Login(ctx *gin.Context) {
 	var body struct {
 		Username string `json:"username" binding:"required"`

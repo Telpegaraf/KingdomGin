@@ -63,11 +63,11 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	g.POST("/user", userHandler.CreateUser)
-	g.POST("/login", authHandler.Login)
+	g.POST("/auth/login", authHandler.Login)
 	g.GET("/validate", authHandler.Validate)
 
-	g.POST("/a/rabbit", userRabbitHandler.CreateUserRabbit)
-	g.POST("/a/verification", userRabbitHandler.VerificationUser)
+	g.POST("/auth/rabbit", userRabbitHandler.CreateUserRabbit)
+	g.POST("/auth/verification", userRabbitHandler.VerificationUser)
 
 	userGroup := g.Group("/user").Use(authentication.RequireJWT)
 	{

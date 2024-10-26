@@ -1518,50 +1518,6 @@ info:
   title: Kingdom Api
   version: 0.1.0
 paths:
-  /a/rabbit:
-    post:
-      consumes:
-      - application/json
-      description: Returns all users
-      parameters:
-      - description: User data
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/model.CreateUser'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: user details
-          schema:
-            $ref: '#/definitions/model.UserExternal'
-      summary: Returns all users
-      tags:
-      - A
-  /a/verification:
-    post:
-      consumes:
-      - application/json
-      description: Returns all users
-      parameters:
-      - description: User data
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/model.UserCodeVerification'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: user details
-          schema:
-            $ref: '#/definitions/model.UserExternal'
-      summary: Returns all users
-      tags:
-      - A
   /action:
     get:
       consumes:
@@ -1883,6 +1839,74 @@ paths:
       summary: Updates Attribute by ID or nil
       tags:
       - Attribute
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Авторизация пользователя по логину и паролю
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Login user for token
+      tags:
+      - Auth
+  /auth/rabbit:
+    post:
+      consumes:
+      - application/json
+      description: Returns all users
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user details
+          schema:
+            $ref: '#/definitions/model.UserExternal'
+      summary: Returns all users
+      tags:
+      - Auth
+  /auth/verification:
+    post:
+      consumes:
+      - application/json
+      description: Returns all users
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserCodeVerification'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user details
+          schema:
+            $ref: '#/definitions/model.UserExternal'
+      summary: Returns all users
+      tags:
+      - Auth
   /background:
     get:
       consumes:
@@ -3254,30 +3278,6 @@ paths:
       summary: Updates weapon by ID or nil
       tags:
       - Item
-  /login:
-    post:
-      consumes:
-      - application/json
-      description: Авторизация пользователя по логину и паролю
-      parameters:
-      - description: User data
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/model.UserLogin'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-      summary: Login user for token
-      tags:
-      - Auth
   /race:
     get:
       consumes:

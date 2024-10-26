@@ -40,12 +40,12 @@ type UserRabbitApi struct {
 //
 // @Summary Returns all users
 // @Description Returns all users
-// @Tags A
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param user body model.CreateUser true "User data"
 // @Success 200 {object} model.UserExternal "user details"
-// @Router /a/rabbit [post]
+// @Router /auth/rabbit [post]
 func (a *UserRabbitApi) CreateUserRabbit(ctx *gin.Context) {
 	user := model.CreateUser{}
 	if err := ctx.ShouldBindJSON(&user); err == nil {
@@ -86,12 +86,12 @@ func (a *UserRabbitApi) CreateUserRabbit(ctx *gin.Context) {
 //
 // @Summary Returns all users
 // @Description Returns all users
-// @Tags A
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param user body model.UserCodeVerification true "User data"
 // @Success 200 {object} model.UserExternal "user details"
-// @Router /a/verification [post]
+// @Router /auth/verification [post]
 func (a *UserRabbitApi) VerificationUser(ctx *gin.Context) {
 	verificationUserCode := model.UserCodeVerification{}
 	if err := ctx.ShouldBindJSON(&verificationUserCode); err == nil {
