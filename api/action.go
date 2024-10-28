@@ -51,7 +51,7 @@ func (a *ActionApi) CreateAction(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Action id"
-// @Success 200 {object} model.Action "Action details"
+// @Success 200 {object} model.ActionExternal "Action details"
 // @Failure 404 {string} string "Action not found"
 // @Router /action/{id} [get]
 func (a *ActionApi) GetActionByID(ctx *gin.Context) {
@@ -74,7 +74,7 @@ func (a *ActionApi) GetActionByID(ctx *gin.Context) {
 // @Tags Action
 // @Accept json
 // @Produce json
-// @Success 200 {object} model.Action "Action details"
+// @Success 200 {object} model.ActionExternal "Action details"
 // @Failure 401 {string} string ""Unauthorized"
 // @Router /action [get]
 func (a *ActionApi) GetActions(ctx *gin.Context) {

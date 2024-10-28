@@ -52,7 +52,7 @@ func (a *TraitApi) CreateTrait(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Trait id"
-// @Success 200 {object} model.Trait "Trait details"
+// @Success 200 {object} model.TraitExternal "Trait details"
 // @Failure 404 {string} string "Trait not found"
 // @Router /trait/{id} [get]
 func (a *TraitApi) GetTraitByID(ctx *gin.Context) {
@@ -75,7 +75,7 @@ func (a *TraitApi) GetTraitByID(ctx *gin.Context) {
 // @Tags Trait
 // @Accept json
 // @Produce json
-// @Success 200 {object} model.Trait "Trait details"
+// @Success 200 {object} model.TraitExternal "Trait details"
 // @Failure 401 {string} string ""Unauthorized"
 // @Router /trait [get]
 func (a *TraitApi) GetTraits(ctx *gin.Context) {

@@ -52,7 +52,7 @@ func (a *DomainApi) CreateDomain(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "domain id"
-// @Success 200 {object} model.Domain "domain details"
+// @Success 200 {object} model.DomainExternal "domain details"
 // @Failure 404 {string} string "Domain not found"
 // @Router /domain/{id} [get]
 func (a *DomainApi) GetDomainByID(ctx *gin.Context) {
@@ -75,7 +75,7 @@ func (a *DomainApi) GetDomainByID(ctx *gin.Context) {
 // @Tags Domain
 // @Accept json
 // @Produce json
-// @Success 200 {object} model.Domain "Domain details"
+// @Success 200 {object} model.DomainExternal "Domain details"
 // @Failure 401 {string} string ""Unauthorized"
 // @Router /domain [get]
 func (a *DomainApi) GetDomains(ctx *gin.Context) {

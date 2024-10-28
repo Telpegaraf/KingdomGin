@@ -32,7 +32,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Action details",
                         "schema": {
-                            "$ref": "#/definitions/model.Action"
+                            "$ref": "#/definitions/model.ActionExternal"
                         }
                     },
                     "401": {
@@ -114,7 +114,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Action details",
                         "schema": {
-                            "$ref": "#/definitions/model.Action"
+                            "$ref": "#/definitions/model.ActionExternal"
                         }
                     },
                     "404": {
@@ -1513,7 +1513,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Domain details",
                         "schema": {
-                            "$ref": "#/definitions/model.Domain"
+                            "$ref": "#/definitions/model.DomainExternal"
                         }
                     },
                     "401": {
@@ -1595,7 +1595,7 @@ const docTemplate = `{
                     "200": {
                         "description": "domain details",
                         "schema": {
-                            "$ref": "#/definitions/model.Domain"
+                            "$ref": "#/definitions/model.DomainExternal"
                         }
                     },
                     "404": {
@@ -1714,7 +1714,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Feat details",
                         "schema": {
-                            "$ref": "#/definitions/model.Feat"
+                            "$ref": "#/definitions/model.FeatExternal"
                         }
                     },
                     "401": {
@@ -1844,7 +1844,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Feat details",
                         "schema": {
-                            "$ref": "#/definitions/model.Feat"
+                            "$ref": "#/definitions/model.FeatExternal"
                         }
                     },
                     "403": {
@@ -2106,7 +2106,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Feat details",
                         "schema": {
-                            "$ref": "#/definitions/model.Feat"
+                            "$ref": "#/definitions/model.FeatExternal"
                         }
                     },
                     "401": {
@@ -3183,7 +3183,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Trait details",
                         "schema": {
-                            "$ref": "#/definitions/model.Trait"
+                            "$ref": "#/definitions/model.TraitExternal"
                         }
                     },
                     "401": {
@@ -3265,7 +3265,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Trait details",
                         "schema": {
-                            "$ref": "#/definitions/model.Trait"
+                            "$ref": "#/definitions/model.TraitExternal"
                         }
                     },
                     "404": {
@@ -5799,6 +5799,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/model.Character"
                     }
+                },
+                "email": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"

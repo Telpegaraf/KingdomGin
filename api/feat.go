@@ -51,7 +51,7 @@ func (a *FeatAPI) CreateFeat(ctx *gin.Context) {
 // @Tags Item
 // @Accept json
 // @Produce json
-// @Success 200 {object} model.Feat "Feat details"
+// @Success 200 {object} model.FeatExternal "Feat details"
 // @Failure 401 {string} string ""Unauthorized"
 // @Router /feat [get]
 func (a *FeatAPI) GetFeats(ctx *gin.Context) {
@@ -75,7 +75,7 @@ func (a *FeatAPI) GetFeats(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Feat id"
-// @Success 200 {object} model.Feat "Feat details"
+// @Success 200 {object} model.FeatExternal "Feat details"
 // @Failure 401 {string} string ""Unauthorized"
 // @Router /item/Feat/{id} [get]
 func (a *FeatAPI) GetFeatByID(ctx *gin.Context) {
@@ -98,7 +98,7 @@ func (a *FeatAPI) GetFeatByID(ctx *gin.Context) {
 // @Produce json
 // @Param id path int true "Feat id"
 // @Param Feat body model.UpdateFeat true "Feat data"
-// @Success 200 {object} model.Feat "Feat details"
+// @Success 200 {object} model.FeatExternal "Feat details"
 // @Failure 403 {string} string "You can't access for this API"
 // @Failure 404 {string} string "Feat doesn't exist"
 // @Router /feat/{id} [patch]

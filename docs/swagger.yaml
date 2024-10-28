@@ -1434,6 +1434,8 @@ definitions:
         items:
           $ref: '#/definitions/model.Character'
         type: array
+      email:
+        type: string
       id:
         type: integer
       username:
@@ -1529,7 +1531,7 @@ paths:
         "200":
           description: Action details
           schema:
-            $ref: '#/definitions/model.Action'
+            $ref: '#/definitions/model.ActionExternal'
         "401":
           description: Unauthorized
           schema:
@@ -1609,7 +1611,7 @@ paths:
         "200":
           description: Action details
           schema:
-            $ref: '#/definitions/model.Action'
+            $ref: '#/definitions/model.ActionExternal'
         "404":
           description: Action not found
           schema:
@@ -2506,7 +2508,7 @@ paths:
         "200":
           description: Domain details
           schema:
-            $ref: '#/definitions/model.Domain'
+            $ref: '#/definitions/model.DomainExternal'
         "401":
           description: Unauthorized
           schema:
@@ -2586,7 +2588,7 @@ paths:
         "200":
           description: domain details
           schema:
-            $ref: '#/definitions/model.Domain'
+            $ref: '#/definitions/model.DomainExternal'
         "404":
           description: Domain not found
           schema:
@@ -2639,7 +2641,7 @@ paths:
         "200":
           description: Feat details
           schema:
-            $ref: '#/definitions/model.Feat'
+            $ref: '#/definitions/model.FeatExternal'
         "401":
           description: Unauthorized
           schema:
@@ -2725,7 +2727,7 @@ paths:
         "200":
           description: Feat details
           schema:
-            $ref: '#/definitions/model.Feat'
+            $ref: '#/definitions/model.FeatExternal'
         "403":
           description: You can't access for this API
           schema:
@@ -2949,7 +2951,7 @@ paths:
         "200":
           description: Feat details
           schema:
-            $ref: '#/definitions/model.Feat'
+            $ref: '#/definitions/model.FeatExternal'
         "401":
           description: Unauthorized
           schema:
@@ -3610,7 +3612,7 @@ paths:
         "200":
           description: Trait details
           schema:
-            $ref: '#/definitions/model.Trait'
+            $ref: '#/definitions/model.TraitExternal'
         "401":
           description: Unauthorized
           schema:
@@ -3690,7 +3692,7 @@ paths:
         "200":
           description: Trait details
           schema:
-            $ref: '#/definitions/model.Trait'
+            $ref: '#/definitions/model.TraitExternal'
         "404":
           description: Trait not found
           schema:
