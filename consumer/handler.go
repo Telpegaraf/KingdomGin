@@ -1,11 +1,11 @@
 package consumer
 
 import (
-	"github.com/streadway/amqp"
+	"github.com/rabbitmq/amqp091-go"
 	"log"
 )
 
-func Handler(queue string, msg amqp.Delivery, err error) {
+func Handler(queue string, msg amqp091.Delivery, err error) {
 	if err != nil {
 		log.Printf("Error occurred in RMQ consumer")
 	}
