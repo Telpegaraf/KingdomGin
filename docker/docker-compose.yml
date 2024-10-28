@@ -10,10 +10,12 @@ services:
     container_name: kingdom
     depends_on:
       - db
+      - rabbitmq
     restart: always
 
   db:
     image: postgres:alpine
+    container_name: db
     restart: always
     env_file: .env_docker
     volumes:
@@ -21,5 +23,29 @@ services:
     ports:
       - "5432:5432"
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    env_file: .env_docker
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/default.conf
+    depends_on:
+      - web
+    networks:
+      - webnet
+
 volumes:
   pg_data: {}
+
+networks:
+  webnet:
