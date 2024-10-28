@@ -2,7 +2,7 @@ package consumer
 
 import (
 	"fmt"
-	"github.com/streadway/amqp"
+	"github.com/rabbitmq/amqp091-go"
 	"kingdom/model"
 	"log"
 	"math/rand"
@@ -17,13 +17,13 @@ type RMQConsumerDatabase interface {
 
 type RMQConsumer struct {
 	Queue      string
-	Channel    *amqp.Channel
-	Connection *amqp.Connection
+	Channel    *amqp091.Channel
+	Connection *amqp091.Connection
 	DB         RMQConsumerDatabase
 }
 
 func New(connectionString string) (rmg *RMQConsumer, err error) {
-	conn, err := amqp.Dial(connectionString)
+	conn, err := amqp091.Dial(connectionString)
 	if err != nil {
 		log.Println("Failed to connect to RabbitMQ")
 		panic(err)
@@ -94,7 +94,7 @@ func (r *RMQConsumer) Publish(email string) {
 		r.Queue,
 		false,
 		false,
-		amqp.Publishing{ContentType: "text/plain", Body: []byte(email)},
+		amqp091.Publishing{ContentType: "text/plain", Body: []byte(email)},
 	)
 	if err != nil {
 		log.Println("Failed to publish a message")
