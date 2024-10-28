@@ -319,6 +319,7 @@ func toExternalUser(internal *model.User) *model.UserExternal {
 		Username:   internal.Username,
 		Admin:      internal.Admin,
 		ID:         internal.ID,
+		Email:      internal.Email,
 		Characters: internal.Characters,
 	}
 }

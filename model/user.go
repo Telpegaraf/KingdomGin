@@ -22,6 +22,7 @@ type UserExternal struct {
 	ID         uint        `json:"id"`
 	Username   string      `binding:"required" json:"username" query:"username" form:"username"`
 	Admin      bool        `json:"admin" query:"admin" form:"admin"`
+	Email      string      `json:"email"`
 	Characters []Character `json:"characters" query:"characters" form:"characters"`
 }
 
