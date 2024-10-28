@@ -104,68 +104,68 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	g.GET("/domain/:id", domainHandler.GetDomainByID).Use(authentication.RequireJWT)
 	g.GET("/domain", domainHandler.GetDomains).Use(authentication.RequireJWT)
 
-	featGroup := g.Group("/feat").Use(authentication.RequireJWT)
+	featGroup := g.Group("/feat").Use(authentication.RequireAdmin)
 	{
 		featGroup.POST("", featHandler.CreateFeat)
 		featGroup.PATCH("/:id", featHandler.UpdateFeat)
-		featGroup.GET("", featHandler.GetFeats)
-		featGroup.GET("/:id", featHandler.GetFeatByID)
 		featGroup.DELETE("/:id", featHandler.DeleteFeat)
 	}
+	g.GET("/feat", featHandler.GetFeats).Use(authentication.RequireJWT)
+	g.GET("/feat/:id", featHandler.GetFeatByID).Use(authentication.RequireJWT)
 
-	raceGroup := g.Group("/race").Use(authentication.RequireJWT)
+	raceGroup := g.Group("/race").Use(authentication.RequireAdmin)
 	{
 		raceGroup.POST("", raceHandler.CreateRace)
 		raceGroup.PATCH("/:id", raceHandler.UpdateRace)
-		raceGroup.GET("", raceHandler.GetRaces)
-		raceGroup.GET("/:id", raceHandler.GetRaceByID)
 		raceGroup.DELETE("/:id", raceHandler.DeleteRace)
 	}
+	g.GET("/race", raceHandler.GetRaces).Use(authentication.RequireJWT)
+	g.GET("/race/:id", raceHandler.GetRaceByID).Use(authentication.RequireJWT)
 
-	ancestryGroup := g.Group("/ancestry").Use(authentication.RequireJWT)
+	ancestryGroup := g.Group("/ancestry").Use(authentication.RequireAdmin)
 	{
 		ancestryGroup.POST("", ancestryHandler.CreateAncestry)
 		ancestryGroup.PATCH("/:id", ancestryHandler.UpdateAncestry)
-		ancestryGroup.GET("", ancestryHandler.GetAncestries)
-		ancestryGroup.GET("/:id", ancestryHandler.GetAncestryByID)
 		ancestryGroup.DELETE("/:id", ancestryHandler.DeleteAncestry)
 	}
+	g.GET("/ancestry", ancestryHandler.GetAncestries).Use(authentication.RequireJWT)
+	g.GET("/ancestry/:id", ancestryHandler.GetAncestryByID).Use(authentication.RequireJWT)
 
-	actionGroup := g.Group("/action").Use(authentication.RequireJWT)
+	actionGroup := g.Group("/action").Use(authentication.RequireAdmin)
 	{
 		actionGroup.POST("", actionHandler.CreateAction)
 		actionGroup.PATCH("/:id", actionHandler.UpdateAction)
-		actionGroup.GET("", actionHandler.GetActions)
-		actionGroup.GET("/:id", actionHandler.GetActionByID)
 		actionGroup.DELETE("/:id", actionHandler.DeleteAction)
 	}
+	g.GET("/action", actionHandler.GetActions).Use(authentication.RequireJWT)
+	g.GET("/action/:id", actionHandler.GetActionByID).Use(authentication.RequireJWT)
 
-	backgroundGroup := g.Group("/background").Use(authentication.RequireJWT)
+	backgroundGroup := g.Group("/background").Use(authentication.RequireAdmin)
 	{
 		backgroundGroup.POST("", backgroundHandler.CreateBackground)
 		backgroundGroup.PATCH("/:id", backgroundHandler.UpdateBackground)
-		backgroundGroup.GET("/:id", backgroundHandler.GetBackgroundByID)
-		backgroundGroup.GET("", backgroundHandler.GetBackgrounds)
 		backgroundGroup.DELETE("/:id", backgroundHandler.DeleteBackground)
 	}
+	g.GET("/background", backgroundHandler.GetBackgrounds).Use(authentication.RequireJWT)
+	g.GET("/background/:id", backgroundHandler.GetBackgroundByID).Use(authentication.RequireJWT)
 
-	traditionGroup := g.Group("/tradition").Use(authentication.RequireJWT)
+	traditionGroup := g.Group("/tradition").Use(authentication.RequireAdmin)
 	{
 		traditionGroup.POST("", traditionHandler.CreateTradition)
 		traditionGroup.PATCH("/:id", traditionHandler.UpdateTradition)
-		traditionGroup.GET("", traditionHandler.GetTraditions)
-		traditionGroup.GET("/:id", traditionHandler.GetTraditionByID)
 		traditionGroup.DELETE("/:id", traditionHandler.DeleteTradition)
 	}
+	g.GET("/tradition", traditionHandler.GetTraditions).Use(authentication.RequireJWT)
+	g.GET("/tradition/:id", traditionHandler.GetTraditionByID).Use(authentication.RequireJWT)
 
-	traitGroup := g.Group("/trait").Use(authentication.RequireJWT)
+	traitGroup := g.Group("/trait").Use(authentication.RequireAdmin)
 	{
 		traitGroup.POST("", traitHandler.CreateTrait)
 		traitGroup.PATCH("/:id", traitHandler.UpdateTrait)
-		traitGroup.GET("", traitHandler.GetTraits)
-		traitGroup.GET("/:id", traitHandler.GetTraitByID)
 		traitGroup.DELETE("/:id", traitHandler.DeleteTrait)
 	}
+	g.GET("/trait", traitHandler.GetTraits).Use(authentication.RequireJWT)
+	g.GET("/trait/:id", traitHandler.GetTraitByID).Use(authentication.RequireJWT)
 
 	characterClassGroup := g.Group("/class").Use(authentication.RequireJWT)
 	{
