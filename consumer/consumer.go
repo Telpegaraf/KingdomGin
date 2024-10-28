@@ -117,8 +117,6 @@ func (r *RMQConsumer) SendEmail(email string) {
 	smtpHost := os.Getenv("SMTP_HOST")
 	smtpPort := os.Getenv("SMTP_PORT")
 
-	log.Println(smtpHost, smtpPort)
-
 	message := "From: " + emailFrom + "\n" +
 		"To: " + email + "\n" +
 		"Subject: " + "Kingdom Register" + "\n" +
