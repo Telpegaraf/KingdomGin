@@ -373,6 +373,63 @@ definitions:
         - $ref: '#/definitions/model.MasteryLevel'
         example: Train
     type: object
+  model.CharacterClassExternal:
+    properties:
+      common_weapon:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      fortitude:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      health:
+        example: 6
+        type: integer
+      heavy_armor:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      id:
+        type: integer
+      light_armor:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      martial_weapon:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      medium_armor:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      name:
+        example: Fighter
+        type: string
+      perception:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      reflex:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      tradition_id:
+        type: integer
+      un_armed_weapon:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      unarmed_armor:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+      will:
+        allOf:
+        - $ref: '#/definitions/model.MasteryLevel'
+        example: Train
+    type: object
   model.CharacterDefence:
     properties:
       armorClass:
@@ -2475,6 +2532,29 @@ paths:
       summary: Create and returns new Character Class or nil
       tags:
       - Character Class
+  /class/load:
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Tradition details
+          schema:
+            $ref: '#/definitions/model.CharacterClassExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create Character Class from csv file on server or nil
+      tags:
+      - Character Class
   /domain:
     get:
       consumes:
@@ -3600,6 +3680,29 @@ paths:
           schema:
             type: string
       summary: Updates Tradition by ID or nil
+      tags:
+      - Tradition
+  /tradition/load:
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Tradition details
+          schema:
+            $ref: '#/definitions/model.TraditionExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create Tradition from csv file on server or nil
       tags:
       - Tradition
   /trait:

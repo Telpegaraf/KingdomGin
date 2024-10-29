@@ -1463,6 +1463,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/class/load": {
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character Class"
+                ],
+                "summary": "Create Character Class from csv file on server or nil",
+                "responses": {
+                    "201": {
+                        "description": "Tradition details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterClassExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/domain": {
             "get": {
                 "description": "Return all domains",
@@ -3040,6 +3075,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/tradition/load": {
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tradition"
+                ],
+                "summary": "Create Tradition from csv file on server or nil",
+                "responses": {
+                    "201": {
+                        "description": "Tradition details",
+                        "schema": {
+                            "$ref": "#/definitions/model.TraditionExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/tradition/{id}": {
             "get": {
                 "description": "Retrieve Tradition details using its ID",
@@ -4181,6 +4251,113 @@ const docTemplate = `{
                         }
                     ],
                     "example": "Train"
+                },
+                "light_armor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "martial_weapon": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "medium_armor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Fighter"
+                },
+                "perception": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "reflex": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "tradition_id": {
+                    "type": "integer"
+                },
+                "un_armed_weapon": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "unarmed_armor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "will": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                }
+            }
+        },
+        "model.CharacterClassExternal": {
+            "type": "object",
+            "properties": {
+                "common_weapon": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "fortitude": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "health": {
+                    "type": "integer",
+                    "example": 6
+                },
+                "heavy_armor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MasteryLevel"
+                        }
+                    ],
+                    "example": "Train"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "light_armor": {
                     "allOf": [

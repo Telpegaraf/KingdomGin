@@ -1,13 +1,18 @@
 package api
 
 import (
+	"encoding/csv"
 	"github.com/gin-gonic/gin"
+	"io"
 	"kingdom/model"
+	"log"
 	"net/http"
+	"os"
 )
 
 type TraditionDatabase interface {
 	GetTraditionByID(id uint) (*model.Tradition, error)
+	GetTraditionByName(name string) (*model.Tradition, error)
 	CreateTradition(Tradition *model.Tradition) error
 	GetTraditions() ([]*model.Tradition, error)
 	UpdateTradition(Tradition *model.Tradition) error
@@ -41,6 +46,56 @@ func (a *TraditionApi) CreateTradition(ctx *gin.Context) {
 			return
 		}
 		ctx.JSON(http.StatusCreated, ToTraditionExternal(internal))
+	}
+}
+
+// LoadTradition godoc
+//
+// @Summary Create Tradition from csv file on server or nil
+// @Description Permissions for Admin
+// @Tags Tradition
+// @Accept json
+// @Produce json
+// @Success 201 {object} model.TraditionExternal "Tradition details"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 403 {string} string "You can't access for this API"
+// @Router /tradition/load [post]
+func (a *TraditionApi) LoadTradition(ctx *gin.Context) {
+	file, err := os.Open("./csv/Tradition.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
+	reader := csv.NewReader(file)
+	reader.Comma = ';'
+	var traditions []model.Tradition
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		tradition := model.Tradition{
+			Name:        record[0],
+			Description: record[1],
+		}
+		traditions = append(traditions, tradition)
+		if existTradition, err := a.DB.GetTraditionByName(tradition.Name); err == nil && existTradition != nil {
+			continue
+		}
+		err = a.DB.CreateTradition(&tradition)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 	}
 }
 

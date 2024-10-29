@@ -150,6 +150,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	traditionGroup := g.Group("/tradition").Use(authentication.RequireAdmin)
 	{
 		traditionGroup.POST("", traditionHandler.CreateTradition)
+		traditionGroup.POST("/load", traditionHandler.LoadTradition)
 		traditionGroup.PATCH("/:id", traditionHandler.UpdateTradition)
 		traditionGroup.DELETE("/:id", traditionHandler.DeleteTradition)
 	}
@@ -165,9 +166,10 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	g.GET("/trait", traitHandler.GetTraits).Use(authentication.RequireJWT)
 	g.GET("/trait/:id", traitHandler.GetTraitByID).Use(authentication.RequireJWT)
 
-	characterClassGroup := g.Group("/class").Use(authentication.RequireJWT)
+	characterClassGroup := g.Group("/class").Use(authentication.RequireAdmin)
 	{
 		characterClassGroup.POST("", characterClassHandler.CreateCharacterClass)
+		characterClassGroup.POST("/load", characterClassHandler.LoadCharacterClass)
 	}
 	itemGroup := g.Group("/item").Use(authentication.RequireJWT)
 	{

@@ -24,6 +24,19 @@ func (d *GormDatabase) GetCharacterClassByID(id uint) (*model.CharacterClass, er
 	return nil, err
 }
 
+// GetCharacterClassByName returns Character Class by Name
+func (d *GormDatabase) GetCharacterClassByName(name string) (*model.CharacterClass, error) {
+	characterClass := &model.CharacterClass{}
+	err := d.DB.Where("name = ?", name).First(characterClass).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	if characterClass.Name == name {
+		return characterClass, err
+	}
+	return nil, err
+}
+
 // GetCharacterClasses returns all Character classes
 func (d *GormDatabase) GetCharacterClasses() (*[]model.CharacterClass, error) {
 	var characterClass []model.CharacterClass
