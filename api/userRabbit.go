@@ -22,6 +22,7 @@ type UserRabbitDatabase interface {
 	CountUser(condition ...interface{}) (int, error)
 	GetUSerCodeByEmail(email string) (*model.UserCode, error)
 	UpdateUserVerification(user *model.User) error
+	GetUserByUsernameAndEmail(name string, email string) (*model.User, error)
 }
 
 type UserConsumer interface {
@@ -59,26 +60,36 @@ func (a *UserRabbitApi) CreateUserRabbit(ctx *gin.Context) {
 			Email:    user.Email,
 			Password: password.CreatePassword(user.Password, a.PasswordStrength),
 		}
-		existingUser, err := a.DB.GetUserByUsername(internal.Username)
+		existingUser, err := a.DB.GetUserByUsernameAndEmail(internal.Username, internal.Email)
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			err = nil
 		}
 		if success := SuccessOrAbort(ctx, 500, err); !success {
 			return
 		}
-		if existingUser == nil {
-			if success := SuccessOrAbort(ctx, 500, a.DB.CreateUser(internal)); !success {
-				return
-			}
-			ctx.JSON(201, toExternalUser(internal))
-
-			a.Consumer.Publish(internal.Email)
-
-			return
-		} else {
+		if existingUser != nil && existingUser.Verification {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "user already exists"})
 			return
+		} else if existingUser != nil && !existingUser.Verification {
+			existingUserCode, err := a.DB.GetUSerCodeByEmail(existingUser.Email)
+			if err != nil {
+				ctx.JSON(400, gin.H{"error": err.Error()})
+				return
+			}
+			if time.Now().Sub(existingUserCode.CreatedAt).Minutes() <= 2 {
+				ctx.JSON(400, gin.H{"error": "You cannot try to register more than once every 2 minutes"})
+				return
+			}
+			a.Consumer.Publish(internal.Email)
+			ctx.JSON(200, gin.H{"message": "Verification email has been sent resent"})
+			return
 		}
+		if success := SuccessOrAbort(ctx, 500, a.DB.CreateUser(internal)); !success {
+			return
+		}
+		ctx.JSON(201, toExternalUser(internal))
+		a.Consumer.Publish(internal.Email)
+		return
 	}
 }
 
