@@ -537,74 +537,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/rabbit": {
-            "post": {
-                "description": "Create User and sent verification code to email",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Create User and sent verification code to email",
-                "parameters": [
-                    {
-                        "description": "User data",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.CreateUser"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "user details",
-                        "schema": {
-                            "$ref": "#/definitions/model.UserExternal"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/verification": {
-            "post": {
-                "description": "Verification user after email with code",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Verification user after email with code",
-                "parameters": [
-                    {
-                        "description": "User data",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.UserCodeVerification"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "user details",
-                        "schema": {
-                            "$ref": "#/definitions/model.UserExternal"
-                        }
-                    }
-                }
-            }
-        },
         "/background": {
             "get": {
                 "description": "Return all Backgrounds",
@@ -3401,7 +3333,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Auth"
                 ],
                 "summary": "Create and returns user or nil",
                 "parameters": [
@@ -3498,6 +3430,40 @@ const docTemplate = `{
                         "description": "You need to provide a valid access token or user credentials to access this api",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/verification": {
+            "post": {
+                "description": "Verification user after email with code",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Verification user after email with code",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserCodeVerification"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user details",
+                        "schema": {
+                            "$ref": "#/definitions/model.UserExternal"
                         }
                     }
                 }
@@ -4752,17 +4718,13 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "email",
-                "password",
-                "username"
+                "password"
             ],
             "properties": {
                 "email": {
                     "type": "string"
                 },
                 "password": {
-                    "type": "string"
-                },
-                "username": {
                     "type": "string"
                 }
             }
@@ -5808,6 +5770,9 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                },
+                "verification": {
+                    "type": "boolean"
                 }
             }
         },

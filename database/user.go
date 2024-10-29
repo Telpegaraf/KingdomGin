@@ -6,18 +6,6 @@ import (
 	"kingdom/model"
 )
 
-func (d *GormDatabase) GetUserByUsernameAndEmail(name string, email string) (*model.User, error) {
-	user := &model.User{}
-	err := d.DB.Where("username = ? AND email = ?", name, email).First(user).Error
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, err
-	}
-	if user.Username == name || user.Email == email {
-		return user, nil
-	}
-	return nil, err
-}
-
 // GetUserByUsername returns the user by the given name or nil.
 func (d *GormDatabase) GetUserByUsername(name string) (*model.User, error) {
 	user := new(model.User)

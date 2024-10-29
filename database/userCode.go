@@ -7,8 +7,8 @@ func (d *GormDatabase) CreateUserCode(code *model.UserCode) error {
 	return d.DB.Create(code).Error
 }
 
-// GetUSerCodeByEmail returns UserCode object by email
-func (d *GormDatabase) GetUSerCodeByEmail(email string) (*model.UserCode, error) {
+// GetUserCodeByEmail returns UserCode object by email
+func (d *GormDatabase) GetUserCodeByEmail(email string) (*model.UserCode, error) {
 	var code model.UserCode
 	err := d.DB.Where("email = ?", email).Last(&code).Error
 	return &code, err

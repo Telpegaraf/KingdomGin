@@ -9,54 +9,31 @@ import (
 	"kingdom/model"
 	"net/http"
 	"net/mail"
+	"time"
 )
 
 type UserDatabase interface {
 	GetUsers() ([]*model.User, error)
 	GetUserByID(id uint) (*model.User, error)
 	GetUserByUsername(username string) (*model.User, error)
+	GetUserByEmail(email string) (*model.User, error)
 	DeleteUserByID(id uint) error
 	UpdateUser(user *model.User) error
 	CreateUser(user *model.User) error
 	CountUser(condition ...interface{}) (int, error)
+	GetUserCodeByEmail(email string) (*model.UserCode, error)
+	UpdateUserVerification(user *model.User) error
 }
 
-type UserChangeNotifier struct {
-	userDeletedCallbacks []func(uid uint) error
-	userAddedCallbacks   []func(uid uint) error
-}
-
-func (c *UserChangeNotifier) OnUserDeleted(callback func(uid uint) error) {
-	c.userDeletedCallbacks = append(c.userDeletedCallbacks, callback)
-}
-
-func (c *UserChangeNotifier) OnUserAdded(callback func(uid uint) error) {
-	c.userAddedCallbacks = append(c.userAddedCallbacks, callback)
-}
-
-func (c *UserChangeNotifier) fireUserDeleted(uid uint) error {
-	for _, callback := range c.userDeletedCallbacks {
-		if err := callback(uid); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (c *UserChangeNotifier) fireUserAdded(uid uint) error {
-	for _, callback := range c.userAddedCallbacks {
-		if err := callback(uid); err != nil {
-			return err
-		}
-	}
-	return nil
+type UserConsumer interface {
+	Publish(email string)
 }
 
 type UserApi struct {
-	DB                 UserDatabase
-	PasswordStrength   int
-	UserChangeNotifier *UserChangeNotifier
-	Registration       bool
+	DB               UserDatabase
+	PasswordStrength int
+	Registration     bool
+	Consumer         UserConsumer
 }
 
 // GetCurrentUser godoc
@@ -140,7 +117,7 @@ func (a *UserApi) GetUserByUsername(ctx *gin.Context) {
 //
 // @Summary Create and returns user or nil
 // @Description Create new user
-// @Tags User
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param user body model.CreateUser true "User data"
@@ -156,27 +133,39 @@ func (a *UserApi) CreateUser(ctx *gin.Context) {
 			return
 		}
 		internal := &model.User{
-			Username: user.Username,
 			Email:    user.Email,
 			Password: password.CreatePassword(user.Password, a.PasswordStrength),
 		}
-		existingUser, err := a.DB.GetUserByUsername(internal.Username)
+		existingUser, err := a.DB.GetUserByEmail(internal.Email)
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			err = nil
 		}
 		if success := SuccessOrAbort(ctx, 500, err); !success {
 			return
 		}
-		if existingUser == nil {
-			if success := SuccessOrAbort(ctx, 500, a.DB.CreateUser(internal)); !success {
-				return
-			}
-			ctx.JSON(201, toExternalUser(internal))
-			return
-		} else {
+		if existingUser != nil && existingUser.Verification {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "user already exists"})
 			return
+		} else if existingUser != nil && !existingUser.Verification {
+			existingUserCode, err := a.DB.GetUserCodeByEmail(existingUser.Email)
+			if err != nil {
+				ctx.JSON(400, gin.H{"error": err.Error()})
+				return
+			}
+			if time.Now().Sub(existingUserCode.CreatedAt).Minutes() <= 2 {
+				ctx.JSON(400, gin.H{"error": "You cannot try to register more than once every 2 minutes"})
+				return
+			}
+			a.Consumer.Publish(internal.Email)
+			ctx.JSON(200, gin.H{"message": "Verification email has been sent resent"})
+			return
 		}
+		if success := SuccessOrAbort(ctx, 500, a.DB.CreateUser(internal)); !success {
+			return
+		}
+		ctx.JSON(201, toExternalUser(internal))
+		a.Consumer.Publish(internal.Email)
+		return
 	}
 }
 
@@ -279,10 +268,6 @@ func (a *UserApi) DeleteUserByID(ctx *gin.Context) {
 				ctx.AbortWithError(400, errors.New("can't delete last admin"))
 				return
 			}
-			if err := a.UserChangeNotifier.fireUserDeleted(id); err != nil {
-				ctx.AbortWithError(http.StatusInternalServerError, err)
-				return
-			}
 			SuccessOrAbort(ctx, 500, a.DB.DeleteUserByID(id))
 		} else {
 			ctx.AbortWithError(400, errors.New("user doesn't exist"))
@@ -311,6 +296,44 @@ func (a *UserApi) ChangePassword(ctx *gin.Context) {
 		}
 		user.Password = password.CreatePassword(pw.Password, a.PasswordStrength)
 		SuccessOrAbort(ctx, 500, a.DB.UpdateUser(user))
+	}
+}
+
+// VerificationUser godoc
+//
+// @Summary Verification user after email with code
+// @Description Verification user after email with code
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param user body model.UserCodeVerification true "User data"
+// @Success 200 {object} model.UserExternal "user details"
+// @Router /user/verification [post]
+func (a *UserApi) VerificationUser(ctx *gin.Context) {
+	verificationUserCode := model.UserCodeVerification{}
+	if err := ctx.ShouldBindJSON(&verificationUserCode); err == nil {
+		userCode, err := a.DB.GetUserCodeByEmail(verificationUserCode.Email)
+		if err != nil {
+			ctx.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+		if userCode.Code != verificationUserCode.Code {
+			ctx.JSON(400, gin.H{"error": "wrong code"})
+			return
+		}
+		if time.Now().Sub(userCode.CreatedAt).Minutes() >= 5 {
+			ctx.JSON(400, gin.H{"error": "user code has expired"})
+			return
+		}
+		user, err := a.DB.GetUserByEmail(userCode.Email)
+		if err != nil {
+			ctx.JSON(400, gin.H{"error": "User not found"})
+		}
+		user.Verification = true
+		err = a.DB.UpdateUserVerification(user)
+		if err != nil {
+			return
+		}
 	}
 }
 

@@ -728,12 +728,9 @@ definitions:
         type: string
       password:
         type: string
-      username:
-        type: string
     required:
     - email
     - password
-    - username
     type: object
   model.CreateWeapon:
     properties:
@@ -1440,6 +1437,8 @@ definitions:
         type: integer
       username:
         type: string
+      verification:
+        type: boolean
     required:
     - username
     type: object
@@ -1863,50 +1862,6 @@ paths:
           schema:
             type: string
       summary: Login user for token
-      tags:
-      - Auth
-  /auth/rabbit:
-    post:
-      consumes:
-      - application/json
-      description: Create User and sent verification code to email
-      parameters:
-      - description: User data
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/model.CreateUser'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: user details
-          schema:
-            $ref: '#/definitions/model.UserExternal'
-      summary: Create User and sent verification code to email
-      tags:
-      - Auth
-  /auth/verification:
-    post:
-      consumes:
-      - application/json
-      description: Verification user after email with code
-      parameters:
-      - description: User data
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/model.UserCodeVerification'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: user details
-          schema:
-            $ref: '#/definitions/model.UserExternal'
-      summary: Verification user after email with code
       tags:
       - Auth
   /background:
@@ -3775,7 +3730,7 @@ paths:
             type: string
       summary: Create and returns user or nil
       tags:
-      - User
+      - Auth
   /user/{id}:
     delete:
       consumes:
@@ -3913,6 +3868,28 @@ paths:
       summary: Changes User's password
       tags:
       - User
+  /user/verification:
+    post:
+      consumes:
+      - application/json
+      description: Verification user after email with code
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserCodeVerification'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user details
+          schema:
+            $ref: '#/definitions/model.UserExternal'
+      summary: Verification user after email with code
+      tags:
+      - Auth
 schemes:
 - http
 - https

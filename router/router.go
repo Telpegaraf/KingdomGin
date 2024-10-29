@@ -26,12 +26,11 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	})
 	authentication := auth.Auth{DB: db}
 
-	userChangeNotifier := new(api.UserChangeNotifier)
 	userHandler := api.UserApi{
-		DB:                 db,
-		PasswordStrength:   conf.PassStrength,
-		UserChangeNotifier: userChangeNotifier,
-		Registration:       conf.Registration}
+		DB:               db,
+		PasswordStrength: conf.PassStrength,
+		Registration:     conf.Registration,
+	}
 
 	characterHandler := api.CharacterApi{DB: db}
 	characterClassHandler := api.CharacterClassApi{DB: db}
@@ -53,8 +52,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 
 	authHandler := api.Controller{DB: db}
 
-	userRabbitHandler := api.UserRabbitApi{DB: db, Consumer: consumer}
-
 	g.NoRoute(gerror.NotFound())
 
 	g.Use(cors.New(auth.CorsConfig(conf)))
@@ -63,11 +60,9 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	g.POST("/user", userHandler.CreateUser)
+	g.POST("/user/verification", userHandler.VerificationUser)
 	g.POST("/auth/login", authHandler.Login)
 	g.GET("/validate", authHandler.Validate)
-
-	g.POST("/auth/rabbit", userRabbitHandler.CreateUserRabbit)
-	g.POST("/auth/verification", userRabbitHandler.VerificationUser)
 
 	userGroup := g.Group("/user").Use(authentication.RequireJWT)
 	{
