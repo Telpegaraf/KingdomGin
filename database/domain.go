@@ -19,6 +19,19 @@ func (d *GormDatabase) GetDomainByID(id uint) (*model.Domain, error) {
 	return nil, err
 }
 
+// GetDomainByName returns Domain by ID
+func (d *GormDatabase) GetDomainByName(name string) (*model.Domain, error) {
+	domain := new(model.Domain)
+	err := d.DB.Where("name = ?", name).First(domain).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err = nil
+	}
+	if domain.Name == name {
+		return domain, err
+	}
+	return nil, err
+}
+
 // CreateDomain create new Domain
 func (d *GormDatabase) CreateDomain(domain *model.Domain) error { return d.DB.Create(domain).Error }
 

@@ -1652,6 +1652,29 @@ paths:
       summary: Updates Action by ID or nil
       tags:
       - Action
+  /action/load:
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Action details
+          schema:
+            $ref: '#/definitions/model.ActionExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create Action from csv file on server or nil
+      tags:
+      - Action
   /ancestry:
     get:
       consumes:
@@ -2583,6 +2606,29 @@ paths:
           schema:
             type: string
       summary: Updates Domain by ID or nil
+      tags:
+      - Domain
+  /domain/load:
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Domain details
+          schema:
+            $ref: '#/definitions/model.DomainExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create Domain from csv file on server or nil
       tags:
       - Domain
   /feat:

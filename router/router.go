@@ -30,6 +30,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 		DB:               db,
 		PasswordStrength: conf.PassStrength,
 		Registration:     conf.Registration,
+		Consumer:         consumer,
 	}
 
 	characterHandler := api.CharacterApi{DB: db}
@@ -93,6 +94,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	domainGroup := g.Group("/domain").Use(authentication.RequireAdmin)
 	{
 		domainGroup.POST("", domainHandler.CreateDomain)
+		domainGroup.POST("/load", domainHandler.LoadDomain)
 		domainGroup.PATCH("/:id", domainHandler.UpdateDomain)
 		domainGroup.DELETE("/:id", domainHandler.DeleteDomain)
 	}
@@ -129,6 +131,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	actionGroup := g.Group("/action").Use(authentication.RequireAdmin)
 	{
 		actionGroup.POST("", actionHandler.CreateAction)
+		actionGroup.POST("/load", actionHandler.LoadAction)
 		actionGroup.PATCH("/:id", actionHandler.UpdateAction)
 		actionGroup.DELETE("/:id", actionHandler.DeleteAction)
 	}

@@ -35,7 +35,7 @@ type Configuration struct {
 	}
 	Database struct {
 		Dialect    string `default:"postgres"`
-		Connection string `default:"data/gotify.db"`
+		Connection string `default:"data/kingdom.db"`
 	}
 	DefaultUser struct {
 		Name string `default:"admin"`

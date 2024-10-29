@@ -19,6 +19,19 @@ func (d *GormDatabase) GetActionByID(id uint) (*model.Action, error) {
 	return nil, err
 }
 
+// GetActionByName returns Action by ID
+func (d *GormDatabase) GetActionByName(name string) (*model.Action, error) {
+	action := new(model.Action)
+	err := d.DB.Where("name = ?", name).First(action).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	if action.Name == name {
+		return action, err
+	}
+	return nil, err
+}
+
 // CreateAction create new Action
 func (d *GormDatabase) CreateAction(action *model.Action) error { return d.DB.Create(action).Error }
 

@@ -1,13 +1,18 @@
 package api
 
 import (
+	"encoding/csv"
 	"github.com/gin-gonic/gin"
+	"io"
 	"kingdom/model"
+	"log"
 	"net/http"
+	"os"
 )
 
 type DomainDatabase interface {
 	GetDomainByID(id uint) (*model.Domain, error)
+	GetDomainByName(name string) (*model.Domain, error)
 	CreateDomain(domain *model.Domain) error
 	GetDomains() ([]*model.Domain, error)
 	UpdateDomain(domain *model.Domain) error
@@ -41,6 +46,56 @@ func (a *DomainApi) CreateDomain(ctx *gin.Context) {
 			return
 		}
 		ctx.JSON(http.StatusCreated, ToDomainExternal(internal))
+	}
+}
+
+// LoadDomain godoc
+//
+// @Summary Create Domain from csv file on server or nil
+// @Description Permissions for Admin
+// @Tags Domain
+// @Accept json
+// @Produce json
+// @Success 201 {object} model.DomainExternal "Domain details"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 403 {string} string "You can't access for this API"
+// @Router /domain/load [post]
+func (a *DomainApi) LoadDomain(ctx *gin.Context) {
+	file, err := os.Open("./csv/Domain.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
+	reader := csv.NewReader(file)
+	reader.Comma = ';'
+	var domains []model.Domain
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		domain := model.Domain{
+			Name:        record[0],
+			Description: record[1],
+		}
+		domains = append(domains, domain)
+		if existDomain, err := a.DB.GetDomainByName(domain.Name); err == nil && existDomain != nil {
+			continue
+		}
+		err = a.DB.CreateDomain(&domain)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 	}
 }
 

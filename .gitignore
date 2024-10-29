@@ -39,3 +39,4 @@ Thumbs.db
 .env.local
 .env.*.local
 /docker/.env_docker
+/csv/

@@ -84,6 +84,41 @@
                 }
             }
         },
+        "/action/load": {
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "Create Action from csv file on server or nil",
+                "responses": {
+                    "201": {
+                        "description": "Action details",
+                        "schema": {
+                            "$ref": "#/definitions/model.ActionExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/action/{id}": {
             "get": {
                 "description": "Retrieve Action details using its ID",
@@ -1475,6 +1510,41 @@
                         }
                     }
                 ],
+                "responses": {
+                    "201": {
+                        "description": "Domain details",
+                        "schema": {
+                            "$ref": "#/definitions/model.DomainExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/domain/load": {
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Domain"
+                ],
+                "summary": "Create Domain from csv file on server or nil",
                 "responses": {
                     "201": {
                         "description": "Domain details",
