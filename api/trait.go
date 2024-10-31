@@ -1,13 +1,18 @@
 package api
 
 import (
+	"encoding/csv"
 	"github.com/gin-gonic/gin"
+	"io"
 	"kingdom/model"
+	"log"
 	"net/http"
+	"os"
 )
 
 type TraitDatabase interface {
 	GetTraitByID(id uint) (*model.Trait, error)
+	GetTraitByName(name string) (*model.Trait, error)
 	CreateTrait(Trait *model.Trait) error
 	GetTraits() ([]*model.Trait, error)
 	UpdateTrait(Trait *model.Trait) error
@@ -66,6 +71,56 @@ func (a *TraitApi) GetTraitByID(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, ToTraitExternal(trait))
 		}
 	})
+}
+
+// LoadTrait godoc
+//
+// @Summary Create Trait from csv file on server or nil
+// @Description Permissions for Admin
+// @Tags Trait
+// @Accept json
+// @Produce json
+// @Success 201 {object} model.TraitExternal "Trait details"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 403 {string} string "You can't access for this API"
+// @Router /trait/load [post]
+func (a *TraitApi) LoadTrait(ctx *gin.Context) {
+	file, err := os.Open("./csv/Trait.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
+	reader := csv.NewReader(file)
+	reader.Comma = ';'
+	var traits []model.Trait
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		trait := model.Trait{
+			Name:        record[0],
+			Description: record[1],
+		}
+		traits = append(traits, trait)
+		if existTradition, err := a.DB.GetTraitByName(trait.Name); err == nil && existTradition != nil {
+			continue
+		}
+		err = a.DB.CreateTrait(&trait)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	}
 }
 
 // GetTraits godoc

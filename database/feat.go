@@ -22,6 +22,19 @@ func (d *GormDatabase) GetFeatByID(id uint) (*model.Feat, error) {
 	return nil, err
 }
 
+// GetFeatByName Returns Feat by Name or nil
+func (d *GormDatabase) GetFeatByName(name string) (*model.Feat, error) {
+	feat := new(model.Feat)
+	err := d.DB.Where("name = ?", name).First(&feat).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	if feat.Name == name {
+		return feat, nil
+	}
+	return nil, err
+}
+
 // GetFeats Returns All Feat objects
 func (d *GormDatabase) GetFeats() (*[]model.Feat, error) {
 	var feats []model.Feat

@@ -27,3 +27,10 @@ BEGIN
 CREATE TYPE ability AS ENUM ('Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma');
 END IF;
 END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'rarity') THEN
+CREATE TYPE rarity AS ENUM ('Common', 'Uncommon', 'Rare', 'Legendary', 'Mythic');
+END IF;
+END $$;

@@ -1,14 +1,19 @@
 package api
 
 import (
+	"encoding/csv"
 	"github.com/gin-gonic/gin"
+	"io"
 	"kingdom/model"
+	"log"
 	"net/http"
+	"os"
 )
 
 type FeatDatabase interface {
 	CreateFeat(feat *model.Feat) error
 	GetFeatByID(id uint) (*model.Feat, error)
+	GetFeatByName(name string) (*model.Feat, error)
 	GetFeats() (*[]model.Feat, error)
 	DeleteFeat(id uint) error
 	UpdateFeat(feat *model.Feat) error
@@ -42,6 +47,56 @@ func (a *FeatAPI) CreateFeat(ctx *gin.Context) {
 		}
 	}
 	ctx.JSON(http.StatusCreated, feat)
+}
+
+// LoadFeat godoc
+//
+// @Summary Create Feat from csv file on server or nil
+// @Description Permissions for Admin
+// @Tags Feat
+// @Accept json
+// @Produce json
+// @Success 201 {object} model.FeatExternal "Feat details"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 403 {string} string "You can't access for this API"
+// @Router /feat/load [post]
+func (a *FeatAPI) LoadFeat(ctx *gin.Context) {
+	file, err := os.Open("./csv/Feat.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
+	reader := csv.NewReader(file)
+	reader.Comma = ';'
+	var feats []model.Feat
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		feat := model.Feat{
+			Name:        record[0],
+			Description: record[1],
+		}
+		feats = append(feats, feat)
+		if existTradition, err := a.DB.GetFeatByName(feat.Name); err == nil && existTradition != nil {
+			continue
+		}
+		err = a.DB.CreateFeat(&feat)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	}
 }
 
 // GetFeats godoc

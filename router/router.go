@@ -104,6 +104,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	featGroup := g.Group("/feat").Use(authentication.RequireAdmin)
 	{
 		featGroup.POST("", featHandler.CreateFeat)
+		featGroup.POST("/load", featHandler.LoadFeat)
 		featGroup.PATCH("/:id", featHandler.UpdateFeat)
 		featGroup.DELETE("/:id", featHandler.DeleteFeat)
 	}
@@ -160,6 +161,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	traitGroup := g.Group("/trait").Use(authentication.RequireAdmin)
 	{
 		traitGroup.POST("", traitHandler.CreateTrait)
+		traitGroup.POST("/load", traitHandler.LoadTrait)
 		traitGroup.PATCH("/:id", traitHandler.UpdateTrait)
 		traitGroup.DELETE("/:id", traitHandler.DeleteTrait)
 	}

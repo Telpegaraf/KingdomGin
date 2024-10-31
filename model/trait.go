@@ -5,6 +5,7 @@ type Trait struct {
 	Name        string  `gorm:"unique;type:varchar(127);not null"`
 	Description string  `gorm:"type:text;not null;"`
 	Spells      []Spell `gorm:"many2many:spell_traits;"`
+	Feats       []Feat  `gorm:"many2many:feat_traits;"`
 }
 
 type CreateTrait struct {

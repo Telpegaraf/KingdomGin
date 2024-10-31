@@ -5,6 +5,7 @@ type HitPoint string
 type SquareSize string
 type MasteryLevel string
 type Ability string
+type Rarity string
 
 const (
 	Abjuration    School = "Abjuration"
@@ -48,4 +49,12 @@ const (
 	Intelligence Ability = "Intelligence"
 	Wisdom       Ability = "Wisdom"
 	Charisma     Ability = "Charisma"
+)
+
+const (
+	Common    Rarity = "Common"
+	Uncommon  Rarity = "Uncommon"
+	Rare      Rarity = "Rare"
+	Legendary Rarity = "Legendary"
+	Mythic    Rarity = "Mythic"
 )

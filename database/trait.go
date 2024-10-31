@@ -19,6 +19,19 @@ func (d *GormDatabase) GetTraitByID(id uint) (*model.Trait, error) {
 	return nil, err
 }
 
+// GetTraitByName Returns Trait by Name or nil
+func (d *GormDatabase) GetTraitByName(name string) (*model.Trait, error) {
+	trait := new(model.Trait)
+	err := d.DB.Where("name = ?", name).Find(trait).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	if trait.Name == name {
+		return trait, nil
+	}
+	return nil, err
+}
+
 // CreateTrait create new Trait
 func (d *GormDatabase) CreateTrait(trait *model.Trait) error { return d.DB.Create(trait).Error }
 
