@@ -36,9 +36,13 @@ func (d *GormDatabase) GetFeatByName(name string) (*model.Feat, error) {
 }
 
 // GetFeats Returns All Feat objects
-func (d *GormDatabase) GetFeats() (*[]model.Feat, error) {
+func (d *GormDatabase) GetFeats(limit int, offset int) (*[]model.Feat, error) {
 	var feats []model.Feat
-	err := d.DB.Preload("Traits").Find(&feats).Error
+	if limit == 0 {
+		err := d.DB.Preload("Traits").Offset(offset).First(&feats).Error
+		return &feats, err
+	}
+	err := d.DB.Preload("Traits").Limit(limit).Offset(offset).First(&feats).Error
 	return &feats, err
 }
 

@@ -4,12 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"kingdom/model"
 	"net/http"
+	"strconv"
 )
 
 type FeatDatabase interface {
 	CreateFeat(feat *model.Feat) error
 	GetFeatByID(id uint) (*model.Feat, error)
-	GetFeats() (*[]model.Feat, error)
+	GetFeats(limit int, offset int) (*[]model.Feat, error)
 	DeleteFeat(id uint) error
 	UpdateFeat(feat *model.Feat) error
 }
@@ -51,11 +52,17 @@ func (a *FeatAPI) CreateFeat(ctx *gin.Context) {
 // @Tags Feat
 // @Accept json
 // @Produce json
+// @Param limit query int false "Limit for pagination"
+// @Param offset query int false "Offset for pagination"
 // @Success 200 {object} model.FeatExternal "Feat details"
 // @Failure 401 {string} string ""Unauthorized"
 // @Router /feat [get]
 func (a *FeatAPI) GetFeats(ctx *gin.Context) {
-	feats, err := a.DB.GetFeats()
+	limit := ctx.DefaultQuery("limit", "0")
+	offset := ctx.DefaultQuery("offset", "0")
+	limitInt, err := strconv.Atoi(limit)
+	offsetInt, err := strconv.Atoi(offset)
+	feats, err := a.DB.GetFeats(limitInt, limitInt*offsetInt)
 	if success := SuccessOrAbort(ctx, 500, err); !success {
 		return
 	}

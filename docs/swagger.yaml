@@ -2686,6 +2686,15 @@ paths:
       consumes:
       - application/json
       description: Return all Feats
+      parameters:
+      - description: Offset for pagination
+        in: query
+        name: offset
+        type: integer
+      - description: Limit for pagination
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
