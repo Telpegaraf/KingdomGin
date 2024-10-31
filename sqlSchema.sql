@@ -17,7 +17,7 @@ END $$;
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'mastery_level') THEN
-        CREATE TYPE mastery_level AS ENUM ('None', 'Train', 'Expert', 'Master', 'Legend');
+        CREATE TYPE mastery_level AS ENUM ('None', 'Trained', 'Expert', 'Master', 'Legend');
     END IF;
 END $$;
 

@@ -285,10 +285,6 @@ definitions:
         $ref: '#/definitions/model.Character'
       commonWeapon:
         $ref: '#/definitions/model.MasteryLevel'
-      feat:
-        items:
-          $ref: '#/definitions/model.Feat'
-        type: array
       fortitude:
         $ref: '#/definitions/model.MasteryLevel'
       heavyArmor:
@@ -858,8 +854,6 @@ definitions:
         items:
           $ref: '#/definitions/model.Background'
         type: array
-      characterClassId:
-        type: integer
       characterFeat:
         items:
           $ref: '#/definitions/model.CharacterFeat'
@@ -876,6 +870,12 @@ definitions:
         $ref: '#/definitions/model.MasteryLevel'
       prerequisiteSkillID:
         type: integer
+      rarity:
+        $ref: '#/definitions/model.Rarity'
+      traits:
+        items:
+          $ref: '#/definitions/model.Trait'
+        type: array
     type: object
   model.FeatExternal:
     properties:
@@ -1076,7 +1076,7 @@ definitions:
   model.MasteryLevel:
     enum:
     - None
-    - Train
+    - Trained
     - Expert
     - Master
     - Legend
@@ -1177,6 +1177,20 @@ definitions:
       speed:
         type: integer
     type: object
+  model.Rarity:
+    enum:
+    - Common
+    - Uncommon
+    - Rare
+    - Legendary
+    - Mythic
+    type: string
+    x-enum-varnames:
+    - Common
+    - Uncommon
+    - Rare
+    - Legendary
+    - Mythic
   model.School:
     enum:
     - Abjuration
@@ -1197,6 +1211,35 @@ definitions:
     - Illusion
     - Necromancy
     - Transmutation
+  model.SkillCreate:
+    properties:
+      ability:
+        $ref: '#/definitions/model.Ability'
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  model.SkillExternal:
+    properties:
+      ability:
+        $ref: '#/definitions/model.Ability'
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.SkillUpdate:
+    properties:
+      ability:
+        $ref: '#/definitions/model.Ability'
+      description:
+        type: string
+      name:
+        type: string
+    type: object
   model.Slot:
     properties:
       armor:
@@ -1327,6 +1370,10 @@ definitions:
     properties:
       description:
         type: string
+      feats:
+        items:
+          $ref: '#/definitions/model.Feat'
+        type: array
       id:
         type: integer
       name:
@@ -2820,6 +2867,29 @@ paths:
       summary: Updates Feat by ID or nil
       tags:
       - Item
+  /feat/load:
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Feat details
+          schema:
+            $ref: '#/definitions/model.FeatExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create Feat from csv file on server or nil
+      tags:
+      - Feat
   /god:
     get:
       consumes:
@@ -3494,6 +3564,162 @@ paths:
       summary: Updates Race by ID or nil
       tags:
       - Race
+  /skill:
+    get:
+      consumes:
+      - application/json
+      description: Return all Skills
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Skill details
+          schema:
+            $ref: '#/definitions/model.SkillExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all Skills
+      tags:
+      - Skill
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Skill data
+        in: body
+        name: Skill
+        required: true
+        schema:
+          $ref: '#/definitions/model.SkillCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Skill details
+          schema:
+            $ref: '#/definitions/model.SkillExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Skill or nil
+      tags:
+      - Skill
+  /skill/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Skill id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Skill doesn't exist
+          schema:
+            type: string
+      summary: Deletes Skill by ID or returns nil
+      tags:
+      - Skill
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Skill details using its ID
+      parameters:
+      - description: Skill id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Skill details
+          schema:
+            $ref: '#/definitions/model.SkillExternal'
+        "404":
+          description: Skill not found
+          schema:
+            type: string
+      summary: Returns Skill by id
+      tags:
+      - Skill
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Skill id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Skill data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.SkillUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Skill details
+          schema:
+            $ref: '#/definitions/model.SkillExternal'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Skill doesn't exist
+          schema:
+            type: string
+      summary: Updates Skill by ID or nil
+      tags:
+      - Skill
+  /skill/load:
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Skill details
+          schema:
+            $ref: '#/definitions/model.SkillExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create Skill from csv file on server or nil
+      tags:
+      - Skill
   /slot/{id}:
     get:
       consumes:
@@ -3836,6 +4062,29 @@ paths:
           schema:
             type: string
       summary: Updates Trait by ID or nil
+      tags:
+      - Trait
+  /trait/load:
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Trait details
+          schema:
+            $ref: '#/definitions/model.TraitExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create Trait from csv file on server or nil
       tags:
       - Trait
   /user:

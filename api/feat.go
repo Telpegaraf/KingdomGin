@@ -8,12 +8,15 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 type FeatDatabase interface {
 	CreateFeat(feat *model.Feat) error
 	GetFeatByID(id uint) (*model.Feat, error)
 	GetFeatByName(name string) (*model.Feat, error)
+	GetTraitByName(name string) (*model.Trait, error)
+	GetSkillByName(name string) (*model.Skill, error)
 	GetFeats() (*[]model.Feat, error)
 	DeleteFeat(id uint) error
 	UpdateFeat(feat *model.Feat) error
@@ -75,20 +78,49 @@ func (a *FeatAPI) LoadFeat(ctx *gin.Context) {
 	reader.Comma = ';'
 	var feats []model.Feat
 
+	if _, err := reader.Read(); err != nil {
+		log.Fatal(err)
+	}
+
 	for {
 		record, err := reader.Read()
 		if err == io.EOF {
 			break
 		}
+
+		if len(record) != 8 {
+			log.Printf("неправильное количество полей в записи: %v", record)
+			continue // пропускаем неправильные записи
+		}
+
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		level, err := strconv.Atoi(record[2])
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		skill, err := a.DB.GetSkillByName(record[4])
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		feat := model.Feat{
 			Name:        record[0],
 			Description: record[1],
+			Level:       uint8(level),
+			Rarity:      model.Rarity(record[3]),
 		}
+
+		if skill != nil {
+			feat.PrerequisiteSkillID = &skill.ID
+			feat.PrerequisiteMastery = model.MasteryLevel(record[5])
+		}
+
 		feats = append(feats, feat)
-		if existTradition, err := a.DB.GetFeatByName(feat.Name); err == nil && existTradition != nil {
+		if existFeat, err := a.DB.GetFeatByName(feat.Name); err == nil && existFeat != nil {
 			continue
 		}
 		err = a.DB.CreateFeat(&feat)

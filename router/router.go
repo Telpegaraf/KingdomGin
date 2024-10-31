@@ -50,6 +50,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	traitHandler := api.TraitApi{DB: db}
 	characterSkillHandler := api.CharacterSkillApi{DB: db}
 	backgroundHandler := api.BackgroundApi{DB: db}
+	skillHandler := api.SkillApi{DB: db}
 
 	authHandler := api.Controller{DB: db}
 
@@ -100,6 +101,16 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	}
 	g.GET("/domain/:id", domainHandler.GetDomainByID).Use(authentication.RequireJWT)
 	g.GET("/domain", domainHandler.GetDomains).Use(authentication.RequireJWT)
+
+	skillGroup := g.Group("/skill").Use(authentication.RequireAdmin)
+	{
+		skillGroup.POST("", skillHandler.CreateSkill)
+		skillGroup.POST("/load", skillHandler.LoadSkill)
+		skillGroup.PATCH("/:id", skillHandler.UpdateSkill)
+		skillGroup.DELETE("/:id", skillHandler.DeleteSkill)
+	}
+	g.GET("/skill", skillHandler.GetSkills).Use(authentication.RequireJWT)
+	g.GET("/skill/:id", skillHandler.GetSkillByID).Use(authentication.RequireJWT)
 
 	featGroup := g.Group("/feat").Use(authentication.RequireAdmin)
 	{

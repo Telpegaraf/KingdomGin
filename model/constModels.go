@@ -36,7 +36,7 @@ const (
 
 const (
 	None   MasteryLevel = "None"
-	Train  MasteryLevel = "Train"
+	Train  MasteryLevel = "Trained"
 	Expert MasteryLevel = "Expert"
 	Master MasteryLevel = "Master"
 	Legend MasteryLevel = "Legend"

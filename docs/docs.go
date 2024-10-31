@@ -1807,6 +1807,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/feat/load": {
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feat"
+                ],
+                "summary": "Create Feat from csv file on server or nil",
+                "responses": {
+                    "201": {
+                        "description": "Feat details",
+                        "schema": {
+                            "$ref": "#/definitions/model.FeatExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/feat/{id}": {
             "delete": {
                 "description": "Permissions for Admin",
@@ -2919,6 +2954,242 @@ const docTemplate = `{
                 }
             }
         },
+        "/skill": {
+            "get": {
+                "description": "Return all Skills",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Skill"
+                ],
+                "summary": "Returns all Skills",
+                "responses": {
+                    "200": {
+                        "description": "Skill details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SkillExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Skill"
+                ],
+                "summary": "Create and returns Skill or nil",
+                "parameters": [
+                    {
+                        "description": "Skill data",
+                        "name": "Skill",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SkillCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Skill details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SkillExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/skill/load": {
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Skill"
+                ],
+                "summary": "Create Skill from csv file on server or nil",
+                "responses": {
+                    "201": {
+                        "description": "Skill details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SkillExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/skill/{id}": {
+            "get": {
+                "description": "Retrieve Skill details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Skill"
+                ],
+                "summary": "Returns Skill by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Skill id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Skill details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SkillExternal"
+                        }
+                    },
+                    "404": {
+                        "description": "Skill not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Skill"
+                ],
+                "summary": "Deletes Skill by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Skill id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Skill doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Skill"
+                ],
+                "summary": "Updates Skill by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Skill id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Skill data",
+                        "name": "character",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SkillUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Skill details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SkillExternal"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Skill doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/slot/{id}": {
             "get": {
                 "description": "Permissions for auth user",
@@ -3289,6 +3560,41 @@ const docTemplate = `{
                         }
                     }
                 ],
+                "responses": {
+                    "201": {
+                        "description": "Trait details",
+                        "schema": {
+                            "$ref": "#/definitions/model.TraitExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/trait/load": {
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trait"
+                ],
+                "summary": "Create Trait from csv file on server or nil",
                 "responses": {
                     "201": {
                         "description": "Trait details",
@@ -4170,12 +4476,6 @@ const docTemplate = `{
                 },
                 "commonWeapon": {
                     "$ref": "#/definitions/model.MasteryLevel"
-                },
-                "feat": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Feat"
-                    }
                 },
                 "fortitude": {
                     "$ref": "#/definitions/model.MasteryLevel"
@@ -5076,9 +5376,6 @@ const docTemplate = `{
                         "$ref": "#/definitions/model.Background"
                     }
                 },
-                "characterClassId": {
-                    "type": "integer"
-                },
                 "characterFeat": {
                     "type": "array",
                     "items": {
@@ -5102,6 +5399,15 @@ const docTemplate = `{
                 },
                 "prerequisiteSkillID": {
                     "type": "integer"
+                },
+                "rarity": {
+                    "$ref": "#/definitions/model.Rarity"
+                },
+                "traits": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Trait"
+                    }
                 }
             }
         },
@@ -5399,7 +5705,7 @@ const docTemplate = `{
             "type": "string",
             "enum": [
                 "None",
-                "Train",
+                "Trained",
                 "Expert",
                 "Master",
                 "Legend"
@@ -5547,6 +5853,23 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Rarity": {
+            "type": "string",
+            "enum": [
+                "Common",
+                "Uncommon",
+                "Rare",
+                "Legendary",
+                "Mythic"
+            ],
+            "x-enum-varnames": [
+                "Common",
+                "Uncommon",
+                "Rare",
+                "Legendary",
+                "Mythic"
+            ]
+        },
         "model.School": {
             "type": "string",
             "enum": [
@@ -5569,6 +5892,51 @@ const docTemplate = `{
                 "Necromancy",
                 "Transmutation"
             ]
+        },
+        "model.SkillCreate": {
+            "type": "object",
+            "properties": {
+                "ability": {
+                    "$ref": "#/definitions/model.Ability"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SkillExternal": {
+            "type": "object",
+            "properties": {
+                "ability": {
+                    "$ref": "#/definitions/model.Ability"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SkillUpdate": {
+            "type": "object",
+            "properties": {
+                "ability": {
+                    "$ref": "#/definitions/model.Ability"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
         },
         "model.Slot": {
             "type": "object",
@@ -5762,6 +6130,12 @@ const docTemplate = `{
             "properties": {
                 "description": {
                     "type": "string"
+                },
+                "feats": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Feat"
+                    }
                 },
                 "id": {
                     "type": "integer"

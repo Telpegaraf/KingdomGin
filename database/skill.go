@@ -22,6 +22,18 @@ func (d *GormDatabase) GetSkillByID(id uint) (*model.Skill, error) {
 	return nil, err
 }
 
+func (d *GormDatabase) GetSkillByName(name string) (*model.Skill, error) {
+	skill := new(model.Skill)
+	err := d.DB.Where("name = ?", name).First(skill).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+	if skill.Name == name {
+		return skill, err
+	}
+	return nil, err
+}
+
 func (d *GormDatabase) GetSkills() ([]*model.Skill, error) {
 	var skills []*model.Skill
 	err := d.DB.Find(&skills).Error

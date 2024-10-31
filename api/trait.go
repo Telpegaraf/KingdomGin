@@ -99,6 +99,10 @@ func (a *TraitApi) LoadTrait(ctx *gin.Context) {
 	reader.Comma = ';'
 	var traits []model.Trait
 
+	if _, err := reader.Read(); err != nil {
+		log.Fatal(err)
+	}
+
 	for {
 		record, err := reader.Read()
 		if err == io.EOF {
@@ -112,7 +116,7 @@ func (a *TraitApi) LoadTrait(ctx *gin.Context) {
 			Description: record[1],
 		}
 		traits = append(traits, trait)
-		if existTradition, err := a.DB.GetTraitByName(trait.Name); err == nil && existTradition != nil {
+		if existTrait, err := a.DB.GetTraitByName(trait.Name); err == nil && existTrait != nil {
 			continue
 		}
 		err = a.DB.CreateTrait(&trait)
