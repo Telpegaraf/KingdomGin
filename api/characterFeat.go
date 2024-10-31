@@ -68,11 +68,11 @@ func (a *CharacterApi) AddCharacterFeat(ctx *gin.Context) {
 
 func (a *CharacterApi) checkSkillMastery(actual, required model.MasteryLevel) bool {
 	masteryOrder := map[model.MasteryLevel]int{
-		model.None:   0,
-		model.Train:  1,
-		model.Expert: 2,
-		model.Master: 3,
-		model.Legend: 4,
+		model.None:      0,
+		model.Train:     1,
+		model.Expert:    2,
+		model.Master:    3,
+		model.Legendary: 4,
 	}
 
 	return masteryOrder[actual] >= masteryOrder[required]

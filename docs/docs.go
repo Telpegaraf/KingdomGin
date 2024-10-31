@@ -88,41 +88,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/action/load": {
-            "post": {
-                "description": "Permissions for Admin",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Action"
-                ],
-                "summary": "Create Action from csv file on server or nil",
-                "responses": {
-                    "201": {
-                        "description": "Action details",
-                        "schema": {
-                            "$ref": "#/definitions/model.ActionExternal"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "You can't access for this API",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/action/{id}": {
             "get": {
                 "description": "Retrieve Action details using its ID",
@@ -1463,9 +1428,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/class/load": {
+        "/csv": {
             "post": {
-                "description": "Permissions for Admin",
+                "description": "Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat",
                 "consumes": [
                     "application/json"
                 ],
@@ -1473,16 +1438,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Character Class"
+                    "CSV"
                 ],
-                "summary": "Create Character Class from csv file on server or nil",
+                "summary": "Create and returns models from csv files or nil",
                 "responses": {
-                    "201": {
-                        "description": "Tradition details",
-                        "schema": {
-                            "$ref": "#/definitions/model.CharacterClassExternal"
-                        }
-                    },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
@@ -1785,41 +1744,6 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "Feat details",
-                        "schema": {
-                            "$ref": "#/definitions/model.FeatExternal"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "You can't access for this API",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/feat/load": {
-            "post": {
-                "description": "Permissions for Admin",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Feat"
-                ],
-                "summary": "Create Feat from csv file on server or nil",
                 "responses": {
                     "201": {
                         "description": "Feat details",
@@ -3027,41 +2951,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/skill/load": {
-            "post": {
-                "description": "Permissions for Admin",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Skill"
-                ],
-                "summary": "Create Skill from csv file on server or nil",
-                "responses": {
-                    "201": {
-                        "description": "Skill details",
-                        "schema": {
-                            "$ref": "#/definitions/model.SkillExternal"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "You can't access for this API",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/skill/{id}": {
             "get": {
                 "description": "Retrieve Skill details using its ID",
@@ -3346,41 +3235,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/tradition/load": {
-            "post": {
-                "description": "Permissions for Admin",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tradition"
-                ],
-                "summary": "Create Tradition from csv file on server or nil",
-                "responses": {
-                    "201": {
-                        "description": "Tradition details",
-                        "schema": {
-                            "$ref": "#/definitions/model.TraditionExternal"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "You can't access for this API",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/tradition/{id}": {
             "get": {
                 "description": "Retrieve Tradition details using its ID",
@@ -3560,41 +3414,6 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "Trait details",
-                        "schema": {
-                            "$ref": "#/definitions/model.TraitExternal"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "You can't access for this API",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/trait/load": {
-            "post": {
-                "description": "Permissions for Admin",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Trait"
-                ],
-                "summary": "Create Trait from csv file on server or nil",
                 "responses": {
                     "201": {
                         "description": "Trait details",
@@ -4551,113 +4370,6 @@ const docTemplate = `{
                         }
                     ],
                     "example": "Train"
-                },
-                "light_armor": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.MasteryLevel"
-                        }
-                    ],
-                    "example": "Train"
-                },
-                "martial_weapon": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.MasteryLevel"
-                        }
-                    ],
-                    "example": "Train"
-                },
-                "medium_armor": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.MasteryLevel"
-                        }
-                    ],
-                    "example": "Train"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "Fighter"
-                },
-                "perception": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.MasteryLevel"
-                        }
-                    ],
-                    "example": "Train"
-                },
-                "reflex": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.MasteryLevel"
-                        }
-                    ],
-                    "example": "Train"
-                },
-                "tradition_id": {
-                    "type": "integer"
-                },
-                "un_armed_weapon": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.MasteryLevel"
-                        }
-                    ],
-                    "example": "Train"
-                },
-                "unarmed_armor": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.MasteryLevel"
-                        }
-                    ],
-                    "example": "Train"
-                },
-                "will": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.MasteryLevel"
-                        }
-                    ],
-                    "example": "Train"
-                }
-            }
-        },
-        "model.CharacterClassExternal": {
-            "type": "object",
-            "properties": {
-                "common_weapon": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.MasteryLevel"
-                        }
-                    ],
-                    "example": "Train"
-                },
-                "fortitude": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.MasteryLevel"
-                        }
-                    ],
-                    "example": "Train"
-                },
-                "health": {
-                    "type": "integer",
-                    "example": 6
-                },
-                "heavy_armor": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.MasteryLevel"
-                        }
-                    ],
-                    "example": "Train"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "light_armor": {
                     "allOf": [
@@ -5708,14 +5420,14 @@ const docTemplate = `{
                 "Trained",
                 "Expert",
                 "Master",
-                "Legend"
+                "Legendary"
             ],
             "x-enum-varnames": [
                 "None",
                 "Train",
                 "Expert",
                 "Master",
-                "Legend"
+                "Legendary"
             ]
         },
         "model.Race": {
@@ -5859,14 +5571,12 @@ const docTemplate = `{
                 "Common",
                 "Uncommon",
                 "Rare",
-                "Legendary",
                 "Mythic"
             ],
             "x-enum-varnames": [
                 "Common",
                 "Uncommon",
                 "Rare",
-                "Legendary",
                 "Mythic"
             ]
         },

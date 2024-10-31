@@ -35,11 +35,11 @@ const (
 )
 
 const (
-	None   MasteryLevel = "None"
-	Train  MasteryLevel = "Trained"
-	Expert MasteryLevel = "Expert"
-	Master MasteryLevel = "Master"
-	Legend MasteryLevel = "Legend"
+	None      MasteryLevel = "None"
+	Train     MasteryLevel = "Trained"
+	Expert    MasteryLevel = "Expert"
+	Master    MasteryLevel = "Master"
+	Legendary MasteryLevel = "Legendary"
 )
 
 const (
@@ -52,9 +52,8 @@ const (
 )
 
 const (
-	Common    Rarity = "Common"
-	Uncommon  Rarity = "Uncommon"
-	Rare      Rarity = "Rare"
-	Legendary Rarity = "Legendary"
-	Mythic    Rarity = "Mythic"
+	Common   Rarity = "Common"
+	Uncommon Rarity = "Uncommon"
+	Rare     Rarity = "Rare"
+	Mythic   Rarity = "Mythic"
 )

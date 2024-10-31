@@ -17,7 +17,7 @@ END $$;
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'mastery_level') THEN
-        CREATE TYPE mastery_level AS ENUM ('None', 'Trained', 'Expert', 'Master', 'Legend');
+        CREATE TYPE mastery_level AS ENUM ('None', 'Trained', 'Expert', 'Master', 'Legendary');
     END IF;
 END $$;
 
@@ -31,6 +31,6 @@ END $$;
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'rarity') THEN
-CREATE TYPE rarity AS ENUM ('Common', 'Uncommon', 'Rare', 'Legendary', 'Mythic');
+CREATE TYPE rarity AS ENUM ('Common', 'Uncommon', 'Rare', 'Mythic');
 END IF;
 END $$;

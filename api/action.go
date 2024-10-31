@@ -1,13 +1,9 @@
 package api
 
 import (
-	"encoding/csv"
 	"github.com/gin-gonic/gin"
-	"io"
 	"kingdom/model"
-	"log"
 	"net/http"
-	"os"
 )
 
 type ActionDatabase interface {
@@ -21,54 +17,6 @@ type ActionDatabase interface {
 
 type ActionApi struct {
 	DB ActionDatabase
-}
-
-// LoadAction godoc
-//
-// @Summary Create Action from csv file on server or nil
-// @Description Permissions for Admin
-// @Tags Action
-// @Accept json
-// @Produce json
-// @Success 201 {object} model.ActionExternal "Action details"
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 403 {string} string "You can't access for this API"
-// @Router /action/load [post]
-func (a *ActionApi) LoadAction(ctx *gin.Context) {
-	file, err := os.Open("./csv/Action.csv")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-
-		}
-	}(file)
-	reader := csv.NewReader(file)
-	var actions []model.Action
-
-	for {
-		record, err := reader.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			log.Fatal(err)
-		}
-		action := model.Action{
-			Name: record[0],
-		}
-		actions = append(actions, action)
-		if existAction, err := a.DB.GetActionByName(action.Name); err == nil && existAction != nil {
-			continue
-		}
-		err = a.DB.CreateAction(&action)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-	}
 }
 
 // CreateAction godoc

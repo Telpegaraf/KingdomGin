@@ -51,6 +51,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	characterSkillHandler := api.CharacterSkillApi{DB: db}
 	backgroundHandler := api.BackgroundApi{DB: db}
 	skillHandler := api.SkillApi{DB: db}
+	loadCSVHandler := api.LoadCSVApi{DB: db}
 
 	authHandler := api.Controller{DB: db}
 
@@ -65,6 +66,8 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	g.POST("/user/verification", userHandler.VerificationUser)
 	g.POST("/auth/login", authHandler.Login)
 	g.GET("/validate", authHandler.Validate)
+
+	g.POST("/csv", loadCSVHandler.LoadCSV).Use(authentication.RequireAdmin)
 
 	userGroup := g.Group("/user").Use(authentication.RequireJWT)
 	{
@@ -105,7 +108,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	skillGroup := g.Group("/skill").Use(authentication.RequireAdmin)
 	{
 		skillGroup.POST("", skillHandler.CreateSkill)
-		skillGroup.POST("/load", skillHandler.LoadSkill)
 		skillGroup.PATCH("/:id", skillHandler.UpdateSkill)
 		skillGroup.DELETE("/:id", skillHandler.DeleteSkill)
 	}
@@ -115,7 +117,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	featGroup := g.Group("/feat").Use(authentication.RequireAdmin)
 	{
 		featGroup.POST("", featHandler.CreateFeat)
-		featGroup.POST("/load", featHandler.LoadFeat)
 		featGroup.PATCH("/:id", featHandler.UpdateFeat)
 		featGroup.DELETE("/:id", featHandler.DeleteFeat)
 	}
@@ -143,7 +144,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	actionGroup := g.Group("/action").Use(authentication.RequireAdmin)
 	{
 		actionGroup.POST("", actionHandler.CreateAction)
-		actionGroup.POST("/load", actionHandler.LoadAction)
 		actionGroup.PATCH("/:id", actionHandler.UpdateAction)
 		actionGroup.DELETE("/:id", actionHandler.DeleteAction)
 	}
@@ -162,7 +162,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	traditionGroup := g.Group("/tradition").Use(authentication.RequireAdmin)
 	{
 		traditionGroup.POST("", traditionHandler.CreateTradition)
-		traditionGroup.POST("/load", traditionHandler.LoadTradition)
 		traditionGroup.PATCH("/:id", traditionHandler.UpdateTradition)
 		traditionGroup.DELETE("/:id", traditionHandler.DeleteTradition)
 	}
@@ -172,7 +171,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	traitGroup := g.Group("/trait").Use(authentication.RequireAdmin)
 	{
 		traitGroup.POST("", traitHandler.CreateTrait)
-		traitGroup.POST("/load", traitHandler.LoadTrait)
 		traitGroup.PATCH("/:id", traitHandler.UpdateTrait)
 		traitGroup.DELETE("/:id", traitHandler.DeleteTrait)
 	}
@@ -182,7 +180,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	characterClassGroup := g.Group("/class").Use(authentication.RequireAdmin)
 	{
 		characterClassGroup.POST("", characterClassHandler.CreateCharacterClass)
-		characterClassGroup.POST("/load", characterClassHandler.LoadCharacterClass)
 	}
 	itemGroup := g.Group("/item").Use(authentication.RequireJWT)
 	{

@@ -1,18 +1,13 @@
 package api
 
 import (
-	"encoding/csv"
 	"github.com/gin-gonic/gin"
-	"io"
 	"kingdom/model"
-	"log"
 	"net/http"
-	"os"
 )
 
 type SkillDatabase interface {
 	GetSkillByID(id uint) (*model.Skill, error)
-	GetSkillByName(name string) (*model.Skill, error)
 	CreateSkill(Skill *model.Skill) error
 	GetSkills() ([]*model.Skill, error)
 	UpdateSkill(Skill *model.Skill) error
@@ -71,61 +66,6 @@ func (a *SkillApi) GetSkillByID(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, ToSkillExternal(skill))
 		}
 	})
-}
-
-// LoadSkill godoc
-//
-// @Summary Create Skill from csv file on server or nil
-// @Description Permissions for Admin
-// @Tags Skill
-// @Accept json
-// @Produce json
-// @Success 201 {object} model.SkillExternal "Skill details"
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 403 {string} string "You can't access for this API"
-// @Router /skill/load [post]
-func (a *SkillApi) LoadSkill(ctx *gin.Context) {
-	file, err := os.Open("./csv/Skill.csv")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-
-		}
-	}(file)
-	reader := csv.NewReader(file)
-	reader.Comma = ';'
-	var Skills []model.Skill
-
-	if _, err := reader.Read(); err != nil {
-		log.Fatal(err)
-	}
-
-	for {
-		record, err := reader.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			log.Fatal(err)
-		}
-		Skill := model.Skill{
-			Name:        record[0],
-			Description: record[1],
-			Ability:     model.Ability(record[2]),
-		}
-		Skills = append(Skills, Skill)
-		if existSkill, err := a.DB.GetSkillByName(Skill.Name); err == nil && existSkill != nil {
-			continue
-		}
-		err = a.DB.CreateSkill(&Skill)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-	}
 }
 
 // GetSkills godoc

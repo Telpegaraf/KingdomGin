@@ -6,7 +6,7 @@ type Feat struct {
 	Description         string
 	Level               uint8 `gorm:"default:1;not null"`
 	PrerequisiteSkillID *uint
-	PrerequisiteMastery MasteryLevel    `gorm:"type:mastery_level"`
+	PrerequisiteMastery MasteryLevel    `gorm:"type:mastery_level;default:None"`
 	Rarity              Rarity          `gorm:"type:rarity;default:Common"`
 	Traits              []Trait         `gorm:"many2many:feat_traits;constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
 	Background          []Background    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
