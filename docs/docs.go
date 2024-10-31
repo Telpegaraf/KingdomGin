@@ -1703,7 +1703,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Item"
+                    "Feat"
                 ],
                 "summary": "Returns all Feats",
                 "responses": {
@@ -1767,6 +1767,42 @@ const docTemplate = `{
             }
         },
         "/feat/{id}": {
+            "get": {
+                "description": "Permissions for auth users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feat"
+                ],
+                "summary": "Returns Feat by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Feat id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Feat details",
+                        "schema": {
+                            "$ref": "#/definitions/model.FeatExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "Permissions for Admin",
                 "consumes": [
@@ -1815,7 +1851,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Item"
+                    "Feat"
                 ],
                 "summary": "Updates Feat by ID or nil",
                 "parameters": [
@@ -2065,44 +2101,6 @@ const docTemplate = `{
                         "description": "Item details",
                         "schema": {
                             "$ref": "#/definitions/model.Item"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/item/Feat/{id}": {
-            "get": {
-                "description": "Permissions for auth users",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Item"
-                ],
-                "summary": "Returns Feat by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Feat id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Feat details",
-                        "schema": {
-                            "$ref": "#/definitions/model.FeatExternal"
                         }
                     },
                     "401": {
@@ -5106,6 +5104,9 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "prerequisiteFeat": {
+                    "type": "string"
+                },
                 "prerequisiteMastery": {
                     "$ref": "#/definitions/model.MasteryLevel"
                 },
@@ -5141,8 +5142,17 @@ const docTemplate = `{
                 "prerequisiteMastery": {
                     "$ref": "#/definitions/model.MasteryLevel"
                 },
+                "prerequisite_feat": {
+                    "type": "string"
+                },
                 "prerequisite_skill_id": {
                     "type": "integer"
+                },
+                "traits": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Trait"
+                    }
                 }
             }
         },

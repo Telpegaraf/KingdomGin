@@ -6,9 +6,10 @@ type Feat struct {
 	Description         string
 	Level               uint8 `gorm:"default:1;not null"`
 	PrerequisiteSkillID *uint
-	PrerequisiteMastery MasteryLevel    `gorm:"type:mastery_level;default:None"`
+	PrerequisiteMastery MasteryLevel `gorm:"type:mastery_level;default:None"`
+	PrerequisiteFeat    *string
 	Rarity              Rarity          `gorm:"type:rarity;default:Common"`
-	Traits              []Trait         `gorm:"many2many:feat_traits;constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
+	Traits              []Trait         `gorm:"many2many:feat_traits;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Background          []Background    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CharacterFeat       []CharacterFeat `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
@@ -36,4 +37,6 @@ type FeatExternal struct {
 	Level               uint8        `json:"level" query:"level"`
 	PrerequisiteSkillID *uint        `json:"prerequisite_skill_id" query:"prerequisite_skill_id"`
 	PrerequisiteMastery MasteryLevel `gorm:"type:mastery_level"`
+	Traits              []Trait      `json:"traits" query:"traits"`
+	PrerequisiteFeat    *string      `json:"prerequisite_feat" query:"prerequisite_feat"`
 }

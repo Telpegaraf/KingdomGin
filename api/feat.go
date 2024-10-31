@@ -48,7 +48,7 @@ func (a *FeatAPI) CreateFeat(ctx *gin.Context) {
 //
 // @Summary Returns all Feats
 // @Description Return all Feats
-// @Tags Item
+// @Tags Feat
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.FeatExternal "Feat details"
@@ -71,13 +71,13 @@ func (a *FeatAPI) GetFeats(ctx *gin.Context) {
 //
 // @Summary Returns Feat by ID
 // @Description Permissions for auth users
-// @Tags Item
+// @Tags Feat
 // @Accept json
 // @Produce json
 // @Param id path int true "Feat id"
 // @Success 200 {object} model.FeatExternal "Feat details"
 // @Failure 401 {string} string ""Unauthorized"
-// @Router /item/Feat/{id} [get]
+// @Router /feat/{id} [get]
 func (a *FeatAPI) GetFeatByID(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		Feat, err := a.DB.GetFeatByID(id)
@@ -93,7 +93,7 @@ func (a *FeatAPI) GetFeatByID(ctx *gin.Context) {
 //
 // @Summary Updates Feat by ID or nil
 // @Description Permissions for Admin
-// @Tags Item
+// @Tags Feat
 // @Accept json
 // @Produce json
 // @Param id path int true "Feat id"
@@ -158,9 +158,13 @@ func (a *FeatAPI) DeleteFeat(ctx *gin.Context) {
 
 func ToExternalFeat(Feat *model.Feat) *model.FeatExternal {
 	return &model.FeatExternal{
-		ID:          Feat.ID,
-		Name:        Feat.Name,
-		Description: Feat.Description,
-		Level:       Feat.Level,
+		ID:                  Feat.ID,
+		Name:                Feat.Name,
+		Description:         Feat.Description,
+		Level:               Feat.Level,
+		PrerequisiteSkillID: Feat.PrerequisiteSkillID,
+		PrerequisiteMastery: Feat.PrerequisiteMastery,
+		PrerequisiteFeat:    Feat.PrerequisiteFeat,
+		Traits:              Feat.Traits,
 	}
 }

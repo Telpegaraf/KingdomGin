@@ -321,10 +321,11 @@ func (a *LoadCSVApi) LoadFeat(ctx *gin.Context) {
 		traits := a.GetTraits(ctx, record[6])
 
 		feat := model.Feat{
-			Name:        record[0],
-			Description: record[1],
-			Level:       uint8(level),
-			Rarity:      model.Rarity(record[3]),
+			Name:             record[0],
+			Description:      record[1],
+			Level:            uint8(level),
+			Rarity:           model.Rarity(record[3]),
+			PrerequisiteFeat: &record[7],
 		}
 
 		if skill != nil {
