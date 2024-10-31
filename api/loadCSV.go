@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type LoadCSVDatabase interface {
@@ -24,6 +25,7 @@ type LoadCSVDatabase interface {
 	CreateTrait(Trait *model.Trait) error
 	GetFeatByName(name string) (*model.Feat, error)
 	CreateFeat(feat *model.Feat) error
+	FindTraits(traitIDs []uint) ([]model.Trait, error)
 }
 
 type LoadCSVApi struct {
@@ -295,6 +297,8 @@ func (a *LoadCSVApi) LoadFeat(ctx *gin.Context) {
 			break
 		}
 
+		log.Println(record)
+
 		if len(record) != 8 {
 			log.Printf("Wrong record count %v", record)
 			continue
@@ -306,8 +310,6 @@ func (a *LoadCSVApi) LoadFeat(ctx *gin.Context) {
 
 		level, err := strconv.Atoi(record[2])
 		if err != nil {
-			log.Println(111)
-			log.Println(record[0])
 			log.Fatal(err)
 		}
 
@@ -315,6 +317,8 @@ func (a *LoadCSVApi) LoadFeat(ctx *gin.Context) {
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		traits := a.GetTraits(ctx, record[6])
 
 		feat := model.Feat{
 			Name:        record[0],
@@ -328,16 +332,39 @@ func (a *LoadCSVApi) LoadFeat(ctx *gin.Context) {
 			feat.PrerequisiteMastery = model.MasteryLevel(record[4])
 		}
 
+		if traits != nil {
+			featTraits, err := a.DB.FindTraits(traits)
+			if err != nil {
+				log.Fatal(err)
+			}
+			feat.Traits = featTraits
+		}
+
 		feats = append(feats, feat)
 		if existFeat, err := a.DB.GetFeatByName(feat.Name); err == nil && existFeat != nil {
 			continue
 		}
 		err = a.DB.CreateFeat(&feat)
 		if err != nil {
-			log.Println(111)
-			log.Println(feat.Name)
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 	}
+}
+
+func (a *LoadCSVApi) GetTraits(ctx *gin.Context, traits string) []uint {
+	parts := strings.Split(traits, ", ")
+	var traitsID []uint
+	for _, part := range parts {
+		trait, err := a.DB.GetTraitByName(part)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return nil
+		}
+		traitsID = append(traitsID, trait.ID)
+	}
+	if len(traitsID) == 0 {
+		return nil
+	}
+	return traitsID
 }

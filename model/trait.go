@@ -22,3 +22,7 @@ type TraitExternal struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
+
+type TraitID struct {
+	ID uint `json:"id"`
+}

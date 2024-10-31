@@ -50,3 +50,10 @@ func (d *GormDatabase) DeleteTrait(id uint) error {
 	return d.DB.Where("id = ?", id).
 		Delete(&model.Trait{}).Error
 }
+
+// FindTraits Return Trait's ID in Feat object
+func (d *GormDatabase) FindTraits(IDs []uint) ([]model.Trait, error) {
+	var traits []model.Trait
+	err := d.DB.Where("id IN (?)", IDs).Find(&traits).Error
+	return traits, err
+}
