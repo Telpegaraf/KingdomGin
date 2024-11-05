@@ -4,7 +4,7 @@ type Tradition struct {
 	ID             uint           `gorm:"primary_key;AUTO_INCREMENT"`
 	Name           string         `gorm:"unique;type:varchar(127)"`
 	Description    string         `gorm:"type:text"`
-	Spells         []Spell        `gorm:"many2many:spell_traditions;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Spells         []Spell        `gorm:"many2many:spell_traditions;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CharacterClass CharacterClass `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 

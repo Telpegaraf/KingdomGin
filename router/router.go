@@ -51,6 +51,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	characterSkillHandler := api.CharacterSkillApi{DB: db}
 	backgroundHandler := api.BackgroundApi{DB: db}
 	skillHandler := api.SkillApi{DB: db}
+	spellHandler := api.SpellAPI{DB: db}
 	loadCSVHandler := api.LoadCSVApi{DB: db}
 
 	authHandler := api.Controller{DB: db}
@@ -131,6 +132,15 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	}
 	g.GET("/race", raceHandler.GetRaces).Use(authentication.RequireJWT)
 	g.GET("/race/:id", raceHandler.GetRaceByID).Use(authentication.RequireJWT)
+
+	spellGroup := g.Group("/spell").Use(authentication.RequireAdmin)
+	{
+		spellGroup.POST("", spellHandler.CreateSpell)
+		spellGroup.PATCH("/:id", spellHandler.UpdateSpell)
+		spellGroup.DELETE("/:id", spellHandler.DeleteSpell)
+	}
+	g.GET("/spell", spellHandler.GetSpells).Use(authentication.RequireJWT)
+	g.GET("/spell/:id", spellHandler.GetSpellByID).Use(authentication.RequireJWT)
 
 	ancestryGroup := g.Group("/ancestry").Use(authentication.RequireAdmin)
 	{

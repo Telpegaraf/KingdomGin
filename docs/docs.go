@@ -502,7 +502,7 @@ const docTemplate = `{
         },
         "/auth/login": {
             "post": {
-                "description": "Авторизация пользователя по логину и паролю",
+                "description": "Authorization by email and password",
                 "consumes": [
                     "application/json"
                 ],
@@ -1430,7 +1430,7 @@ const docTemplate = `{
         },
         "/csv": {
             "post": {
-                "description": "Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat",
+                "description": "Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat, Spell",
                 "consumes": [
                     "application/json"
                 ],
@@ -1709,14 +1709,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Offset for pagination",
-                        "name": "offset",
+                        "description": "Limit for pagination",
+                        "name": "limit",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "Limit for pagination",
-                        "name": "limit",
+                        "description": "Offset for pagination",
+                        "name": "offset",
                         "in": "query"
                     }
                 ],
@@ -3174,6 +3174,221 @@ const docTemplate = `{
                 }
             }
         },
+        "/spell": {
+            "get": {
+                "description": "Return all Spells",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Spell"
+                ],
+                "summary": "Returns all Spells",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit for pagination",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset for pagination",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Spell details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SpellExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Spell"
+                ],
+                "summary": "Create and returns Spell or nil",
+                "parameters": [
+                    {
+                        "description": "spell data",
+                        "name": "Spell",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SpellCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "spell details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SpellExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/spell/{id}": {
+            "get": {
+                "description": "Permissions for auth users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Spell"
+                ],
+                "summary": "Returns Spell by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Spell id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Spell details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SpellExternal"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Spell"
+                ],
+                "summary": "Deletes Spell by ID or returns nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Spell id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "spell doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Permissions for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Spell"
+                ],
+                "summary": "Updates Spell by ID or nil",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Spell id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Spell data",
+                        "name": "Spell",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SpellUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Spell details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SpellExternal"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Spell doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/tradition": {
             "get": {
                 "description": "Return all Traditions",
@@ -3897,23 +4112,6 @@ const docTemplate = `{
                 "Wisdom",
                 "Charisma"
             ]
-        },
-        "model.Action": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "spells": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Spell"
-                    }
-                }
-            }
         },
         "model.ActionExternal": {
             "type": "object",
@@ -5748,16 +5946,16 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "cast": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Action"
-                    }
+                    "type": "string"
                 },
                 "characterSpell": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.CharacterSpell"
                     }
+                },
+                "component": {
+                    "type": "string"
                 },
                 "description": {
                     "type": "string"
@@ -5783,9 +5981,6 @@ const docTemplate = `{
                 "school": {
                     "$ref": "#/definitions/model.School"
                 },
-                "source": {
-                    "type": "string"
-                },
                 "target": {
                     "type": "string"
                 },
@@ -5799,6 +5994,159 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.Trait"
+                    }
+                }
+            }
+        },
+        "model.SpellCreate": {
+            "type": "object",
+            "properties": {
+                "area": {
+                    "type": "string"
+                },
+                "cast": {
+                    "type": "string"
+                },
+                "component": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "range": {
+                    "type": "string"
+                },
+                "rank": {
+                    "type": "integer"
+                },
+                "ritual": {
+                    "type": "boolean"
+                },
+                "school": {
+                    "$ref": "#/definitions/model.School"
+                },
+                "target": {
+                    "type": "string"
+                },
+                "tradition_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "traits_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "model.SpellExternal": {
+            "type": "object",
+            "properties": {
+                "area": {
+                    "type": "string"
+                },
+                "cast": {
+                    "type": "string"
+                },
+                "component": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "range": {
+                    "type": "string"
+                },
+                "rank": {
+                    "type": "integer"
+                },
+                "ritual": {
+                    "type": "boolean"
+                },
+                "school": {
+                    "$ref": "#/definitions/model.School"
+                },
+                "target": {
+                    "type": "string"
+                },
+                "tradition_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "traits_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "model.SpellUpdate": {
+            "type": "object",
+            "properties": {
+                "area": {
+                    "type": "string"
+                },
+                "cast": {
+                    "type": "string"
+                },
+                "component": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "range": {
+                    "type": "string"
+                },
+                "rank": {
+                    "type": "integer"
+                },
+                "ritual": {
+                    "type": "boolean"
+                },
+                "school": {
+                    "$ref": "#/definitions/model.School"
+                },
+                "target": {
+                    "type": "string"
+                },
+                "tradition_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "traits_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
                     }
                 }
             }
@@ -6134,14 +6482,14 @@ const docTemplate = `{
         "model.UserLogin": {
             "type": "object",
             "required": [
-                "password",
-                "username"
+                "email",
+                "password"
             ],
             "properties": {
-                "password": {
+                "email": {
                     "type": "string"
                 },
-                "username": {
+                "password": {
                     "type": "string"
                 }
             }

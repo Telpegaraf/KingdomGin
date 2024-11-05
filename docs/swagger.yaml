@@ -15,17 +15,6 @@ definitions:
     - Intelligence
     - Wisdom
     - Charisma
-  model.Action:
-    properties:
-      id:
-        type: integer
-      name:
-        type: string
-      spells:
-        items:
-          $ref: '#/definitions/model.Spell'
-        type: array
-    type: object
   model.ActionExternal:
     properties:
       id:
@@ -1239,13 +1228,13 @@ definitions:
       area:
         type: string
       cast:
-        items:
-          $ref: '#/definitions/model.Action'
-        type: array
+        type: string
       characterSpell:
         items:
           $ref: '#/definitions/model.CharacterSpell'
         type: array
+      component:
+        type: string
       description:
         type: string
       duration:
@@ -1262,8 +1251,6 @@ definitions:
         type: boolean
       school:
         $ref: '#/definitions/model.School'
-      source:
-        type: string
       target:
         type: string
       traditional:
@@ -1273,6 +1260,107 @@ definitions:
       traits:
         items:
           $ref: '#/definitions/model.Trait'
+        type: array
+    type: object
+  model.SpellCreate:
+    properties:
+      area:
+        type: string
+      cast:
+        type: string
+      component:
+        type: string
+      description:
+        type: string
+      duration:
+        type: string
+      name:
+        type: string
+      range:
+        type: string
+      rank:
+        type: integer
+      ritual:
+        type: boolean
+      school:
+        $ref: '#/definitions/model.School'
+      target:
+        type: string
+      tradition_id:
+        items:
+          type: integer
+        type: array
+      traits_id:
+        items:
+          type: integer
+        type: array
+    type: object
+  model.SpellExternal:
+    properties:
+      area:
+        type: string
+      cast:
+        type: string
+      component:
+        type: string
+      description:
+        type: string
+      duration:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      range:
+        type: string
+      rank:
+        type: integer
+      ritual:
+        type: boolean
+      school:
+        $ref: '#/definitions/model.School'
+      target:
+        type: string
+      tradition_id:
+        items:
+          type: integer
+        type: array
+      traits_id:
+        items:
+          type: integer
+        type: array
+    type: object
+  model.SpellUpdate:
+    properties:
+      area:
+        type: string
+      cast:
+        type: string
+      component:
+        type: string
+      description:
+        type: string
+      duration:
+        type: string
+      name:
+        type: string
+      range:
+        type: string
+      rank:
+        type: integer
+      ritual:
+        type: boolean
+      school:
+        $ref: '#/definitions/model.School'
+      target:
+        type: string
+      tradition_id:
+        items:
+          type: integer
+        type: array
+      traits_id:
+        items:
+          type: integer
         type: array
     type: object
   model.SquareSize:
@@ -1497,13 +1585,13 @@ definitions:
     type: object
   model.UserLogin:
     properties:
+      email:
+        type: string
       password:
         type: string
-      username:
-        type: string
     required:
+    - email
     - password
-    - username
     type: object
   model.UserPasswordUpdate:
     properties:
@@ -1897,7 +1985,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Авторизация пользователя по логину и паролю
+      description: Authorization by email and password
       parameters:
       - description: User data
         in: body
@@ -2510,7 +2598,7 @@ paths:
       consumes:
       - application/json
       description: Permissions for Admin, csv - Tradition, Character Class, Trait,
-        Action, Skill, Feat
+        Action, Skill, Feat, Spell
       produces:
       - application/json
       responses:
@@ -2687,13 +2775,13 @@ paths:
       - application/json
       description: Return all Feats
       parameters:
-      - description: Offset for pagination
-        in: query
-        name: offset
-        type: integer
       - description: Limit for pagination
         in: query
         name: limit
+        type: integer
+      - description: Offset for pagination
+        in: query
+        name: offset
         type: integer
       produces:
       - application/json
@@ -3660,6 +3748,148 @@ paths:
       summary: Updates Slot by ID or nil
       tags:
       - Slot
+  /spell:
+    get:
+      consumes:
+      - application/json
+      description: Return all Spells
+      parameters:
+      - description: Limit for pagination
+        in: query
+        name: limit
+        type: integer
+      - description: Offset for pagination
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Spell details
+          schema:
+            $ref: '#/definitions/model.SpellExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all Spells
+      tags:
+      - Spell
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: spell data
+        in: body
+        name: Spell
+        required: true
+        schema:
+          $ref: '#/definitions/model.SpellCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: spell details
+          schema:
+            $ref: '#/definitions/model.SpellExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns Spell or nil
+      tags:
+      - Spell
+  /spell/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Spell id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: spell doesn't exist
+          schema:
+            type: string
+      summary: Deletes Spell by ID or returns nil
+      tags:
+      - Spell
+    get:
+      consumes:
+      - application/json
+      description: Permissions for auth users
+      parameters:
+      - description: Spell id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Spell details
+          schema:
+            $ref: '#/definitions/model.SpellExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns Spell by ID
+      tags:
+      - Spell
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Admin
+      parameters:
+      - description: Spell id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Spell data
+        in: body
+        name: Spell
+        required: true
+        schema:
+          $ref: '#/definitions/model.SpellUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Spell details
+          schema:
+            $ref: '#/definitions/model.SpellExternal'
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Spell doesn't exist
+          schema:
+            type: string
+      summary: Updates Spell by ID or nil
+      tags:
+      - Spell
   /tradition:
     get:
       consumes:

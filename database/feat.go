@@ -39,7 +39,7 @@ func (d *GormDatabase) GetFeatByName(name string) (*model.Feat, error) {
 func (d *GormDatabase) GetFeats(limit int, offset int) (*[]model.Feat, error) {
 	var feats []model.Feat
 	if limit == 0 {
-		err := d.DB.Preload("Traits").Offset(offset).First(&feats).Error
+		err := d.DB.Preload("Traits").First(&feats).Error
 		return &feats, err
 	}
 	err := d.DB.Preload("Traits").Limit(limit).Offset(offset).First(&feats).Error

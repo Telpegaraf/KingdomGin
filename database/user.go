@@ -9,7 +9,7 @@ import (
 // GetUserByUsername returns the user by the given name or nil.
 func (d *GormDatabase) GetUserByUsername(name string) (*model.User, error) {
 	user := new(model.User)
-	err := d.DB.Where("username = ?", name).Find(user).Error
+	err := d.DB.Where("username = ?", name).First(user).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
@@ -22,7 +22,7 @@ func (d *GormDatabase) GetUserByUsername(name string) (*model.User, error) {
 // GetUserByEmail returns the user by the given name or nil.
 func (d *GormDatabase) GetUserByEmail(email string) (*model.User, error) {
 	user := new(model.User)
-	err := d.DB.Where("email = ?", email).Find(user).Error
+	err := d.DB.Where("email = ?", email).First(user).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func (d *GormDatabase) GetUserByEmail(email string) (*model.User, error) {
 // GetUserByID returns the user by the given id or nil.
 func (d *GormDatabase) GetUserByID(id uint) (*model.User, error) {
 	user := new(model.User)
-	err := d.DB.Preload("Characters").Find(user, id).Error
+	err := d.DB.Preload("Characters").First(user, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}

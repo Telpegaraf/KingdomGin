@@ -12,7 +12,7 @@ import (
 )
 
 type AuthDatabase interface {
-	GetUserByUsername(username string) (*model.User, error)
+	GetUserByEmail(email string) (*model.User, error)
 }
 
 type Controller struct {
@@ -22,7 +22,7 @@ type Controller struct {
 // Login godoc
 //
 // @Summary Login user for token
-// @Description Авторизация пользователя по логину и паролю
+// @Description Authorization by email and password
 // @Tags Auth
 // @Accept  json
 // @Produce  json
@@ -31,10 +31,7 @@ type Controller struct {
 // @Failure 401 {string} string "Unauthorized"
 // @Router /auth/login [post]
 func (a *Controller) Login(ctx *gin.Context) {
-	var body struct {
-		Username string `json:"username" binding:"required"`
-		Password string `json:"password" binding:"required"`
-	}
+	body := model.UserLogin{}
 	if err := ctx.Bind(&body); err != nil {
 		log.Println("Failed to bind request body:", err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -44,7 +41,7 @@ func (a *Controller) Login(ctx *gin.Context) {
 		return
 	}
 
-	user, err := a.DB.GetUserByUsername(body.Username)
+	user, err := a.DB.GetUserByEmail(body.Email)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"error": "Invalid username or password",

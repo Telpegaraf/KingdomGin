@@ -38,7 +38,7 @@ type LoadCSVApi struct {
 // LoadCSV godoc
 //
 // @Summary Create and returns models from csv files or nil
-// @Description Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat
+// @Description Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat, Spell
 // @Tags CSV
 // @Accept json
 // @Produce json
@@ -267,6 +267,8 @@ func (a *LoadCSVApi) LoadSpell(ctx *gin.Context) {
 
 		if record[7] == "" {
 			continue
+		} else {
+			spell.School = model.School(record[7])
 		}
 
 		if traits != nil {
@@ -282,7 +284,7 @@ func (a *LoadCSVApi) LoadSpell(ctx *gin.Context) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			spell.Traditional = spellTraditions
+			spell.Tradition = spellTraditions
 		}
 
 		spells = append(spells, spell)

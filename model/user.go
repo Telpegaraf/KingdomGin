@@ -33,7 +33,7 @@ type CreateUser struct {
 }
 
 type UserLogin struct {
-	Email    string `binding:"required" json:"username" query:"username" form:"username"`
+	Email    string `binding:"required" json:"email" query:"email" form:"email"`
 	Password string `binding:"required" json:"password,omitempty" query:"password" form:"password" binding:"required"`
 }
 
