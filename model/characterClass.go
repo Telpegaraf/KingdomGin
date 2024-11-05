@@ -37,7 +37,7 @@ type CharacterClassCreate struct {
 	TraditionID   uint         `json:"tradition_id" query:"tradition_id"`
 }
 
-type UpdateCharacterClass struct {
+type CharacterClassUpdate struct {
 	Name          string       `json:"name" query:"name" form:"name" example:"Fighter"`
 	HitPoint      uint16       `json:"health" query:"health" form:"health" example:"6" enum:"6,8,10,12"`
 	Perception    MasteryLevel `json:"perception" query:"perception" form:"perception" example:"Train"`
