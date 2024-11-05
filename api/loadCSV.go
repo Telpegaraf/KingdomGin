@@ -26,6 +26,9 @@ type LoadCSVDatabase interface {
 	GetFeatByName(name string) (*model.Feat, error)
 	CreateFeat(feat *model.Feat) error
 	FindTraits(traitIDs []uint) ([]model.Trait, error)
+	FindTraditions(IDs []uint) ([]model.Tradition, error)
+	CreateSpell(spell *model.Spell) error
+	GetDomainByName(name string) (*model.Domain, error)
 }
 
 type LoadCSVApi struct {
@@ -49,6 +52,7 @@ func (a *LoadCSVApi) LoadCSV(ctx *gin.Context) {
 	a.LoadAction(ctx)
 	a.LoadSkill(ctx)
 	a.LoadFeat(ctx)
+	a.LoadSpell(ctx)
 }
 
 func (a *LoadCSVApi) LoadTradition(ctx *gin.Context) {
@@ -214,6 +218,82 @@ func (a *LoadCSVApi) LoadAction(ctx *gin.Context) {
 	}
 }
 
+func (a *LoadCSVApi) LoadSpell(ctx *gin.Context) {
+	file, err := os.Open("./csv/Spell.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
+	reader := csv.NewReader(file)
+	reader.Comma = ';'
+	var spells []model.Spell
+
+	if _, err := reader.Read(); err != nil {
+		log.Fatal(err)
+	}
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Println(len(record))
+			log.Fatal(err)
+		}
+
+		log.Println(record)
+
+		rank, err := strconv.Atoi(record[11])
+		traits := a.GetTraits(ctx, record[10])
+		traditions := a.GetTraditions(ctx, record[9])
+
+		spell := model.Spell{
+			Name:        record[0],
+			Description: record[1],
+			Component:   record[2],
+			Range:       record[3],
+			Area:        record[4],
+			Duration:    record[5],
+			Target:      record[6],
+			Cast:        record[8],
+			Rank:        uint8(rank),
+		}
+
+		if record[7] == "" {
+			continue
+		}
+
+		if traits != nil {
+			spellTraits, err := a.DB.FindTraits(traits)
+			if err != nil {
+				log.Fatal(err)
+			}
+			spell.Traits = spellTraits
+		}
+
+		if traditions != nil {
+			spellTraditions, err := a.DB.FindTraditions(traditions)
+			if err != nil {
+				log.Fatal(err)
+			}
+			spell.Traditional = spellTraditions
+		}
+
+		spells = append(spells, spell)
+		err = a.DB.CreateSpell(&spell)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	}
+}
+
 func (a *LoadCSVApi) LoadCharacterClass(ctx *gin.Context) {
 	file, err := os.Open("./csv/CharacterClass.csv")
 	if err != nil {
@@ -357,15 +437,35 @@ func (a *LoadCSVApi) GetTraits(ctx *gin.Context, traits string) []uint {
 	parts := strings.Split(traits, ", ")
 	var traitsID []uint
 	for _, part := range parts {
+		log.Println(part)
 		trait, err := a.DB.GetTraitByName(part)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return nil
 		}
+		log.Println(trait)
+		log.Println(trait.ID)
 		traitsID = append(traitsID, trait.ID)
 	}
 	if len(traitsID) == 0 {
 		return nil
 	}
 	return traitsID
+}
+
+func (a *LoadCSVApi) GetTraditions(ctx *gin.Context, traditions string) []uint {
+	parts := strings.Split(traditions, ", ")
+	var traditionsID []uint
+	for _, part := range parts {
+		tradition, err := a.DB.GetTraditionByName(part)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return nil
+		}
+		traditionsID = append(traditionsID, tradition.ID)
+	}
+	if len(traditionsID) == 0 {
+		return nil
+	}
+	return traditionsID
 }

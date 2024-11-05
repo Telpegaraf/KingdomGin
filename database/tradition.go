@@ -54,3 +54,10 @@ func (d *GormDatabase) DeleteTradition(id uint) error {
 	return d.DB.Where("id = ?", id).
 		Delete(&model.Tradition{}).Error
 }
+
+// FindTraditions Return Tradition's ID in Spell object
+func (d *GormDatabase) FindTraditions(IDs []uint) ([]model.Tradition, error) {
+	var traditions []model.Tradition
+	err := d.DB.Where("id IN (?)", IDs).Find(&traditions).Error
+	return traditions, err
+}
