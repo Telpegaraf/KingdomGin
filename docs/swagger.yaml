@@ -1325,7 +1325,7 @@ definitions:
         items:
           type: string
         type: array
-      trait:
+      traits:
         items:
           type: string
         type: array
@@ -2568,6 +2568,24 @@ paths:
       tags:
       - Character Feat
   /class:
+    get:
+      consumes:
+      - application/json
+      description: Return all characters for current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Character details
+          schema:
+            $ref: '#/definitions/model.CharacterExternal'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns all characters
+      tags:
+      - Character Class
     post:
       consumes:
       - application/json
@@ -2591,6 +2609,87 @@ paths:
           schema:
             type: string
       summary: Create and returns new Character Class or nil
+      tags:
+      - Character Class
+  /class/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permissions for Character's User or Admin
+      parameters:
+      - description: Character id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+        "404":
+          description: Character doesn't exist
+          schema:
+            type: string
+      summary: Deletes Character by ID or returns nil
+      tags:
+      - Character Class
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Character class details using its ID
+      parameters:
+      - description: character id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: character details
+          schema:
+            $ref: '#/definitions/model.CharacterExternal'
+        "404":
+          description: Character not found
+          schema:
+            type: string
+      summary: Returns Character by id
+      tags:
+      - Character Class
+    patch:
+      consumes:
+      - application/json
+      description: Permissions for Character's User or Admin
+      parameters:
+      - description: Character id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Character data
+        in: body
+        name: character
+        required: true
+        schema:
+          $ref: '#/definitions/model.CharacterUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Character details
+          schema:
+            $ref: '#/definitions/model.CharacterExternal'
+        "404":
+          description: Character doesn't exist
+          schema:
+            type: string
+      summary: Updates Character by ID or nil
       tags:
       - Character Class
   /csv:

@@ -38,10 +38,10 @@ func (d *GormDatabase) GetCharacterClassByName(name string) (*model.CharacterCla
 }
 
 // GetCharacterClasses returns all Character classes
-func (d *GormDatabase) GetCharacterClasses() (*[]model.CharacterClass, error) {
-	var characterClass []model.CharacterClass
+func (d *GormDatabase) GetCharacterClasses() ([]*model.CharacterClass, error) {
+	var characterClass []*model.CharacterClass
 	err := d.DB.Find(&characterClass).Error
-	return &characterClass, err
+	return characterClass, err
 }
 
 // DeleteCharacterClass deletes Character Class

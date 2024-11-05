@@ -9,7 +9,7 @@ import (
 type CharacterClassDatabase interface {
 	CreateCharacterClass(characterClass *model.CharacterClass) error
 	GetCharacterClassByID(id uint) (*model.CharacterClass, error)
-	GetCharacterClasses() (*[]model.CharacterClass, error)
+	GetCharacterClasses() ([]*model.CharacterClass, error)
 	DeleteCharacterClass(id uint) error
 	UpdateCharacterClass(class *model.CharacterClass) error
 	GetTraditionByName(name string) (*model.Tradition, error)
@@ -85,8 +85,8 @@ func (a *CharacterClassApi) GetCharacterClasses(ctx *gin.Context) {
 		return
 	}
 	var resp []*model.CharacterClassExternal
-	for _, character := range *characters {
-		resp = append(resp, ToExternalCharacterClass(&character))
+	for _, character := range characters {
+		resp = append(resp, ToExternalCharacterClass(character))
 	}
 	ctx.JSON(http.StatusOK, resp)
 }
@@ -170,6 +170,7 @@ func (a *CharacterClassApi) DeleteCharacterClass(ctx *gin.Context) {
 }
 
 func ToExternalCharacterClass(character *model.CharacterClass) *model.CharacterClassExternal {
+
 	return &model.CharacterClassExternal{
 		ID:            character.ID,
 		Name:          character.Name,
@@ -185,6 +186,6 @@ func ToExternalCharacterClass(character *model.CharacterClass) *model.CharacterC
 		UnArmedWeapon: character.UnArmedWeapon,
 		CommonWeapon:  character.CommonWeapon,
 		MartialWeapon: character.MartialWeapon,
-		TraditionID:   *character.TraditionID,
+		TraditionID:   character.TraditionID,
 	}
 }

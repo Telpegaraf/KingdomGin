@@ -69,5 +69,5 @@ type CharacterClassExternal struct {
 	UnArmedWeapon MasteryLevel `json:"un_armed_weapon" query:"un_armed_weapon" example:"Train"`
 	CommonWeapon  MasteryLevel `json:"common_weapon" query:"common_weapon" example:"Train"`
 	MartialWeapon MasteryLevel `json:"martial_weapon" query:"martial_weapon" example:"Train"`
-	TraditionID   uint         `json:"tradition_id" query:"tradition_id"`
+	TraditionID   *uint        `json:"tradition_id" query:"tradition_id"`
 }

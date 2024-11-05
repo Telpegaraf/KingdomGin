@@ -190,7 +190,11 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	characterClassGroup := g.Group("/class").Use(authentication.RequireAdmin)
 	{
 		characterClassGroup.POST("", characterClassHandler.CreateCharacterClass)
+		characterClassGroup.PATCH("/:id", characterClassHandler.UpdateCharacterClass)
+		characterClassGroup.DELETE("/:id", characterClassHandler.DeleteCharacterClass)
 	}
+	g.GET("/class", characterClassHandler.GetCharacterClasses).Use(authentication.RequireJWT)
+	g.GET("/class/:id", characterClassHandler.GetCharacterClassByID).Use(authentication.RequireJWT)
 	itemGroup := g.Group("/item").Use(authentication.RequireJWT)
 	{
 		itemGroup.GET("", itemHandler.GetItems)
