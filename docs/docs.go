@@ -5984,7 +5984,7 @@ const docTemplate = `{
                 "target": {
                     "type": "string"
                 },
-                "traditional": {
+                "tradition": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.Tradition"
@@ -6087,16 +6087,16 @@ const docTemplate = `{
                 "target": {
                     "type": "string"
                 },
-                "tradition_id": {
+                "tradition": {
                     "type": "array",
                     "items": {
-                        "type": "integer"
+                        "type": "string"
                     }
                 },
-                "traits_id": {
+                "trait": {
                     "type": "array",
                     "items": {
-                        "type": "integer"
+                        "type": "string"
                     }
                 }
             }

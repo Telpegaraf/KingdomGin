@@ -189,8 +189,12 @@ func (a *SpellAPI) DeleteSpell(ctx *gin.Context) {
 
 func ToExternalSpell(Spell *model.Spell) *model.SpellExternal {
 	var traditon_names []string
+	var trait_names []string
 	for _, tradition_name := range Spell.Tradition {
 		traditon_names = append(traditon_names, tradition_name.Name)
+	}
+	for _, trait_name := range Spell.Traits {
+		trait_names = append(trait_names, trait_name.Name)
 	}
 	return &model.SpellExternal{
 		ID:          Spell.ID,
@@ -199,11 +203,11 @@ func ToExternalSpell(Spell *model.Spell) *model.SpellExternal {
 		Rank:        Spell.Rank,
 		School:      Spell.School,
 		Tradition:   traditon_names,
-		//TraitsID:      traits,
-		Range:     Spell.Range,
-		Duration:  Spell.Duration,
-		Target:    Spell.Target,
-		Area:      Spell.Area,
-		Component: Spell.Component,
+		Traits:      trait_names,
+		Range:       Spell.Range,
+		Duration:    Spell.Duration,
+		Target:      Spell.Target,
+		Area:        Spell.Area,
+		Component:   Spell.Component,
 	}
 }

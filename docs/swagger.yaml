@@ -1253,7 +1253,7 @@ definitions:
         $ref: '#/definitions/model.School'
       target:
         type: string
-      traditional:
+      tradition:
         items:
           $ref: '#/definitions/model.Tradition'
         type: array
@@ -1321,13 +1321,13 @@ definitions:
         $ref: '#/definitions/model.School'
       target:
         type: string
-      tradition_id:
+      tradition:
         items:
-          type: integer
+          type: string
         type: array
-      traits_id:
+      trait:
         items:
-          type: integer
+          type: string
         type: array
     type: object
   model.SpellUpdate:

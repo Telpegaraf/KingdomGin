@@ -9,7 +9,7 @@ import (
 // GetSpellByID returns Spell by ID
 func (d *GormDatabase) GetSpellByID(id uint) (*model.Spell, error) {
 	spell := new(model.Spell)
-	err := d.DB.Preload("Tradition").Find(spell, id).Error
+	err := d.DB.Preload("Tradition").Preload("Traits").Find(spell, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
@@ -41,10 +41,10 @@ func (d *GormDatabase) CreateSpell(spell *model.Spell) error {
 func (d *GormDatabase) GetSpells(limit int, offset int) ([]*model.Spell, error) {
 	var spells []*model.Spell
 	if limit == 0 {
-		err := d.DB.Find(&spells).Error
+		err := d.DB.Preload("Tradition").Preload("Traits").Find(&spells).Error
 		return spells, err
 	}
-	err := d.DB.Limit(limit).Offset(offset).First(&spells).Error
+	err := d.DB.Preload("Tradition").Preload("Traits").Limit(limit).Offset(offset).Find(&spells).Error
 	return spells, err
 }
 

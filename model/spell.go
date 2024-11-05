@@ -63,6 +63,6 @@ type SpellExternal struct {
 	Ritual      bool     `json:"ritual" query:"ritual"`
 	School      School   `json:"school" query:"school"`
 	Cast        string   `json:"cast" query:"cast"`
-	TraitsID    []uint   `json:"traits_id" query:"traits_id"`
+	Traits      []string `json:"traits" query:"traits"`
 	Tradition   []string `json:"tradition" query:"tradition"`
 }
