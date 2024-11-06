@@ -170,7 +170,6 @@ func (a *CharacterClassApi) DeleteCharacterClass(ctx *gin.Context) {
 }
 
 func ToExternalCharacterClass(character *model.CharacterClass) *model.CharacterClassExternal {
-
 	return &model.CharacterClassExternal{
 		ID:            character.ID,
 		Name:          character.Name,
