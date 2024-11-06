@@ -364,6 +364,10 @@ func (a *LoadCSVApi) LoadAction(ctx *gin.Context) {
 	reader := csv.NewReader(file)
 	var actions []model.Action
 
+	if _, err := reader.Read(); err != nil {
+		log.Fatal(err)
+	}
+
 	for {
 		record, err := reader.Read()
 		if err == io.EOF {
