@@ -29,6 +29,7 @@ type LoadCSVDatabase interface {
 	FindTraditions(IDs []uint) ([]model.Tradition, error)
 	CreateSpell(spell *model.Spell) error
 	GetDomainByName(name string) (*model.Domain, error)
+	CreateDomain(domain *model.Domain) error
 	GetRaceByName(name string) (*model.Race, error)
 	CreateRace(race *model.Race) error
 	GetAncestryByName(name string) (*model.Ancestry, error)
@@ -53,6 +54,7 @@ type LoadCSVApi struct {
 // @Router /csv [post]
 func (a *LoadCSVApi) LoadCSV(ctx *gin.Context) {
 	a.LoadRace(ctx)
+	a.LoadDomain(ctx)
 	a.LoadAncestry(ctx)
 	a.LoadTradition(ctx)
 	a.LoadCharacterClass(ctx)
@@ -62,6 +64,51 @@ func (a *LoadCSVApi) LoadCSV(ctx *gin.Context) {
 	a.LoadFeat(ctx)
 	a.LoadBackground(ctx)
 	a.LoadSpell(ctx)
+}
+
+func (a *LoadCSVApi) LoadDomain(ctx *gin.Context) {
+	file, err := os.Open("./csv/Domain.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(file)
+	reader := csv.NewReader(file)
+	reader.Comma = ';'
+
+	if _, err := reader.Read(); err != nil {
+		log.Fatal(err)
+	}
+
+	var domains []model.Domain
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		domain := model.Domain{
+			Name:        record[0],
+			Description: record[1],
+		}
+		domains = append(domains, domain)
+		if existDomain, err := a.DB.GetDomainByName(domain.Name); err == nil && existDomain != nil {
+			continue
+		}
+		err = a.DB.CreateDomain(&domain)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	}
 }
 
 func (a *LoadCSVApi) LoadRace(ctx *gin.Context) {
