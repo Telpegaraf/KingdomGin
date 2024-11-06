@@ -30,7 +30,7 @@ type BackgroundExternal struct {
 	ID            uint   `json:"id"`
 	Name          string `json:"name" query:"name"`
 	Description   string `json:"description"`
-	FeatID        uint   `json:"feat_id"`
-	FirstSkillID  uint   `json:"first_skill_id"`
-	SecondSkillID uint   `json:"second_skill_id"`
+	FeatID        *uint  `json:"feat_id"`
+	FirstSkillID  *uint  `json:"first_skill_id"`
+	SecondSkillID *uint  `json:"second_skill_id"`
 }

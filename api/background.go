@@ -168,8 +168,8 @@ func ToBackgroundExternal(Background *model.Background) *model.BackgroundExterna
 		ID:            Background.ID,
 		Name:          Background.Name,
 		Description:   Background.Description,
-		FeatID:        *Background.FeatID,
-		FirstSkillID:  *Background.FirstSkillID,
-		SecondSkillID: *Background.SecondSkillID,
+		FeatID:        Background.FeatID,
+		FirstSkillID:  Background.FirstSkillID,
+		SecondSkillID: Background.SecondSkillID,
 	}
 }
