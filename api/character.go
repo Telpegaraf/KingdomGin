@@ -29,6 +29,7 @@ type CharacterDatabase interface {
 	GetFeatByID(id uint) (*model.Feat, error)
 	GetCharacterSkillByCharacterID(characterId uint, skillID uint) (*model.CharacterSkill, error)
 	CreateCharacterInfo(*model.CharacterInfo) error
+	GetAncestryByID(id uint) (*model.Ancestry, error)
 }
 
 type CharacterApi struct {
@@ -115,6 +116,13 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 			BackgroundID:     character.BackgroundID,
 			RaceID:           character.RaceID,
 		}
+
+		ancestry, err := a.DB.GetAncestryByID(character.AncestryID)
+		if err != nil || ancestry.RaceID != character.RaceID {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong Ancestry or Race ID"})
+			return
+		}
+
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateCharacter(internal)); !success {
 			return
 		}
