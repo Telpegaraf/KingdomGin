@@ -13,10 +13,10 @@ Kingdom — это учебный проект, представляющий с�
 Установка и запуск
 
 - Клонируйте репозиторий:
-  git clone https://github.com/Telpegaraf/KingdomFA.git
-  cd KingdomFA
+  git clone https://github.com/Telpegaraf/KingdomGin.git
+  cd KingdomGin
 - Настройте переменные окружения: Укажите переменные окружения в файле .env для подключения к базе данных и настройки JWT.
-- Запустите проект через Docker: sudo docker compose -f docker/docker-compose.yml --project-name kingdom up -d --build
+- Запустите проект через Docker: docker compose -f docker/docker-compose.yml --project-name kingdom up -d --build
 
 To-Do
 
@@ -37,11 +37,11 @@ Authorization: JWT-based middleware for authentication and role-based access con
 Setup and Installation
 
 - Clone the repository:
-    git clone https://github.com/Telpegaraf/KingdomFA.git
-    cd KingdomFA
+    git clone https://github.com/Telpegaraf/KingdomGin.git
+    cd KingdomGin
 - Setup Environment Variables: Configure environment variables in .env for database and JWT secrets.
 
-- Run the Project with Docker: sudo docker compose -f docker/docker-compose.yml --project-name kingdom up -d --build
+- Run the Project with Docker: docker compose -f docker/docker-compose.yml --project-name kingdom up -d --build
 
 To-Do
 
