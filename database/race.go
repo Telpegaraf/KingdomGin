@@ -22,6 +22,16 @@ func (d *GormDatabase) GetRaceByID(id uint) (*model.Race, error) {
 	return nil, err
 }
 
+// GetRaceByName returns race by Name
+func (d *GormDatabase) GetRaceByName(name string) (*model.Race, error) {
+	race := new(model.Race)
+	err := d.DB.Where("name = ?", name).First(race).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return race, nil
+}
+
 // GetRaces returns all Races
 func (d *GormDatabase) GetRaces() ([]*model.Race, error) {
 	var races []*model.Race

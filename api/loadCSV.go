@@ -29,6 +29,10 @@ type LoadCSVDatabase interface {
 	FindTraditions(IDs []uint) ([]model.Tradition, error)
 	CreateSpell(spell *model.Spell) error
 	GetDomainByName(name string) (*model.Domain, error)
+	GetRaceByName(name string) (*model.Race, error)
+	CreateRace(race *model.Race) error
+	GetAncestryByName(name string) (*model.Ancestry, error)
+	CreateAncestry(ancestry *model.Ancestry) error
 }
 
 type LoadCSVApi struct {
@@ -38,7 +42,7 @@ type LoadCSVApi struct {
 // LoadCSV godoc
 //
 // @Summary Create and returns models from csv files or nil
-// @Description Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat, Spell
+// @Description Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat, Spell, Race, Ancestry
 // @Tags CSV
 // @Accept json
 // @Produce json
@@ -46,6 +50,8 @@ type LoadCSVApi struct {
 // @Failure 403 {string} string "You can't access for this API"
 // @Router /csv [post]
 func (a *LoadCSVApi) LoadCSV(ctx *gin.Context) {
+	a.LoadRace(ctx)
+	a.LoadAncestry(ctx)
 	a.LoadTradition(ctx)
 	a.LoadCharacterClass(ctx)
 	a.LoadTrait(ctx)
@@ -53,6 +59,118 @@ func (a *LoadCSVApi) LoadCSV(ctx *gin.Context) {
 	a.LoadSkill(ctx)
 	a.LoadFeat(ctx)
 	a.LoadSpell(ctx)
+}
+
+func (a *LoadCSVApi) LoadRace(ctx *gin.Context) {
+	file, err := os.Open("./csv/Race.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(file)
+	reader := csv.NewReader(file)
+	reader.Comma = ';'
+
+	if _, err := reader.Read(); err != nil {
+		log.Fatal(err)
+	}
+
+	var races []model.Race
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		hitPoint, err := strconv.Atoi(record[2])
+		speed, err := strconv.Atoi(record[4])
+		abilityBoost, err := strconv.Atoi(record[5])
+
+		race := model.Race{
+			Name:         record[0],
+			Description:  record[1],
+			HitPoint:     uint16(hitPoint),
+			Size:         model.SquareSize(record[3]),
+			Speed:        uint8(speed),
+			AbilityBoost: uint8(abilityBoost),
+			Language:     record[7],
+		}
+		if record[6] != "" {
+			attributeFlaw := model.Ability(record[6])
+			race.AttributeFlaw = &attributeFlaw
+		} else {
+			race.AttributeFlaw = nil
+		}
+		races = append(races, race)
+		if existRace, err := a.DB.GetRaceByName(race.Name); err == nil && existRace != nil {
+			continue
+		}
+		err = a.DB.CreateRace(&race)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	}
+}
+
+func (a *LoadCSVApi) LoadAncestry(ctx *gin.Context) {
+	file, err := os.Open("./csv/Ancestry.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(file)
+	reader := csv.NewReader(file)
+	reader.Comma = ';'
+
+	if _, err := reader.Read(); err != nil {
+		log.Fatal(err)
+	}
+
+	var ancestries []model.Ancestry
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		race, err := a.DB.GetRaceByName(record[2])
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		ancestry := model.Ancestry{
+			Name:        record[0],
+			Description: record[1],
+			RaceID:      race.ID,
+		}
+		ancestries = append(ancestries, ancestry)
+		if existAncestry, err := a.DB.GetAncestryByName(ancestry.Name); err == nil && existAncestry != nil {
+			continue
+		}
+		err = a.DB.CreateAncestry(&ancestry)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	}
 }
 
 func (a *LoadCSVApi) LoadTradition(ctx *gin.Context) {
@@ -63,11 +181,12 @@ func (a *LoadCSVApi) LoadTradition(ctx *gin.Context) {
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-
+			log.Fatal(err)
 		}
 	}(file)
 	reader := csv.NewReader(file)
 	reader.Comma = ';'
+
 	var traditions []model.Tradition
 
 	for {
@@ -145,7 +264,7 @@ func (a *LoadCSVApi) LoadSkill(ctx *gin.Context) {
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-
+			log.Fatal(err)
 		}
 	}(file)
 	reader := csv.NewReader(file)
@@ -189,7 +308,7 @@ func (a *LoadCSVApi) LoadAction(ctx *gin.Context) {
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-
+			log.Fatal(err)
 		}
 	}(file)
 	reader := csv.NewReader(file)
@@ -226,7 +345,7 @@ func (a *LoadCSVApi) LoadSpell(ctx *gin.Context) {
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-
+			log.Fatal(err)
 		}
 	}(file)
 	reader := csv.NewReader(file)
@@ -266,9 +385,10 @@ func (a *LoadCSVApi) LoadSpell(ctx *gin.Context) {
 		}
 
 		if record[7] == "" {
-			continue
+			spell.School = nil
 		} else {
-			spell.School = model.School(record[7])
+			school := model.School(record[7])
+			spell.School = &school
 		}
 
 		if traits != nil {
@@ -304,7 +424,7 @@ func (a *LoadCSVApi) LoadCharacterClass(ctx *gin.Context) {
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-
+			log.Fatal(err)
 		}
 	}(file)
 	reader := csv.NewReader(file)
@@ -362,7 +482,7 @@ func (a *LoadCSVApi) LoadFeat(ctx *gin.Context) {
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-
+			log.Fatal(err)
 		}
 	}(file)
 	reader := csv.NewReader(file)
@@ -439,14 +559,11 @@ func (a *LoadCSVApi) GetTraits(ctx *gin.Context, traits string) []uint {
 	parts := strings.Split(traits, ", ")
 	var traitsID []uint
 	for _, part := range parts {
-		log.Println(part)
 		trait, err := a.DB.GetTraitByName(part)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return nil
 		}
-		log.Println(trait)
-		log.Println(trait.ID)
 		traitsID = append(traitsID, trait.ID)
 	}
 	if len(traitsID) == 0 {

@@ -13,7 +13,7 @@ type Race struct {
 	Size          SquareSize `gorm:"type:square_size;default:Medium"`
 	Speed         uint8      `gorm:"not null;default:25"`
 	AbilityBoost  uint8      `gorm:"not null;default:2"`
-	AttributeFlaw Ability    `gorm:"type:ability"`
+	AttributeFlaw *Ability   `gorm:"type:ability"`
 	Language      string
 	Ancestry      []Ancestry `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }

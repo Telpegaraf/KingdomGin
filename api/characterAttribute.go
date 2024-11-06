@@ -23,7 +23,7 @@ func (a *CharacterApi) CreateAttribute(
 	internal := &model.Attribute{
 		CharacterID: characterID,
 	}
-	switch race.AttributeFlaw {
+	switch *race.AttributeFlaw {
 	case model.Strength:
 		internal.Strength = 8
 	case model.Dexterity:

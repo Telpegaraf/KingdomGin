@@ -21,6 +21,16 @@ func (d *GormDatabase) GetAncestryByID(id uint) (*model.Ancestry, error) {
 	return &ancestry, nil
 }
 
+// GetAncestryByName returns Ancestry by Name
+func (d *GormDatabase) GetAncestryByName(name string) (*model.Ancestry, error) {
+	var ancestry model.Ancestry
+	err := d.DB.Where("name = ?", name).First(&ancestry).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return &ancestry, nil
+}
+
 // GetAncestries returns all ancestries
 func (d *GormDatabase) GetAncestries() ([]*model.Ancestry, error) {
 	var ancestries []*model.Ancestry

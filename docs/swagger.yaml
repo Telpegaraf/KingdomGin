@@ -2697,7 +2697,7 @@ paths:
       consumes:
       - application/json
       description: Permissions for Admin, csv - Tradition, Character Class, Trait,
-        Action, Skill, Feat, Spell
+        Action, Skill, Feat, Spell, Race, Ancestry
       produces:
       - application/json
       responses:

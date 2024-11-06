@@ -11,7 +11,7 @@ type Spell struct {
 	Target         string `gorm:"type:varchar(255)"`
 	Rank           uint8
 	Ritual         bool             `gorm:"type:bool;default:false"`
-	School         School           `gorm:"type:school"`
+	School         *School          `gorm:"type:school"`
 	CharacterSpell []CharacterSpell `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Cast           string
 	Tradition      []Tradition `gorm:"many2many:spell_traditions;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`

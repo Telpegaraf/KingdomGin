@@ -1579,7 +1579,7 @@ const docTemplate = `{
         },
         "/csv": {
             "post": {
-                "description": "Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat, Spell",
+                "description": "Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat, Spell, Race, Ancestry",
                 "consumes": [
                     "application/json"
                 ],
