@@ -33,6 +33,8 @@ type LoadCSVDatabase interface {
 	CreateRace(race *model.Race) error
 	GetAncestryByName(name string) (*model.Ancestry, error)
 	CreateAncestry(ancestry *model.Ancestry) error
+	GetBackgroundByName(name string) (*model.Background, error)
+	CreateBackground(background *model.Background) error
 }
 
 type LoadCSVApi struct {
@@ -42,7 +44,7 @@ type LoadCSVApi struct {
 // LoadCSV godoc
 //
 // @Summary Create and returns models from csv files or nil
-// @Description Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat, Spell, Race, Ancestry
+// @Description Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat, Spell, Race, Ancestry, Background
 // @Tags CSV
 // @Accept json
 // @Produce json
@@ -58,6 +60,7 @@ func (a *LoadCSVApi) LoadCSV(ctx *gin.Context) {
 	a.LoadAction(ctx)
 	a.LoadSkill(ctx)
 	a.LoadFeat(ctx)
+	a.LoadBackground(ctx)
 	a.LoadSpell(ctx)
 }
 
@@ -365,9 +368,6 @@ func (a *LoadCSVApi) LoadSpell(ctx *gin.Context) {
 			log.Println(len(record))
 			log.Fatal(err)
 		}
-
-		log.Println(record)
-
 		rank, err := strconv.Atoi(record[11])
 		traits := a.GetTraits(ctx, record[10])
 		traditions := a.GetTraditions(ctx, record[9])
@@ -499,8 +499,6 @@ func (a *LoadCSVApi) LoadFeat(ctx *gin.Context) {
 			break
 		}
 
-		log.Println(record)
-
 		if len(record) != 8 {
 			log.Printf("Wrong record count %v", record)
 			continue
@@ -515,10 +513,7 @@ func (a *LoadCSVApi) LoadFeat(ctx *gin.Context) {
 			log.Fatal(err)
 		}
 
-		skill, err := a.DB.GetSkillByName(record[5])
-		if err != nil {
-			log.Fatal(err)
-		}
+		skill, _ := a.DB.GetSkillByName(record[5])
 
 		traits := a.GetTraits(ctx, record[6])
 
@@ -548,6 +543,68 @@ func (a *LoadCSVApi) LoadFeat(ctx *gin.Context) {
 			continue
 		}
 		err = a.DB.CreateFeat(&feat)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	}
+}
+
+func (a *LoadCSVApi) LoadBackground(ctx *gin.Context) {
+	file, err := os.Open("./csv/Background.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(file)
+	reader := csv.NewReader(file)
+	reader.Comma = ';'
+	var backgrounds []model.Background
+
+	if _, err := reader.Read(); err != nil {
+		log.Fatal(err)
+	}
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		feat, _ := a.DB.GetFeatByName(record[2])
+		firstSkill, _ := a.DB.GetSkillByName(record[3])
+		secondSkill, _ := a.DB.GetSkillByName(record[4])
+
+		log.Println(feat, firstSkill, secondSkill)
+
+		background := model.Background{
+			Name:        record[0],
+			Description: record[1],
+		}
+
+		if feat != nil {
+			background.FeatID = &feat.ID
+		}
+
+		if firstSkill != nil {
+			background.FirstSkillID = &firstSkill.ID
+		}
+		if secondSkill != nil {
+			background.SecondSkillID = &secondSkill.ID
+		}
+
+		backgrounds = append(backgrounds, background)
+		if existBackground, err := a.DB.GetBackgroundByName(background.Name); err == nil && existBackground != nil {
+			continue
+		}
+		err = a.DB.CreateBackground(&background)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

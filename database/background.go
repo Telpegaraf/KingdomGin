@@ -9,14 +9,21 @@ import (
 // GetBackgroundByID Returns Background object by ID
 func (d *GormDatabase) GetBackgroundByID(id uint) (*model.Background, error) {
 	background := model.Background{}
-	err := d.DB.Find(&background, id).Error
+	err := d.DB.First(&background, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
-	if background.ID == id {
-		return &background, nil
+	return &background, err
+}
+
+// GetBackgroundByName Returns Background object by Name
+func (d *GormDatabase) GetBackgroundByName(name string) (*model.Background, error) {
+	background := model.Background{}
+	err := d.DB.Where("name = ?", name).First(&background).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
 	}
-	return nil, err
+	return &background, err
 }
 
 // GetBackgrounds Returns All Background objects

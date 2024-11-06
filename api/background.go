@@ -36,9 +36,9 @@ func (a *BackgroundApi) CreateBackground(ctx *gin.Context) {
 		internal := &model.Background{
 			Name:          background.Name,
 			Description:   background.Description,
-			FeatID:        background.FeatID,
-			FirstSkillID:  background.FirstSkillID,
-			SecondSkillID: background.SecondSkillID,
+			FeatID:        &background.FeatID,
+			FirstSkillID:  &background.FirstSkillID,
+			SecondSkillID: &background.SecondSkillID,
 		}
 		if success := SuccessOrAbort(ctx, 500, a.DB.CreateBackground(internal)); !success {
 			return
@@ -119,9 +119,9 @@ func (a *BackgroundApi) UpdateBackground(ctx *gin.Context) {
 					ID:            oldBackground.ID,
 					Name:          background.Name,
 					Description:   background.Description,
-					FeatID:        background.FeatID,
-					FirstSkillID:  background.FirstSkillID,
-					SecondSkillID: background.SecondSkillID,
+					FeatID:        &background.FeatID,
+					FirstSkillID:  &background.FirstSkillID,
+					SecondSkillID: &background.SecondSkillID,
 				}
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateBackground(internal)); !success {
 					return
@@ -168,8 +168,8 @@ func ToBackgroundExternal(Background *model.Background) *model.BackgroundExterna
 		ID:            Background.ID,
 		Name:          Background.Name,
 		Description:   Background.Description,
-		FeatID:        Background.FeatID,
-		FirstSkillID:  Background.FirstSkillID,
-		SecondSkillID: Background.SecondSkillID,
+		FeatID:        *Background.FeatID,
+		FirstSkillID:  *Background.FirstSkillID,
+		SecondSkillID: *Background.SecondSkillID,
 	}
 }

@@ -28,10 +28,7 @@ func (d *GormDatabase) GetSkillByName(name string) (*model.Skill, error) {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}
-	if skill.Name == name {
-		return skill, err
-	}
-	return nil, err
+	return skill, err
 }
 
 func (d *GormDatabase) GetSkills() ([]*model.Skill, error) {

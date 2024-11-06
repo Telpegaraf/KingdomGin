@@ -1579,7 +1579,7 @@ const docTemplate = `{
         },
         "/csv": {
             "post": {
-                "description": "Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat, Spell, Race, Ancestry",
+                "description": "Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat,",
                 "consumes": [
                     "application/json"
                 ],
@@ -4448,6 +4448,12 @@ const docTemplate = `{
         "model.Background": {
             "type": "object",
             "properties": {
+                "character": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Character"
+                    }
+                },
                 "description": {
                     "type": "string"
                 },

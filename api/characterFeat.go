@@ -9,7 +9,7 @@ import (
 func (a *CharacterApi) CreateCharacterFeat(characterID uint, background *model.Background) {
 	characterFeat := &model.CharacterFeat{
 		CharacterID: characterID,
-		FeatID:      background.FeatID,
+		FeatID:      *background.FeatID,
 	}
 	err := a.DB.CreateCharacterFeat(characterFeat)
 	if err != nil {

@@ -272,7 +272,7 @@ func (a *CharacterApi) CreateSkills(ctx *gin.Context, character *model.Character
 	skills, _ := a.DB.GetSkills()
 	for _, skill := range skills {
 		mastery := model.None
-		if backgroundCharacter.FirstSkillID == skill.ID || backgroundCharacter.SecondSkillID == skill.ID {
+		if *backgroundCharacter.FirstSkillID == skill.ID || *backgroundCharacter.SecondSkillID == skill.ID {
 			mastery = model.Train
 		}
 		characterSkill := &model.CharacterSkill{

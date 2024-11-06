@@ -4,9 +4,10 @@ type Background struct {
 	ID            uint   `gorm:"primary_key;AUTO_INCREMENT"`
 	Name          string `gorm:"unique;not null"`
 	Description   string `gorm:"not null"`
-	FeatID        uint
-	FirstSkillID  uint
-	SecondSkillID uint
+	FeatID        *uint
+	FirstSkillID  *uint
+	SecondSkillID *uint
+	Character     []Character `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 type BackgroundCreate struct {
