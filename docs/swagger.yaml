@@ -1797,6 +1797,26 @@ paths:
       summary: Updates Action by ID or nil
       tags:
       - Action
+  /admin/csv:
+    post:
+      consumes:
+      - application/json
+      description: Permissions for Admin, csv - Tradition, Character Class, Trait,
+        Action, Skill, Feat, Spell, Race, Ancestry, Background
+      produces:
+      - application/json
+      responses:
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You can't access for this API
+          schema:
+            type: string
+      summary: Create and returns models from csv files or nil
+      tags:
+      - CSV
   /ancestry:
     get:
       consumes:
@@ -2696,26 +2716,6 @@ paths:
       summary: Updates Character by ID or nil
       tags:
       - Character Class
-  /csv:
-    post:
-      consumes:
-      - application/json
-      description: Permissions for Admin, csv - Tradition, Character Class, Trait,
-        Action, Skill, Feat,
-      produces:
-      - application/json
-      responses:
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "403":
-          description: You can't access for this API
-          schema:
-            type: string
-      summary: Create and returns models from csv files or nil
-      tags:
-      - CSV
   /domain:
     get:
       consumes:

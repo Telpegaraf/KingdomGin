@@ -216,6 +216,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/csv": {
+            "post": {
+                "description": "Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat, Spell, Race, Ancestry, Background",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CSV"
+                ],
+                "summary": "Create and returns models from csv files or nil",
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/ancestry": {
             "get": {
                 "description": "Return all GetAncestries",
@@ -1570,35 +1599,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Character doesn't exist",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/csv": {
-            "post": {
-                "description": "Permissions for Admin, csv - Tradition, Character Class, Trait, Action, Skill, Feat,",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "CSV"
-                ],
-                "summary": "Create and returns models from csv files or nil",
-                "responses": {
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "You can't access for this API",
                         "schema": {
                             "type": "string"
                         }

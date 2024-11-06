@@ -36,6 +36,7 @@ type LoadCSVDatabase interface {
 	CreateAncestry(ancestry *model.Ancestry) error
 	GetBackgroundByName(name string) (*model.Background, error)
 	CreateBackground(background *model.Background) error
+	GetUserByID(id uint) (*model.User, error)
 }
 
 type LoadCSVApi struct {
@@ -51,7 +52,7 @@ type LoadCSVApi struct {
 // @Produce json
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 403 {string} string "You can't access for this API"
-// @Router /csv [post]
+// @Router /admin/csv [post]
 func (a *LoadCSVApi) LoadCSV(ctx *gin.Context) {
 	a.LoadRace(ctx)
 	a.LoadDomain(ctx)
