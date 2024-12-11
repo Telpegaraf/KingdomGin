@@ -31,6 +31,10 @@ type CharacterDatabase interface {
 	GetCharacterSkillByCharacterID(characterId uint, skillID uint) (*model.CharacterSkill, error)
 	CreateCharacterInfo(*model.CharacterInfo) error
 	GetAncestryByID(id uint) (*model.Ancestry, error)
+	GetRaces() ([]*model.Race, error)
+	GetBackgrounds() ([]*model.Background, error)
+	GetAncestries() ([]*model.Ancestry, error)
+	GetCharacterClasses() ([]*model.CharacterClass, error)
 }
 
 type CharacterApi struct {
@@ -88,7 +92,7 @@ func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
 	for _, character := range characters {
 		resp = append(resp, ToExternalCharacter(character))
 	}
-	tmpl, err := template.ParseFiles("templates/character.html")
+	tmpl, err := template.ParseFiles("templates/character/character.html")
 	if err != nil {
 		ctx.String(http.StatusInternalServerError, "Error loading template")
 		return
@@ -101,6 +105,32 @@ func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
 	}
 }
 
+func (a *CharacterApi) CreateCharacterPage(ctx *gin.Context) {
+	tmpl, err := template.ParseFiles("templates/character/create_character.html")
+	characterClasses, _ := a.DB.GetCharacterClasses()
+	ancestries, _ := a.DB.GetAncestries()
+	backgrounds, _ := a.DB.GetBackgrounds()
+	races, _ := a.DB.GetRaces()
+	data := gin.H{
+		"CharacterClasses": characterClasses,
+		"Ancestries":       ancestries,
+		"Backgrounds":      backgrounds,
+		"Races":            races,
+	}
+	if err != nil {
+		ctx.String(http.StatusInternalServerError, "Error loading template")
+		return
+	}
+
+	tmpl.Execute(ctx.Writer, data)
+	//ctx.HTML(http.StatusOK, "", gin.H{
+	//	"CharacterClasses": characterClasses,
+	//	"Ancestries":       ancestries,
+	//	"Backgrounds":      backgrounds,
+	//	"Races":            races,
+	//})
+}
+
 // CreateCharacter godoc
 //
 // @Summary Create and returns character or nil
@@ -111,7 +141,7 @@ func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
 // @Param character body model.CreateCharacter true "Character data"
 // @Success 201 {object} model.CharacterExternal "Character details"
 // @Failure 401 {string} string "Unauthorized"
-// @Router /character [post]
+// @Router /character/create [post]
 func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 	userID, _ := ctx.Get("userID")
 
@@ -261,20 +291,21 @@ func (a *CharacterApi) DeleteCharacter(ctx *gin.Context) {
 
 func ToExternalCharacter(character *model.Character) *model.CharacterExternal {
 	return &model.CharacterExternal{
-		ID:               character.ID,
-		Name:             character.Name,
-		Alias:            character.Alias,
-		LastName:         character.LastName,
-		UserID:           character.UserID,
-		Level:            character.Level,
-		CharacterItem:    character.CharacterItem,
-		CharacterBoost:   character.Boost,
-		Attribute:        character.Attribute,
-		Slot:             character.Slot,
-		CharacterClassID: character.CharacterClassID,
-		RaceID:           character.RaceID,
-		AncestryID:       character.AncestryID,
-		BackgroundID:     character.BackgroundID,
+		ID:                 character.ID,
+		Name:               character.Name,
+		Alias:              character.Alias,
+		LastName:           character.LastName,
+		UserID:             character.UserID,
+		Level:              character.Level,
+		CharacterItem:      character.CharacterItem,
+		CharacterBoost:     character.Boost,
+		Attribute:          character.Attribute,
+		Slot:               character.Slot,
+		CharacterClassID:   character.CharacterClassID,
+		RaceID:             character.RaceID,
+		AncestryID:         character.AncestryID,
+		BackgroundID:       character.BackgroundID,
+		CharacterClassName: character.CharacterClass.Name,
 	}
 }
 

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Characters</title>
+    <link rel="stylesheet" href="/static/character.css">
+    <script>
+        function confirmDelete(characterId) {
+            if (confirm("Are you sure you want to delete this character?")) {
+                fetch(`/character/${characterId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert("Failed to delete character.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("An error occurred while deleting the character.");
+                    });
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Your Characters</h1>
+<div>
+    <a href="/character/create" class="create-character-button">Create New Character</a>
+</div>
+{{range .}}
+<div class="character">
+    <h2>{{.Name}}</h2>
+    <p>Level: {{.Level}}</p>
+    <p>Class: {{.CharacterClassName}}</p>
+    <button onclick="confirmDelete({{.ID}})">Delete</button>
+</div>
+{{else}}
+<p>No characters found.</p>
+{{end}}
+</body>
+</html>

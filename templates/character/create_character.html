@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Character</title>
+    <link rel="stylesheet" href="/static/character.css">
+    <script>
+        async function createCharacter(event) {
+            event.preventDefault();
+
+            const characterData = {
+                name: document.getElementById('name').value,
+                alias: document.getElementById('alias').value,
+                last_name: document.getElementById('last_name').value,
+                character_class_id: parseInt(document.getElementById('character_class_id').value),
+                ancestry_id: parseInt(document.getElementById('ancestry_id').value),
+                background_id: parseInt(document.getElementById('background_id').value),
+                race_id: parseInt(document.getElementById('race_id').value)
+            };
+
+            try {
+                const response = await fetch('/character/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(characterData)
+                });
+
+                if (response.ok) {
+                    alert('Character created successfully!');
+                    window.location.href = '/characters';
+                } else {
+                    const errorData = await response.json();
+                    alert('Error creating character: ' + errorData.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while creating the character.');
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Create New Character</h1>
+<form id="createCharacterForm" onsubmit="createCharacter(event)">
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+        <label for="alias">Alias:</label>
+        <input type="text" id="alias" name="alias">
+    </div>
+    <div>
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name">
+    </div>
+    <div>
+        <label for="character_class_id">Character Class:</label>
+        <select id="character_class_id" name="character_class_id" required>
+            {{range .CharacterClasses}}
+            <option value="{{.ID}}">{{.Name}}</option>
+            {{end}}
+        </select>
+    </div>
+    <div>
+        <label for="ancestry_id">Ancestry:</label>
+        <select id="ancestry_id" name="ancestry_id" required>
+            {{range .Ancestries}}
+            <option value="{{.ID}}">{{.Name}}</option>
+            {{end}}
+        </select>
+    </div>
+    <div>
+        <label for="background_id">Background:</label>
+        <select id="background_id" name="background_id" required>
+            {{range .Backgrounds}}
+            <option value="{{.ID}}">{{.Name}}</option>
+            {{end}}
+        </select>
+    </div>
+    <div>
+        <label for="race_id">Race:</label>
+        <select id="race_id" name="race_id" required>
+            {{range .Races}}
+            <option value="{{.ID}}">{{.Name}}</option>
+            {{end}}
+        </select>
+    </div>
+    <button type="submit">Create Character</button>
+</form>
+</body>
+</html>
