@@ -4,8 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Character</title>
-    <link rel="stylesheet" href="/static/character.css">
+    <link rel="stylesheet" href="/static/character/character_create.css">
     <script>
+        let currentTab = 0;
+        const classDescriptions = {
+            {{range .CharacterClasses}}
+            {{.ID}}: {
+                name: "{{.Name}}",
+                hitPoint: {{.HitPoint}},
+                perception: "{{.Perception}}",
+                fortitude: "{{.Fortitude}}",
+                reflex: "{{.Reflex}}",
+                will: "{{.Will}}",
+                unarmedArmor: "{{.UnarmedArmor}}",
+                lightArmor: "{{.LightArmor}}",
+                mediumArmor: "{{.MediumArmor}}",
+                heavyArmor: "{{.HeavyArmor}}",
+                unArmedWeapon: "{{.UnArmedWeapon}}",
+                commonWeapon: "{{.CommonWeapon}}",
+                martialWeapon: "{{.MartialWeapon}}"
+            },
+            {{end}}
+        };
+
+        const raceDescriptions = {
+            {{range .Races}}
+            {{.ID}}: {
+                name: "{{.Name}}",
+                description: "{{.Description}}",
+                hitPoint: {{.HitPoint}},
+                size: "{{.Size}}",
+                speed: {{.Speed}},
+                abilityBoost: {{.AbilityBoost}},
+                attributeFlaw: "{{if .AttributeFlaw}}{{.AttributeFlaw}}{{else}}None{{end}}",
+                language: "{{.Language}}"
+            },
+            {{end}}
+        };
+
+        function showTab(n) {
+            const tabs = document.querySelectorAll('.tab');
+            const tabButtons = document.querySelectorAll('.tab-button');
+
+            tabs.forEach((tab, index) => {
+                tab.style.display = index === n ? 'block' : 'none';
+                tabButtons[index].classList.toggle('active', index === n);
+            });
+
+            currentTab = n;
+        }
+
+        function nextTab() {
+            if (currentTab < document.querySelectorAll('.tab').length - 1) {
+                showTab(currentTab + 1);
+            }
+        }
+
+        function prevTab() {
+            if (currentTab > 0) {
+                showTab(currentTab - 1);
+            }
+        }
+
+        function selectClass(classId) {
+            // Удаляем активный класс с предыдущего выбранного элемента
+            const classItems = document.querySelectorAll('.class-item');
+            classItems.forEach(item => item.classList.remove('active'));
+
+            // Добавляем активный класс к текущему выбранному элементу
+            const selectedItem = document.querySelector(`.class-item[data-id='${classId}']`);
+            if (selectedItem) {
+                selectedItem.classList.add('active');
+            }
+            document.getElementById('character_class_id').value = classId;
+            const classInfo = classDescriptions[classId];
+            document.getElementById('classDescription').innerHTML = `
+                <h3>${classInfo.name}</h3>
+                <p>Hit Points: ${classInfo.hitPoint}</p>
+                <p>Perception: ${classInfo.perception}</p>
+                <p>Fortitude: ${classInfo.fortitude}</p>
+                <p>Reflex: ${classInfo.reflex}</p>
+                <p>Will: ${classInfo.will}</p>
+                <p>Unarmed Armor: ${classInfo.unarmedArmor}</p>
+                <p>Light Armor: ${classInfo.lightArmor}</p>
+                <p>Medium Armor: ${classInfo.mediumArmor}</p>
+                <p>Heavy Armor: ${classInfo.heavyArmor}</p>
+                <p>Unarmed Weapon: ${classInfo.unArmedWeapon}</p>
+                <p>Common Weapon: ${classInfo.commonWeapon}</p>
+                <p>Martial Weapon: ${classInfo.martialWeapon}</p>
+            `;
+        }
+
+        function selectRace(raceId) {
+            // Удаляем активный класс с предыдущего выбранного элемента
+            const raceItems = document.querySelectorAll('.race-item');
+            raceItems.forEach(item => item.classList.remove('active'));
+
+            // Добавляем активный класс к текущему выбранному элементу
+            const selectedItem = document.querySelector(`.race-item[data-id='${raceId}']`);
+            if (selectedItem) {
+                selectedItem.classList.add('active');
+            }
+
+            // Обновляем скрытое поле и описание
+            document.getElementById('race_id').value = raceId;
+            const raceInfo = raceDescriptions[raceId];
+            document.getElementById('raceDescription').innerHTML = `
+                <h3>${raceInfo.name}</h3>
+                <p>Description: ${raceInfo.description}</p>
+                <p>Hit Points: ${raceInfo.hitPoint}</p>
+                <p>Size: ${raceInfo.size}</p>
+                <p>Speed: ${raceInfo.speed}</p>
+                <p>Ability Boost: ${raceInfo.abilityBoost}</p>
+                <p>Attribute Flaw: ${raceInfo.attributeFlaw}</p>
+                <p>Language: ${raceInfo.language}</p>
+            `;
+        }
+
         async function createCharacter(event) {
             event.preventDefault();
 
@@ -40,56 +155,84 @@
                 alert('An error occurred while creating the character.');
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab(currentTab);
+        });
     </script>
 </head>
 <body>
 <h1>Create New Character</h1>
+<div class="tab-buttons">
+    <div class="tab-button" onclick="showTab(0)">Class</div>
+    <div class="tab-button" onclick="showTab(1)">Race</div>
+    <div class="tab-button" onclick="showTab(2)">Ancestry</div>
+    <div class="tab-button" onclick="showTab(3)">Background</div>
+    <div class="tab-button" onclick="showTab(4)">Name</div>
+</div>
 <form id="createCharacterForm" onsubmit="createCharacter(event)">
-    <div>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
+    <div class="tab" id="classTab">
+        <div class="container">
+            <div class="class-list">
+                {{range .CharacterClasses}}
+                <div class="class-item" data-id="{{.ID}}" onclick="selectClass({{.ID}})">{{.Name}}</div>
+                {{end}}
+            </div>
+            <div class="description" id="classDescription">
+                Select a class to see its details.
+            </div>
+        </div>
+        <input type="hidden" id="character_class_id" name="character_class_id" required>
     </div>
-    <div>
-        <label for="alias">Alias:</label>
-        <input type="text" id="alias" name="alias">
+    <div class="tab" id="raceTab">
+        <div class="container">
+            <div class="race-list">
+                {{range .Races}}
+                <div class="race-item" data-id="{{.ID}}" onclick="selectRace({{.ID}})">{{.Name}}</div>
+                {{end}}
+            </div>
+            <div class="description" id="raceDescription">
+                Select a race to see its details.
+            </div>
+            <input type="hidden" id="race_id" name="race_id" required>
+        </div>
     </div>
-    <div>
-        <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name">
-    </div>
-    <div>
-        <label for="character_class_id">Character Class:</label>
-        <select id="character_class_id" name="character_class_id" required>
-            {{range .CharacterClasses}}
-            <option value="{{.ID}}">{{.Name}}</option>
-            {{end}}
-        </select>
-    </div>
-    <div>
+    <div class="tab" id="ancestryTab">
         <label for="ancestry_id">Ancestry:</label>
         <select id="ancestry_id" name="ancestry_id" required>
             {{range .Ancestries}}
             <option value="{{.ID}}">{{.Name}}</option>
             {{end}}
         </select>
+        <button type="button" onclick="prevTab()">Previous</button>
+        <button type="button" onclick="nextTab()">Next</button>
     </div>
-    <div>
+    <div class="tab" id="backgroundTab">
         <label for="background_id">Background:</label>
         <select id="background_id" name="background_id" required>
             {{range .Backgrounds}}
             <option value="{{.ID}}">{{.Name}}</option>
             {{end}}
         </select>
+        <button type="button" onclick="prevTab()">Previous</button>
+        <button type="button" onclick="nextTab()">Next</button>
     </div>
-    <div>
-        <label for="race_id">Race:</label>
-        <select id="race_id" name="race_id" required>
-            {{range .Races}}
-            <option value="{{.ID}}">{{.Name}}</option>
-            {{end}}
-        </select>
+    <div class="tab" id="nameTab">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="alias">Alias:</label>
+            <input type="text" id="alias" name="alias">
+        </div>
+        <div>
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name">
+        </div>
+        <button type="button" onclick="prevTab()">Previous</button>
+        <button type="submit">Create Character</button>
     </div>
-    <button type="submit">Create Character</button>
 </form>
 </body>
 </html>

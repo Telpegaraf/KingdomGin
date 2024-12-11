@@ -8,6 +8,7 @@ type Character struct {
 	Level            int8   `gorm:"default:1"`
 	UserID           uint
 	RaceID           uint
+	Race             Race `gorm:"foreignKey:RaceID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	AncestryID       uint
 	BackgroundID     uint
 	CharacterClassID uint

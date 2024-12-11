@@ -27,7 +27,11 @@ func (d *GormDatabase) GetCharacterByID(id uint) (*model.Character, error) {
 // GetCharacters returns all characters
 func (d *GormDatabase) GetCharacters(id uint) ([]*model.Character, error) {
 	var characters []*model.Character
-	err := d.DB.Preload("CharacterClass").Where(&model.Character{UserID: id}).Find(&characters).Error
+	err := d.DB.
+		Preload("CharacterClass").
+		Preload("Race").
+		Where(&model.Character{UserID: id}).
+		Find(&characters).Error
 	return characters, err
 }
 
