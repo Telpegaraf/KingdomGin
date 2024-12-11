@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"html/template"
 	"kingdom/auth"
 	"kingdom/model"
 	"net/http"
@@ -87,7 +88,17 @@ func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
 	for _, character := range characters {
 		resp = append(resp, ToExternalCharacter(character))
 	}
-	ctx.JSON(http.StatusOK, resp)
+	tmpl, err := template.ParseFiles("templates/character.html")
+	if err != nil {
+		ctx.String(http.StatusInternalServerError, "Error loading template")
+		return
+	}
+
+	err = tmpl.Execute(ctx.Writer, resp)
+	if err != nil {
+		ctx.String(http.StatusInternalServerError, "Error rendering template")
+		return
+	}
 }
 
 // CreateCharacter godoc

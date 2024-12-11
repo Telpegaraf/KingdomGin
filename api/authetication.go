@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
+	"html/template"
 	"kingdom/model"
 	"log"
 	"net/http"
@@ -17,6 +18,15 @@ type AuthDatabase interface {
 
 type Controller struct {
 	DB AuthDatabase
+}
+
+func (a *Controller) LoginPage(ctx *gin.Context) {
+	tmpl, err := template.ParseFiles("templates/login.html")
+	if err != nil {
+		ctx.String(http.StatusInternalServerError, "Error loading template")
+		return
+	}
+	tmpl.Execute(ctx.Writer, nil)
 }
 
 // Login godoc
@@ -75,7 +85,7 @@ func (a *Controller) Login(ctx *gin.Context) {
 
 	ctx.SetSameSite(http.SameSiteLaxMode)
 	ctx.SetCookie("Authorization", tokenString, 3600*24, "", "", false, true)
-	ctx.JSON(http.StatusOK, gin.H{})
+	ctx.Redirect(http.StatusFound, "/character")
 }
 
 func (a *Controller) Validate(c *gin.Context) {

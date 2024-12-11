@@ -16,6 +16,7 @@ import (
 
 func Create(db *database.GormDatabase, conf *config.Configuration, consumer *consumer.RMQConsumer) (*gin.Engine, func()) {
 	g := gin.New()
+	g.Static("/static", "./static")
 	g.RemoteIPHeaders = []string{"X-Forwarded-For"}
 	g.SetTrustedProxies(conf.Server.TrustedProxies)
 	g.ForwardedByClientIP = true
@@ -65,6 +66,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 
 	g.POST("/user", userHandler.CreateUser)
 	g.POST("/user/verification", userHandler.VerificationUser)
+	g.GET("/auth/login", authHandler.LoginPage)
 	g.POST("/auth/login", authHandler.Login)
 	g.GET("/validate", authHandler.Validate)
 

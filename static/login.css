@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap');
+
+body {
+    background-color: #2c2f33; /* Темный фон */
+    color: #f5f5f5; /* Светлый текст */
+    font-family: 'Uncial Antiqua', cursive; /* Фэнтези-шрифт */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-image: url('https://www.transparenttextures.com/patterns/dark-denim.png'); /* Текстурированный фон */
+}
+
+form {
+    background-color: rgba(44, 47, 51, 0.9); /* Полупрозрачный темный фон для формы */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    width: 100%;
+    box-sizing: border-box; /* Учет padding и border в общей ширине */
+    text-align: center; /* Центрирование текста внутри формы */
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #e2c044; /* Золотистый цвет для заголовка */
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    text-align: left; /* Выравнивание текста меток влево */
+}
+
+input, button {
+    width: 100%; /* Установка одинаковой ширины */
+    padding: 10px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    box-sizing: border-box; /* Учет padding и border в общей ширине */
+}
+
+input {
+    border: 1px solid #444;
+    background-color: #1e2124;
+    color: #f5f5f5;
+}
+
+button {
+    background-color: #e2c044;
+    color: #2c2f33;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #c9a635;
+}
