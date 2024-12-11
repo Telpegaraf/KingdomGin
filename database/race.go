@@ -12,7 +12,7 @@ func (d *GormDatabase) CreateRace(race *model.Race) error { return d.DB.Create(&
 // GetRaceByID returns Race by ID
 func (d *GormDatabase) GetRaceByID(id uint) (*model.Race, error) {
 	race := new(model.Race)
-	err := d.DB.Find(race, id).Error
+	err := d.DB.Preload("Ancestry").Find(race, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}

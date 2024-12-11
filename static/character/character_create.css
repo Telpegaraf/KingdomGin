@@ -80,16 +80,36 @@ body {
     background-color: #f0f0f0;
 }
 
-.race-item.active {
+.container {
+    display: flex;
+}
+
+.race-list {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.ancestry-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+}
+
+.ancestry-item.active {
     background-color: #4CAF50; /* Цвет фона для активного элемента */
     color: #fff; /* Цвет текста для активного элемента */
+}
+
+.ancestry-item:hover {
+    background-color: #f0f0f0;
 }
 
 .container {
     display: flex;
 }
 
-.race-list {
+.ancestry-list {
     display: flex;
     flex-direction: column;
     width: 50%;

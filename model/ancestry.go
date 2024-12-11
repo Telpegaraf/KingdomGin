@@ -5,6 +5,7 @@ type Ancestry struct {
 	Name        string `gorm:"unique"`
 	Description string `gorm:"type:text"`
 	RaceID      uint
+	Race        Race `gorm:"foreignKey:RaceID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type AncestryCreate struct {

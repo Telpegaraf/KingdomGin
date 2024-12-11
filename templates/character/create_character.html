@@ -42,6 +42,25 @@
             {{end}}
         };
 
+        const ancestryDescriptions = {
+            {{range .Ancestries}}
+            {{.ID}}: {
+                name: "{{.Name}}",
+                description: "{{.Description}}",
+                raceId: "{{.RaceID}}"
+            },
+            {{end}}
+        };
+
+        const raceAncestries = {};
+
+        {{range .Ancestries}}
+        if (!raceAncestries[{{.RaceID}}]) {
+            raceAncestries[{{.RaceID}}] = [];
+        }
+        raceAncestries[{{.RaceID}}].push({{.ID}});
+        {{end}}
+
         function showTab(n) {
             const tabs = document.querySelectorAll('.tab');
             const tabButtons = document.querySelectorAll('.tab-button');
@@ -119,6 +138,52 @@
                 <p>Attribute Flaw: ${raceInfo.attributeFlaw}</p>
                 <p>Language: ${raceInfo.language}</p>
             `;
+            updateAncestryList(raceId);
+        }
+
+        function clearAncestryDisplay() {
+            // Очищаем список наследий
+            const ancestryList = document.querySelector('.ancestry-list');
+            if (ancestryList) {
+                ancestryList.innerHTML = '';
+            }
+
+            // Очищаем описание наследия
+            const ancestryDescription = document.getElementById('ancestryDescription');
+            if (ancestryDescription) {
+                ancestryDescription.innerHTML = 'Select an ancestry to see its details.';
+            }
+        }
+
+        function updateAncestryList(raceId) {
+            clearAncestryDisplay();
+            const ancestryList = document.querySelector('.ancestry-list');
+            const validAncestries = raceAncestries[raceId];
+            validAncestries.forEach(ancestryId => {
+                const ancestryInfo = ancestryDescriptions[ancestryId];
+                const ancestryItem = document.createElement('div');
+                ancestryItem.className = 'ancestry-item';
+                ancestryItem.setAttribute('data-id', ancestryId);
+                ancestryItem.onclick = () => selectAncestry(ancestryId);
+                ancestryItem.textContent = ancestryInfo.name;
+                ancestryList.appendChild(ancestryItem);
+            });
+        }
+
+        function selectAncestry(ancestryId) {
+            const ancestryItems = document.querySelectorAll('.ancestry-item');
+            ancestryItems.forEach(item => item.classList.remove('active'));
+            const selectedItem = document.querySelector(`.ancestry-item[data-id='${ancestryId}']`);
+            if (selectedItem) {
+                selectedItem.classList.add('active')
+            }
+
+            document.getElementById('ancestry_id').value = ancestryId;
+            const ancestryInfo = ancestryDescriptions[ancestryId];
+            document.getElementById('ancestryDescription').innerHTML = `
+                <h3>${ancestryInfo.name}</h3>
+                <p>Description: ${ancestryInfo.description}</p>
+            `;
         }
 
         async function createCharacter(event) {
@@ -157,6 +222,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            clearAncestryDisplay();
             showTab(currentTab);
         });
     </script>
@@ -194,18 +260,21 @@
             <div class="description" id="raceDescription">
                 Select a race to see its details.
             </div>
-            <input type="hidden" id="race_id" name="race_id" required>
         </div>
+        <input type="hidden" id="race_id" name="race_id" required>
     </div>
     <div class="tab" id="ancestryTab">
-        <label for="ancestry_id">Ancestry:</label>
-        <select id="ancestry_id" name="ancestry_id" required>
-            {{range .Ancestries}}
-            <option value="{{.ID}}">{{.Name}}</option>
-            {{end}}
-        </select>
-        <button type="button" onclick="prevTab()">Previous</button>
-        <button type="button" onclick="nextTab()">Next</button>
+        <div class="container">
+            <div class="ancestry-list">
+                {{range .Ancestries}}
+                <div class="ancestry-item" data-id="{{.ID}}" onclick="selectAncestry({{.ID}})">{{.Name}}</div>
+                {{end}}
+            </div>
+            <div class="description" id="ancestryDescription">
+                Select an ancestry to see its details.
+            </div>
+        </div>
+        <input type="hidden" id="ancestry_id" name="ancestry_id" required>
     </div>
     <div class="tab" id="backgroundTab">
         <label for="background_id">Background:</label>
