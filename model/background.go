@@ -33,4 +33,5 @@ type BackgroundExternal struct {
 	FeatID        *uint  `json:"feat_id"`
 	FirstSkillID  *uint  `json:"first_skill_id"`
 	SecondSkillID *uint  `json:"second_skill_id"`
+	//Feat          Feat   `json:"feat"`
 }

@@ -52,6 +52,16 @@
             {{end}}
         };
 
+        const backgroundDescriptions = {
+            {{range .Backgrounds}}
+            {{.ID}}: {
+                name: "{{.Name}}",
+                description: "{{.Description}}",
+            },
+            {{end}}
+        };
+
+
         const raceAncestries = {};
 
         {{range .Ancestries}}
@@ -71,18 +81,6 @@
             });
 
             currentTab = n;
-        }
-
-        function nextTab() {
-            if (currentTab < document.querySelectorAll('.tab').length - 1) {
-                showTab(currentTab + 1);
-            }
-        }
-
-        function prevTab() {
-            if (currentTab > 0) {
-                showTab(currentTab - 1);
-            }
         }
 
         function selectClass(classId) {
@@ -186,6 +184,22 @@
             `;
         }
 
+        function selectBackground(backgroundId) {
+            const backgroundItems = document.querySelectorAll('.background-item');
+            backgroundItems.forEach(item => item.classList.remove('active'));
+            const selectedItem = document.querySelector(`.background-item[data-id='${backgroundId}']`);
+            if (selectedItem) {
+                selectedItem.classList.add('active')
+            }
+
+            document.getElementById('background_id').value = backgroundId;
+            const backgroundInfo = backgroundDescriptions[backgroundId];
+            document.getElementById('backgroundDescription').innerHTML = `
+                <h3>${backgroundInfo.name}</h3>
+                <p>Description: ${backgroundInfo.description}</p>
+            `;
+        }
+
         async function createCharacter(event) {
             event.preventDefault();
 
@@ -277,14 +291,17 @@
         <input type="hidden" id="ancestry_id" name="ancestry_id" required>
     </div>
     <div class="tab" id="backgroundTab">
-        <label for="background_id">Background:</label>
-        <select id="background_id" name="background_id" required>
-            {{range .Backgrounds}}
-            <option value="{{.ID}}">{{.Name}}</option>
-            {{end}}
-        </select>
-        <button type="button" onclick="prevTab()">Previous</button>
-        <button type="button" onclick="nextTab()">Next</button>
+        <div class="container">
+            <div class="background-list">
+                {{range .Backgrounds}}
+                <div class="background-item" data-id="{{.ID}}" onclick="selectBackground({{.ID}})">{{.Name}}</div>
+                {{end}}
+            </div>
+            <div class="description" id="backgroundDescription">
+                Select an background to see its details.
+            </div>
+        </div>
+        <input type="hidden" id="background_id" name="background_id" required>
     </div>
     <div class="tab" id="nameTab">
         <div>

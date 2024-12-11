@@ -29,7 +29,11 @@ func (d *GormDatabase) GetBackgroundByName(name string) (*model.Background, erro
 // GetBackgrounds Returns All Background objects
 func (d *GormDatabase) GetBackgrounds() ([]*model.Background, error) {
 	var backgrounds []*model.Background
-	err := d.DB.Find(&backgrounds).Error
+	err := d.DB.
+		//Preload("Feat").
+		//Preload("Skill").
+		Order("name asc").
+		Find(&backgrounds).Error
 	return backgrounds, err
 }
 
