@@ -97,18 +97,18 @@
             const classInfo = classDescriptions[classId];
             document.getElementById('classDescription').innerHTML = `
                 <h3>${classInfo.name}</h3>
-                <p>Hit Points: ${classInfo.hitPoint}</p>
-                <p>Perception: ${classInfo.perception}</p>
-                <p>Fortitude: ${classInfo.fortitude}</p>
-                <p>Reflex: ${classInfo.reflex}</p>
-                <p>Will: ${classInfo.will}</p>
-                <p>Unarmed Armor: ${classInfo.unarmedArmor}</p>
-                <p>Light Armor: ${classInfo.lightArmor}</p>
-                <p>Medium Armor: ${classInfo.mediumArmor}</p>
-                <p>Heavy Armor: ${classInfo.heavyArmor}</p>
-                <p>Unarmed Weapon: ${classInfo.unArmedWeapon}</p>
-                <p>Common Weapon: ${classInfo.commonWeapon}</p>
-                <p>Martial Weapon: ${classInfo.martialWeapon}</p>
+                <p><span class="highlight">HIT POINTS</span> ${classInfo.hitPoint}</p>
+                <p><span class="highlight">PERCEPTION</span> ${classInfo.perception}</p>
+                <p><span class="highlight">FORTITUDE</span> ${classInfo.fortitude}</p>
+                <p><span class="highlight">REFLEX</span> ${classInfo.reflex}</p>
+                <p><span class="highlight">WILL</span> ${classInfo.will}</p>
+                <p><span class="highlight">UNARMED ARMOR</span> ${classInfo.unarmedArmor}</p>
+                <p><span class="highlight">LIGHT ARMOR</span> ${classInfo.lightArmor}</p>
+                <p><span class="highlight">MEDIUM ARMOR</span> ${classInfo.mediumArmor}</p>
+                <p><span class="highlight">HEAVY ARMOR</span> ${classInfo.heavyArmor}</p>
+                <p><span class="highlight">UNARMED WEAPON</span> ${classInfo.unArmedWeapon}</p>
+                <p><span class="highlight">COMMON WEAPON</span> ${classInfo.commonWeapon}</p>
+                <p><span class="highlight">MARTIAL WEAPON</span> ${classInfo.martialWeapon}</p>
             `;
         }
 
@@ -128,13 +128,13 @@
             const raceInfo = raceDescriptions[raceId];
             document.getElementById('raceDescription').innerHTML = `
                 <h3>${raceInfo.name}</h3>
-                <p>Description: ${raceInfo.description}</p>
-                <p>Hit Points: ${raceInfo.hitPoint}</p>
-                <p>Size: ${raceInfo.size}</p>
-                <p>Speed: ${raceInfo.speed}</p>
-                <p>Ability Boost: ${raceInfo.abilityBoost}</p>
-                <p>Attribute Flaw: ${raceInfo.attributeFlaw}</p>
-                <p>Language: ${raceInfo.language}</p>
+                <p>${raceInfo.description}</p>
+                <p><span class="highlight">Hit Points</span> ${raceInfo.hitPoint}</p>
+                <p><span class="highlight">Size</span> ${raceInfo.size}</p>
+                <p><span class="highlight">Speed</span> ${raceInfo.speed}</p>
+                <p><span class="highlight">Ability Boost</span> ${raceInfo.abilityBoost}</p>
+                <p><span class="highlight">Attribute Flaw</span> ${raceInfo.attributeFlaw}</p>
+                <p><span class="highlight">Language</span> ${raceInfo.language}</p>
             `;
             updateAncestryList(raceId);
         }
@@ -224,7 +224,7 @@
 
                 if (response.ok) {
                     alert('Character created successfully!');
-                    window.location.href = '/characters';
+                    window.location.href = '/character';
                 } else {
                     const errorData = await response.json();
                     alert('Error creating character: ' + errorData.error);
@@ -298,26 +298,28 @@
                 {{end}}
             </div>
             <div class="description" id="backgroundDescription">
-                Select an background to see its details.
+                Select a background to see its details.
             </div>
         </div>
         <input type="hidden" id="background_id" name="background_id" required>
     </div>
     <div class="tab" id="nameTab">
-        <div>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+        <div class="form-group">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" id="name" name="name" class="form-input" required>
         </div>
-        <div>
-            <label for="alias">Alias:</label>
-            <input type="text" id="alias" name="alias">
+        <div class="form-group">
+            <label for="alias" class="form-label">Alias:</label>
+            <input type="text" id="alias" name="alias" class="form-input">
         </div>
-        <div>
-            <label for="last_name">Last Name:</label>
-            <input type="text" id="last_name" name="last_name">
+        <div class="form-group">
+            <label for="last_name" class="form-label">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" class="form-input">
         </div>
-        <button type="button" onclick="prevTab()">Previous</button>
-        <button type="submit">Create Character</button>
+        <div class="form-buttons">
+            <button type="button" class="button-prev" onclick="prevTab()">Previous</button>
+            <button type="submit" class="button-submit">Create Character</button>
+        </div>
     </div>
 </form>
 </body>

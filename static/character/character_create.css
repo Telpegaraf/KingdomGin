@@ -1,6 +1,20 @@
+@font-face {
+    font-family: 'Commissioner';
+    src: url('fonts/Commissioner-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Commissioner';
+    src: url('fonts/Commissioner-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #2c2f33;
+    font-family: Commissioner, sans-serif;
+    background-color: #171a1e;
     color: #f5f5f5;
     padding: 20px;
 }
@@ -29,101 +43,94 @@ body {
 .tab-button {
     padding: 10px 20px;
     cursor: pointer;
-    background-color: #f1f1f1;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    color: #333; /* Цвет шрифта для неактивных вкладок */
+    color: #f1f1f1; /* Цвет шрифта для неактивных вкладок */
 }
 
 .tab-button.active {
-    background-color: #4CAF50; /* Цвет фона для активной вкладки */
-    color: #fff; /* Цвет шрифта для активной вкладки */
+    color: #ff5722; /* Цвет шрифта для активной вкладки */
 }
 
-.class-list {
+.class-list, .race-list, .ancestry-list, .background-list {
     display: flex;
     flex-direction: column;
     width: 50%;
+    overflow-y: scroll;
+    max-height: 100%; /* Ограничивает высоту, чтобы соответствовать контейнеру */
 }
 
-.class-item {
+.class-item, .race-item, .ancestry-item, .background-item {
     padding: 10px;
     cursor: pointer;
     border-bottom: 1px solid #ccc;
-}
-
-.class-item:hover {
-    background-color: #f0f0f0;
 }
 
 .description {
     width: 50%;
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     border-left: 1px solid #ccc;
+    overflow-y: hidden;
+    max-height: 100%;
+    box-sizing: border-box;
 }
 
 .container {
     display: flex;
+    height: 780px;
 }
 
-.class-item.active {
-    background-color: #4CAF50; /* Цвет фона для активного элемента */
-    color: #fff; /* Цвет текста для активного элемента */
+.class-item.active, .race-item.active, .ancestry-item.active, .background-item.active {
+    color: #ff5722; /* Цвет текста для активного элемента */
+    font-weight: bold;
 }
 
-.race-item.active {
-    background-color: #4CAF50; /* Цвет фона для активного элемента */
-    color: #fff; /* Цвет текста для активного элемента */
+.highlight {
+    font-weight: bold;
+    color: #FF5722FF
 }
 
-.race-item:hover {
-    background-color: #f0f0f0;
+.form-group {
+    margin-bottom: 15px;
 }
 
-.race-list {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
-.ancestry-item {
-    padding: 10px;
+.form-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-buttons {
+    margin-top: 20px;
+}
+
+.button-prev {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ccc;
+    color: #333;
     cursor: pointer;
-    border-bottom: 1px solid #ccc;
+    margin-right: 10px;
 }
 
-.ancestry-item.active {
-    background-color: #4CAF50; /* Цвет фона для активного элемента */
-    color: #fff; /* Цвет текста для активного элемента */
-}
-
-.ancestry-item:hover {
-    background-color: #f0f0f0;
-}
-
-.ancestry-list {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-}
-
-.background-item {
-    padding: 10px;
+.button-submit {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #FF5722FF;
+    color: white;
     cursor: pointer;
-    border-bottom: 1px solid #ccc;
 }
 
-.background-item.active {
-    background-color: #4CAF50; /* Цвет фона для активного элемента */
-    color: #fff; /* Цвет текста для активного элемента */
-}
-
-.background-item:hover {
-    background-color: #f0f0f0;
-}
-
-.background-list {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
+.button-prev:hover,
+.button-submit:hover {
+    opacity: 0.9;
 }
