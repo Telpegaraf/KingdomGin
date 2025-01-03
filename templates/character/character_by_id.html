@@ -13,9 +13,50 @@
     <div class="header-item">Equipment</div>
     <div class="header-item">Skills</div>
 </div>
+<div class="level">Level {{.Level}}</div>
+<div class="level-skills-container">
+    <div class="info">
+        <div class="avatar">Аватар</div>
+        <ul class="attributes-list">
+            <li class="attribute-item">
+                <strong>Strength:</strong> {{.Attribute.Strength}}
+                <div class="attribute-square">{{.Attribute.StrengthModifier}}</div>
+            </li>
+            <li class="attribute-item">
+                <strong>Dexterity:</strong> {{.Attribute.Dexterity}}
+                <div class="attribute-square">{{.Attribute.DexterityModifier}}</div>
+            </li>
+            <li class="attribute-item">
+                <strong>Constitution:</strong> {{.Attribute.Constitution}}
+                <div class="attribute-square">{{.Attribute.ConstitutionModifier}}</div>
+            </li>
+            <li class="attribute-item">
+                <strong>Intelligence:</strong> {{.Attribute.Intelligence}}
+                <div class="attribute-square">{{.Attribute.IntelligenceModifier}}</div>
+            </li>
+            <li class="attribute-item">
+                <strong>Wisdom:</strong> {{.Attribute.Wisdom}}
+                <div class="attribute-square">{{.Attribute.WisdomModifier}}</div>
+            </li>
+            <li class="attribute-item">
+                <strong>Charisma:</strong> {{.Attribute.Charisma}}
+                <div class="attribute-square">{{.Attribute.CharismaModifier}}</div>
+            </li>
+        </ul>
+    </div>
+    <div class="equipment">Экипировка</div>
+    <ul class="skills-list">
+        {{range .CharacterSkill}}
+        <li class="skill-item">
+            <span class="skill-name">{{.Name}}</span>
+            <span class="separator">-</span>
+            <span class="skill-mastery">{{.Mastery}}</span>
+        </li>
+        {{end}}
+    </ul>
+</div>
 <h3>Additional Stats</h3>
 <div class="additional-stats">
-    <div class="stat-item">Level: {{.Level}}</div>
     <div class="stat-item">Hero Points: {{.CharacterInfo.HeroPoint}}</div>
     <div class="stat-item">Ancestry: {{.CharacterAncestry.Name}}</div>
     <div class="stat-item">Background: {{.CharacterBackground.Name}}</div>
@@ -50,41 +91,6 @@
 </div>
 <div class="character-details">
     <h3>Attributes</h3>
-    <ul class="attributes-list">
-        <li class="attribute-item">
-            <div class="attribute-square">{{.Attribute.StrengthModifier}}</div>
-            <strong>Strength:</strong> {{.Attribute.Strength}}
-        </li>
-        <li class="attribute-item">
-            <div class="attribute-square">{{.Attribute.DexterityModifier}}</div>
-            <strong>Dexterity:</strong> {{.Attribute.Dexterity}}
-        </li>
-        <li class="attribute-item">
-            <div class="attribute-square">{{.Attribute.ConstitutionModifier}}</div>
-            <strong>Constitution:</strong> {{.Attribute.Constitution}}
-        </li>
-        <li class="attribute-item">
-            <div class="attribute-square">{{.Attribute.IntelligenceModifier}}</div>
-            <strong>Intelligence:</strong> {{.Attribute.Intelligence}}
-        </li>
-        <li class="attribute-item">
-            <div class="attribute-square">{{.Attribute.WisdomModifier}}</div>
-            <strong>Wisdom:</strong> {{.Attribute.Wisdom}}
-        </li>
-        <li class="attribute-item">
-            <div class="attribute-square">{{.Attribute.CharismaModifier}}</div>
-            <strong>Charisma:</strong> {{.Attribute.Charisma}}
-        </li>
-    </ul>
-    <ul class="skills-list">
-        <h3>Skills</h3>
-        {{range .CharacterSkill}}
-        <li class="skill-item">
-            <span class="skill-name">{{.Name}}</span> -
-            <span class="skill-mastery">{{.Mastery}}</span>
-        </li>
-        {{end}}
-    </ul>
     <h3>Items</h3>
     <ul>
         {{range .CharacterItem}}

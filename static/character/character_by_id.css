@@ -1,3 +1,7 @@
+body {
+    background-color: #2d4059;
+}
+
 .header-row {
     display: flex;
     align-items: center; /* Вертикальное выравнивание по центру */
@@ -26,6 +30,89 @@
     flex: 0 0 40%; /* Занимает 40% ширины контейнера */
 }
 
+.level-skills-container {
+    width: 100%; /* Устанавливаем ширину контейнера */
+    display: flex;
+    align-items: flex-start; /* Выравнивание по левому краю */
+    padding: 20px;
+    box-sizing: border-box; /* Учитываем отступы и границы в ширине */
+}
+
+.level {
+    width: 40%;
+    text-align: center;
+}
+
+.info {
+    display: flex;
+    width: 40%; /* Устанавливаем ширину для блока info */
+    justify-content: space-between; /* Размещает элементы по краям */
+    align-items: center; /* Вертикальное выравнивание по центру */
+}
+
+.avatar {
+    width: 60%; /* Устанавливаем ширину для аватара */
+    margin-bottom: 0; /* Убираем нижний отступ */
+    text-align: center;
+}
+
+.attributes-list {
+    width: 40%; /* Устанавливаем ширину для атрибутов */
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* Три колонки */
+    gap: 10px; /* Расстояние между колонками */
+    margin: 0; /* Убираем отступы */
+}
+
+.attribute-item {
+    display: contents; /* Позволяет элементам внутри занимать свои колонки */
+}
+
+.attribute-name, .attribute-value, .attribute-modifier {
+    background-color: #3e536b;
+    padding: 5px;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.equipment {
+    width: 30%;
+}
+
+.skills-list {
+    list-style-type: none; /* Убирает маркеры списка */
+    margin-right: 0;
+    background-color: #2d4059; /* Цвет фона */
+    border-radius: 5px;
+    max-width: 40%; /* Максимальная ширина блока */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Три колонки */
+    gap: 10px; /* Расстояние между колонками */
+}
+
+.skill-item {
+    display: grid;
+    grid-template-columns: 70% 15% 15%; /* Три части внутри каждого элемента */
+    background-color: #3e536b;
+    padding: 5px;
+    border-radius: 3px;
+    align-items: center; /* Вертикальное выравнивание по центру */
+}
+
+.skill-name {
+    text-align: left;
+}
+
+.separator {
+    text-align: center;
+}
+
+.skill-mastery {
+    text-align: right;
+}
+
 .additional-stats {
     display: flex;
     justify-content: space-between;
@@ -42,62 +129,4 @@
 
 .character-details {
     padding: 20px;
-}
-
-.attributes-list {
-    list-style-type: none; /* Убираем маркеры списка */
-    padding: 0;
-    margin: 0;
-    display: flex; /* Горизонтальное размещение элементов */
-    flex-wrap: wrap; /* Перенос элементов на новую строку при необходимости */
-    gap: 20px; /* Расстояние между элементами */
-    justify-content: center; /* Центрирование элементов */
-}
-
-.attribute-item {
-    display: flex;
-    align-items: center; /* Вертикальное выравнивание по центру */
-}
-
-.attribute-square {
-    width: 20px;
-    height: 20px;
-    background-color: #ccc; /* Цвет квадрата */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 5px; /* Отступ справа от квадрата */
-    font-size: 12px;
-    color: #000; /* Цвет текста внутри квадрата */
-}
-
-.skills-list {
-    list-style-type: none; /* Убирает маркеры списка */
-    padding: 0;
-    margin: 0;
-    background-color: #2d4059; /* Цвет фона */
-    border-radius: 5px;
-    padding: 10px;
-    max-width: 400px; /* Максимальная ширина блока */
-    margin: 20px auto; /* Центрирование блока */
-}
-
-.skill-item {
-    display: flex;
-    justify-content: space-between; /* Распределяет элементы по краям */
-    padding: 5px 0;
-    border-bottom: 1px solid #2d4059; /* Разделительная линия */
-}
-
-.skill-item:last-child {
-    border-bottom: none; /* Убирает линию у последнего элемента */
-}
-
-.skill-name {
-    font-weight: bold;
-    color: #f5f5f5; /* Цвет текста */
-}
-
-.skill-mastery {
-    color: #ddd; /* Цвет текста */
 }
