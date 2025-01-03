@@ -32,7 +32,7 @@ func (d *GormDatabase) GetBackgrounds() ([]*model.Background, error) {
 	err := d.DB.
 		//Preload("Feat").
 		//Preload("Skill").
-		Order("name asc").
+		Order("Name ASC").
 		Find(&backgrounds).Error
 	return backgrounds, err
 }

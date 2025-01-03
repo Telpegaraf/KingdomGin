@@ -27,7 +27,9 @@ func (d *GormDatabase) GetCharacterClassByID(id uint) (*model.CharacterClass, er
 // GetCharacterClassByName returns Character Class by Name
 func (d *GormDatabase) GetCharacterClassByName(name string) (*model.CharacterClass, error) {
 	characterClass := &model.CharacterClass{}
-	err := d.DB.Where("name = ?", name).First(characterClass).Error
+	err := d.DB.
+		Order("Name ASC").
+		First(characterClass).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
@@ -40,7 +42,7 @@ func (d *GormDatabase) GetCharacterClassByName(name string) (*model.CharacterCla
 // GetCharacterClasses returns all Character classes
 func (d *GormDatabase) GetCharacterClasses() ([]*model.CharacterClass, error) {
 	var characterClass []*model.CharacterClass
-	err := d.DB.Find(&characterClass).Error
+	err := d.DB.Order("Name ASC").Find(&characterClass).Error
 	return characterClass, err
 }
 

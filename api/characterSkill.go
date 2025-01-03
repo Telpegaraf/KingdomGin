@@ -34,7 +34,7 @@ func (a *CharacterSkillApi) CharacterSkillCreate(ctx *gin.Context) {
 	if err := ctx.ShouldBindJSON(characterSkill); err == nil {
 		internal := &model.CharacterSkill{
 			CharacterID: characterSkill.CharacterID,
-			SkillID:     characterSkill.SkillID,
+			Name:        characterSkill.Name,
 			Mastery:     characterSkill.Mastery,
 		}
 		if success := SuccessOrAbort(ctx, 500, a.DB.CharacterSkillCreate(internal)); !success {
@@ -93,7 +93,7 @@ func (a *CharacterSkillApi) UpdateCharacterSkill(ctx *gin.Context) {
 				internal := &model.CharacterSkill{
 					ID:          oldCharacterSkill.ID,
 					CharacterID: oldCharacterSkill.CharacterID,
-					SkillID:     oldCharacterSkill.SkillID,
+					Name:        oldCharacterSkill.Name,
 					Mastery:     characterSkill.Mastery,
 				}
 				if success := SuccessOrAbort(ctx, 500, a.DB.UpdateCharacterSkill(internal)); !success {
@@ -109,7 +109,7 @@ func ToExternalCharacterSkill(characterSKill *model.CharacterSkill) *model.Chara
 	return &model.CharacterSkillExternal{
 		ID:          characterSKill.ID,
 		CharacterID: characterSKill.CharacterID,
-		SkillID:     characterSKill.SkillID,
+		Name:        characterSKill.Name,
 		Mastery:     characterSKill.Mastery,
 	}
 }

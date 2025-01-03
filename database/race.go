@@ -35,7 +35,7 @@ func (d *GormDatabase) GetRaceByName(name string) (*model.Race, error) {
 // GetRaces returns all Races
 func (d *GormDatabase) GetRaces() ([]*model.Race, error) {
 	var races []*model.Race
-	err := d.DB.Find(&races).Error
+	err := d.DB.Order("Name ASC").Find(&races).Error
 	return races, err
 }
 

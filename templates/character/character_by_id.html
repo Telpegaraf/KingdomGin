@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Details</title>
+    <link rel="stylesheet" href="/static/common.css">
+    <link rel="stylesheet" href="/static/character/character_by_id.css">
+</head>
+<body>
+<div class="header-row">
+    <div class="header-item">{{.Name}} {{.Alias}} {{.LastName}}</div>
+    <div class="header-item">Equipment</div>
+    <div class="header-item">Skills</div>
+</div>
+<h3>Additional Stats</h3>
+<div class="additional-stats">
+    <div class="stat-item">Level: {{.Level}}</div>
+    <div class="stat-item">Hero Points: {{.CharacterInfo.HeroPoint}}</div>
+    <div class="stat-item">Ancestry: {{.CharacterAncestry.Name}}</div>
+    <div class="stat-item">Background: {{.CharacterBackground.Name}}</div>
+    <div class="stat-item">Class: {{.CharacterClass.Name}}</div>
+    <div class="stat-item">
+        <strong>Armor:</strong> {{.CharacterDefence.ArmorClass}}
+    </div>
+    <div class="stat-item">
+        <strong>Max Weight:</strong> {{.CharacterInfo.MaxBulk}}
+    </div>
+    <div class="stat-item">
+        <strong>Current Weight:</strong> {{.CharacterInfo.Bulk}}
+    </div>
+    <div class="stat-item">
+        <strong>Max HP:</strong> {{.CharacterDefence.MaxHitPoint}}
+    </div>
+    <div class="stat-item">
+        <strong>Current HP:</strong> {{.CharacterDefence.HitPoint}}
+    </div>
+    <div class="stat-item">
+        <strong>UnArmor Proficiency:</strong> {{.CharacterDefence.Unarmed}}
+    </div>
+    <div class="stat-item">
+        <strong>Light Armor Proficiency:</strong> {{.CharacterDefence.LightArmor}}
+    </div>
+    <div class="stat-item">
+        <strong>Medium Armor Proficiency:</strong> {{.CharacterDefence.MediumArmor}}
+    </div>
+    <div class="stat-item">
+        <strong>Heavy Armor Proficiency:</strong> {{.CharacterDefence.HeavyArmor}}
+    </div>
+</div>
+<div class="character-details">
+    <h3>Attributes</h3>
+    <ul class="attributes-list">
+        <li class="attribute-item">
+            <div class="attribute-square">{{.Attribute.StrengthModifier}}</div>
+            <strong>Strength:</strong> {{.Attribute.Strength}}
+        </li>
+        <li class="attribute-item">
+            <div class="attribute-square">{{.Attribute.DexterityModifier}}</div>
+            <strong>Dexterity:</strong> {{.Attribute.Dexterity}}
+        </li>
+        <li class="attribute-item">
+            <div class="attribute-square">{{.Attribute.ConstitutionModifier}}</div>
+            <strong>Constitution:</strong> {{.Attribute.Constitution}}
+        </li>
+        <li class="attribute-item">
+            <div class="attribute-square">{{.Attribute.IntelligenceModifier}}</div>
+            <strong>Intelligence:</strong> {{.Attribute.Intelligence}}
+        </li>
+        <li class="attribute-item">
+            <div class="attribute-square">{{.Attribute.WisdomModifier}}</div>
+            <strong>Wisdom:</strong> {{.Attribute.Wisdom}}
+        </li>
+        <li class="attribute-item">
+            <div class="attribute-square">{{.Attribute.CharismaModifier}}</div>
+            <strong>Charisma:</strong> {{.Attribute.Charisma}}
+        </li>
+    </ul>
+    <ul class="skills-list">
+        <h3>Skills</h3>
+        {{range .CharacterSkill}}
+        <li class="skill-item">
+            <span class="skill-name">{{.Name}}</span> -
+            <span class="skill-mastery">{{.Mastery}}</span>
+        </li>
+        {{end}}
+    </ul>
+    <h3>Items</h3>
+    <ul>
+        {{range .CharacterItem}}
+        <li>{{.Item.Name}} - {{.Quantity}}</li>
+        {{end}}
+    </ul>
+    <!-- Add more sections as needed for spells, feats, etc. -->
+</div>
+</body>
+</html>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Characters</title>
+    <link rel="stylesheet" href="/static/common.css">
     <link rel="stylesheet" href="/static/character/character.css">
     <script>
         function confirmDelete(characterId) {
@@ -36,9 +37,11 @@
 </div>
 {{range .}}
 <div class="character">
-    <h2>{{.Name}}</h2>
-    <p>Level: {{.Level}}</p>
-    <p>Class: {{.CharacterClassName}}</p>
+    <a href="/character/{{.ID}}" class="character-link">
+        <h2>{{.Name}}</h2>
+        <p>Level: {{.Level}}</p>
+        <p>Class: {{.CharacterClass.Name}}</p>
+    </a>
     <button onclick="confirmDelete({{.ID}})">Delete</button>
 </div>
 {{else}}

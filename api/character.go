@@ -58,10 +58,19 @@ func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 		if success := SuccessOrAbort(ctx, 500, err); !success {
 			return
 		}
-		if character != nil {
-			ctx.JSON(http.StatusOK, ToExternalCharacter(character))
-		} else {
-			ctx.JSON(404, gin.H{"error": "Character not found"})
+		var resp *model.CharacterExternal
+		resp = ToExternalCharacter(character)
+		resp.CharacterAncestry = character.Ancestry
+		resp.CharacterBackground = character.Background
+		tmpl, err := template.ParseFiles("templates/character/character_by_id.html")
+		if err != nil {
+			ctx.String(http.StatusInternalServerError, "Error loading template")
+			return
+		}
+		err = tmpl.Execute(ctx.Writer, resp)
+		if err != nil {
+			ctx.String(http.StatusInternalServerError, "Error rendering template")
+			return
 		}
 	})
 }
@@ -291,21 +300,21 @@ func (a *CharacterApi) DeleteCharacter(ctx *gin.Context) {
 
 func ToExternalCharacter(character *model.Character) *model.CharacterExternal {
 	return &model.CharacterExternal{
-		ID:                 character.ID,
-		Name:               character.Name,
-		Alias:              character.Alias,
-		LastName:           character.LastName,
-		UserID:             character.UserID,
-		Level:              character.Level,
-		CharacterItem:      character.CharacterItem,
-		CharacterBoost:     character.Boost,
-		Attribute:          character.Attribute,
-		Slot:               character.Slot,
-		CharacterClassID:   character.CharacterClassID,
-		RaceID:             character.RaceID,
-		AncestryID:         character.AncestryID,
-		BackgroundID:       character.BackgroundID,
-		CharacterClassName: character.CharacterClass.Name,
+		ID:               character.ID,
+		Name:             character.Name,
+		Alias:            character.Alias,
+		LastName:         character.LastName,
+		UserID:           character.UserID,
+		Level:            character.Level,
+		CharacterItem:    character.CharacterItem,
+		CharacterBoost:   character.Boost,
+		Attribute:        character.Attribute,
+		Slot:             character.Slot,
+		CharacterClass:   character.CharacterClass,
+		CharacterRace:    character.Race,
+		CharacterSkill:   character.CharacterSkill,
+		CharacterInfo:    character.CharacterInfo,
+		CharacterDefence: character.CharacterDefence,
 	}
 }
 
@@ -314,12 +323,13 @@ func (a *CharacterApi) CreateSkills(ctx *gin.Context, character *model.Character
 	skills, _ := a.DB.GetSkills()
 	for _, skill := range skills {
 		mastery := model.None
-		if *backgroundCharacter.FirstSkillID == skill.ID || *backgroundCharacter.SecondSkillID == skill.ID {
+		if (backgroundCharacter.FirstSkillID != nil && *backgroundCharacter.FirstSkillID == skill.ID) ||
+			(backgroundCharacter.SecondSkillID != nil && *backgroundCharacter.SecondSkillID == skill.ID) {
 			mastery = model.Train
 		}
 		characterSkill := &model.CharacterSkill{
 			CharacterID: character.ID,
-			SkillID:     skill.ID,
+			Name:        skill.Name,
 			Mastery:     mastery,
 		}
 		err := a.DB.CharacterSkillCreate(characterSkill)

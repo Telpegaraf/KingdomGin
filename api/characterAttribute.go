@@ -23,19 +23,27 @@ func (a *CharacterApi) CreateAttribute(
 	internal := &model.Attribute{
 		CharacterID: characterID,
 	}
-	switch *race.AttributeFlaw {
-	case model.Strength:
-		internal.Strength = 8
-	case model.Dexterity:
-		internal.Dexterity = 8
-	case model.Constitution:
-		internal.Constitution = 8
-	case model.Intelligence:
-		internal.Intelligence = 8
-	case model.Wisdom:
-		internal.Wisdom = 8
-	case model.Charisma:
-		internal.Charisma = 8
+	if race.AttributeFlaw != nil {
+		switch *race.AttributeFlaw {
+		case model.Strength:
+			internal.Strength = 8
+			internal.StrengthModifier = -1
+		case model.Dexterity:
+			internal.Dexterity = 8
+			internal.DexterityModifier = -1
+		case model.Constitution:
+			internal.Constitution = 8
+			internal.ConstitutionModifier = -1
+		case model.Intelligence:
+			internal.Intelligence = 8
+			internal.IntelligenceModifier = -1
+		case model.Wisdom:
+			internal.Wisdom = 8
+			internal.WisdomModifier = -1
+		case model.Charisma:
+			internal.Charisma = 8
+			internal.CharismaModifier = -1
+		}
 	}
 	a.DB.CreateAttribute(internal)
 	go func() {

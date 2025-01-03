@@ -34,7 +34,7 @@ func (d *GormDatabase) GetAncestryByName(name string) (*model.Ancestry, error) {
 // GetAncestries returns all ancestries
 func (d *GormDatabase) GetAncestries() ([]*model.Ancestry, error) {
 	var ancestries []*model.Ancestry
-	err := d.DB.Find(&ancestries).Error
+	err := d.DB.Order("Name ASC").Find(&ancestries).Error
 	return ancestries, err
 }
 

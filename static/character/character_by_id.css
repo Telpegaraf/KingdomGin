@@ -1,0 +1,103 @@
+.header-row {
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание по центру */
+    width: 100%; /* Убедитесь, что контейнер занимает всю доступную ширину */
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #2d4059; /* Цвет фона */
+    border-bottom: 2px solid #ccc; /* Нижняя граница */
+}
+
+.header-item {
+    text-align: center; /* Центрирует текст внутри каждого элемента */
+    font-weight: bold;
+    color: #ccc; /* Цвет текста */
+}
+
+.header-item:first-child {
+    flex: 0 0 40%; /* Занимает 40% ширины контейнера */
+}
+
+.header-item:nth-child(2) {
+    flex: 0 0 20%; /* Занимает 20% ширины контейнера */
+}
+
+.header-item:last-child {
+    flex: 0 0 40%; /* Занимает 40% ширины контейнера */
+}
+
+.additional-stats {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+.character-details {
+    padding: 20px;
+}
+
+.attributes-list {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0;
+    margin: 0;
+    display: flex; /* Горизонтальное размещение элементов */
+    flex-wrap: wrap; /* Перенос элементов на новую строку при необходимости */
+    gap: 20px; /* Расстояние между элементами */
+    justify-content: center; /* Центрирование элементов */
+}
+
+.attribute-item {
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание по центру */
+}
+
+.attribute-square {
+    width: 20px;
+    height: 20px;
+    background-color: #ccc; /* Цвет квадрата */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px; /* Отступ справа от квадрата */
+    font-size: 12px;
+    color: #000; /* Цвет текста внутри квадрата */
+}
+
+.skills-list {
+    list-style-type: none; /* Убирает маркеры списка */
+    padding: 0;
+    margin: 0;
+    background-color: #2d4059; /* Цвет фона */
+    border-radius: 5px;
+    padding: 10px;
+    max-width: 400px; /* Максимальная ширина блока */
+    margin: 20px auto; /* Центрирование блока */
+}
+
+.skill-item {
+    display: flex;
+    justify-content: space-between; /* Распределяет элементы по краям */
+    padding: 5px 0;
+    border-bottom: 1px solid #2d4059; /* Разделительная линия */
+}
+
+.skill-item:last-child {
+    border-bottom: none; /* Убирает линию у последнего элемента */
+}
+
+.skill-name {
+    font-weight: bold;
+    color: #f5f5f5; /* Цвет текста */
+}
+
+.skill-mastery {
+    color: #ddd; /* Цвет текста */
+}

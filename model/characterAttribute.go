@@ -1,14 +1,20 @@
 package model
 
 type Attribute struct {
-	ID           uint  `gorm:"primary_key;AUTO_INCREMENT"`
-	Strength     uint8 `gorm:"default:10;not null;"`
-	Dexterity    uint8 `gorm:"default:10;not null;"`
-	Constitution uint8 `gorm:"default:10;not null"`
-	Intelligence uint8 `gorm:"default:10;not null"`
-	Wisdom       uint8 `gorm:"default:10;not null"`
-	Charisma     uint8 `gorm:"default:10;not null"`
-	CharacterID  uint  `gorm:"unique"`
+	ID                   uint  `gorm:"primary_key;AUTO_INCREMENT"`
+	Strength             uint8 `gorm:"default:10;not null;"`
+	StrengthModifier     int8  `gorm:"default:0;not null;"`
+	Dexterity            uint8 `gorm:"default:10;not null;"`
+	DexterityModifier    int8  `gorm:"default:0;not null;"`
+	Constitution         uint8 `gorm:"default:10;not null"`
+	ConstitutionModifier int8  `gorm:"default:0;not null"`
+	Intelligence         uint8 `gorm:"default:10;not null"`
+	IntelligenceModifier int8  `gorm:"default:0;not null"`
+	Wisdom               uint8 `gorm:"default:10;not null"`
+	WisdomModifier       int8  `gorm:"default:0;not null"`
+	Charisma             uint8 `gorm:"default:10;not null"`
+	CharismaModifier     int8  `gorm:"default:0;not null"`
+	CharacterID          uint  `gorm:"unique"`
 }
 
 type CreateAttribute struct {

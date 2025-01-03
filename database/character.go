@@ -14,7 +14,15 @@ func (d *GormDatabase) CreateCharacter(character *model.Character) error {
 // GetCharacterByID returns Character by ID
 func (d *GormDatabase) GetCharacterByID(id uint) (*model.Character, error) {
 	character := new(model.Character)
-	err := d.DB.Find(character, id).Error
+	err := d.DB.
+		Preload("CharacterClass").
+		Preload("Race").
+		Preload("Ancestry").
+		Preload("Background").
+		Preload("Attribute").
+		Preload("CharacterSkill").
+		Preload("CharacterInfo").
+		Find(character, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = nil
 	}
