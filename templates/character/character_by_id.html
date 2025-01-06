@@ -43,8 +43,30 @@
                 <div class="attribute-square">{{.Attribute.CharismaModifier}}</div>
             </li>
         </ul>
+    <div class="defence">
+        <div class="parameter-item">
+            <span class="parameter-name">Armor Class</span>
+            <span class="parameter-value">{{.CharacterDefence.ArmorClass}}</span>
+        </div>
+        <div class="parameter-item">
+            <span class="parameter-name">Fortitude</span>
+            <span class="parameter-value">{{.CharacterDefence.Fortitude}}</span>
+        </div>
+        <div class="parameter-item">
+            <span class="parameter-name">Reflex</span>
+            <span class="parameter-value">{{.CharacterDefence.Reflex}}</span>
+        </div>
+        <div class="parameter-item">
+            <span class="parameter-name">Will</span>
+            <span class="parameter-value">{{.CharacterDefence.Will}}</span>
+        </div>
+        <div class="parameter-item">
+            <span class="parameter-name">Perception</span>
+            <span class="parameter-value">{{.CharacterDefence.Perception}}</span>
+        </div>
     </div>
-    <div class="equipment">Экипировка</div>
+    </div>
+    <div class="equipment">Equipment</div>
     <ul class="skills-list">
         {{range .CharacterSkill}}
         <li class="skill-item">

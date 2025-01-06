@@ -46,18 +46,19 @@ body {
 .info {
     display: flex;
     width: 40%; /* Устанавливаем ширину для блока info */
-    justify-content: space-between; /* Размещает элементы по краям */
-    align-items: center; /* Вертикальное выравнивание по центру */
+    flex-wrap: wrap;
 }
 
 .avatar {
-    width: 60%; /* Устанавливаем ширину для аватара */
+    flex: 0 0 60%; /* Занимает 60% ширины */
+    height: 40vh; /* Занимает 40% высоты контейнера */
     margin-bottom: 0; /* Убираем нижний отступ */
     text-align: center;
 }
 
 .attributes-list {
-    width: 40%; /* Устанавливаем ширину для атрибутов */
+    flex: 0 0 40%; /* Занимает 40% ширины */
+    height: 40vh; /* Занимает 40% высоты контейнера */
     list-style-type: none; /* Убираем маркеры списка */
     padding: 0;
     display: grid;
@@ -71,6 +72,25 @@ body {
 }
 
 .attribute-name, .attribute-value, .attribute-modifier {
+    background-color: #3e536b;
+    padding: 5px;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.defence {
+    flex: 0 0 100%; /* Занимает 100% ширины */
+    height: 30vh; /* Занимает 30% высоты контейнера */
+    grid-template-columns: 1fr 1fr 1fr; /* Три колонки для параметров */
+    gap: 10px; /* Расстояние между колонками */
+    width: 100%; /* Занимает всю ширину родительского контейнера */
+}
+
+.parameter-item {
+    display: contents; /* Позволяет элементам внутри занимать свои колонки */
+}
+
+.parameter-name, .parameter-value, .parameter-modifier {
     background-color: #3e536b;
     padding: 5px;
     border-radius: 3px;
