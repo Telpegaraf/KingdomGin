@@ -72,7 +72,7 @@
         <li class="skill-item">
             <span class="skill-name">{{.Name}}</span>
             <span class="separator">-</span>
-            <span class="skill-mastery">{{.Mastery}}</span>
+            <span class="skill-mastery" data-id="{{.ID}}" onclick="showMasteryOptions({{.ID}}, '{{.Mastery}}')">{{.Mastery}}</span>
         </li>
         {{end}}
     </ul>
@@ -121,5 +121,7 @@
     </ul>
     <!-- Add more sections as needed for spells, feats, etc. -->
 </div>
+<script src="/static/character/character_by_id.js"></script>
 </body>
 </html>
+

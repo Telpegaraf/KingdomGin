@@ -109,7 +109,7 @@ func (a *UserApi) GetUserByUsername(ctx *gin.Context) {
 	if user != nil {
 		ctx.JSON(200, toExternalUser(user))
 	} else {
-		ctx.JSON(404, errors.New("User not found"))
+		ctx.JSON(404, errors.New("user not found"))
 	}
 }
 
