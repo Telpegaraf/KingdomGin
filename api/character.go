@@ -134,7 +134,7 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 			a.CreateAttribute(ctx, newCharacter.ID, race)
 			a.CreateSlot(ctx, internal.ID)
 			a.CreateCharacterBoost(ctx, newCharacter.ID, race)
-			a.CreateSkills(ctx, newCharacter)
+			a.CreateSkills(newCharacter)
 			a.CreateCharacterDefence(ctx, newCharacter.ID, race, characterClass)
 			a.CreateCharacterFeat(newCharacter.ID, background)
 		}()
@@ -183,7 +183,7 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 				ctx.JSON(http.StatusOK, ToExternalCharacter(internal))
 				if character.Level != oldCharacter.Level {
 					go func() {
-						a.ChangeHitPoint(ctx, internal, character.Level-oldCharacter.Level)
+						a.ChangeHitPoint(internal, character.Level-oldCharacter.Level)
 					}()
 				}
 			}
@@ -193,7 +193,7 @@ func (a *CharacterApi) UpdateCharacter(ctx *gin.Context) {
 	})
 }
 
-func (a *CharacterApi) ChangeHitPoint(ctx *gin.Context, character *model.Character, levelCount int8) {
+func (a *CharacterApi) ChangeHitPoint(character *model.Character, levelCount int8) {
 	characterClass, _ := a.DB.GetCharacterClassByID(character.CharacterClassID)
 	characterDefence, _ := a.DB.GetCharacterDefenceByID(character.ID)
 	maxHtPoint := characterDefence.MaxHitPoint + (characterClass.HitPoint)*uint16(levelCount)
@@ -250,24 +250,28 @@ func (a *CharacterApi) DeleteCharacter(ctx *gin.Context) {
 
 func ToExternalCharacter(character *model.Character) *model.CharacterExternal {
 	return &model.CharacterExternal{
-		ID:               character.ID,
-		Name:             character.Name,
-		Alias:            character.Alias,
-		LastName:         character.LastName,
-		UserID:           character.UserID,
-		Level:            character.Level,
-		CharacterItem:    character.CharacterItem,
-		CharacterBoost:   character.Boost,
-		Attribute:        character.Attribute,
-		Slot:             character.Slot,
-		CharacterClassID: character.CharacterClassID,
-		RaceID:           character.RaceID,
-		AncestryID:       character.AncestryID,
-		BackgroundID:     character.BackgroundID,
+		ID:                 character.ID,
+		Name:               character.Name,
+		Alias:              character.Alias,
+		LastName:           character.LastName,
+		UserID:             character.UserID,
+		Level:              character.Level,
+		CharacterItem:      character.CharacterItem,
+		CharacterBoost:     character.Boost,
+		Attribute:          character.Attribute,
+		Slot:               character.Slot,
+		CharacterClassID:   character.CharacterClassID,
+		CharacterClassName: character.CharacterClass.Name,
+		RaceID:             character.RaceID,
+		RaceName:           character.Race.Name,
+		AncestryID:         character.AncestryID,
+		AncestryName:       character.Ancestry.Name,
+		BackgroundID:       character.BackgroundID,
+		BackgroundName:     character.Background.Name,
 	}
 }
 
-func (a *CharacterApi) CreateSkills(ctx *gin.Context, character *model.Character) {
+func (a *CharacterApi) CreateSkills(character *model.Character) {
 	backgroundCharacter, _ := a.DB.GetBackgroundByID(character.BackgroundID)
 	skills, _ := a.DB.GetSkills()
 	for _, skill := range skills {
@@ -277,7 +281,7 @@ func (a *CharacterApi) CreateSkills(ctx *gin.Context, character *model.Character
 		}
 		characterSkill := &model.CharacterSkill{
 			CharacterID: character.ID,
-			SkillID:     skill.ID,
+			Name:        skill.Name,
 			Mastery:     mastery,
 		}
 		err := a.DB.CharacterSkillCreate(characterSkill)
