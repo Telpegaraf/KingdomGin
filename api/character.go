@@ -50,13 +50,12 @@ type CharacterApi struct {
 func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		character, err := a.DB.GetCharacterByID(id)
-		if success := SuccessOrAbort(ctx, 500, err); !success {
-			return
-		}
-		if character != nil {
-			ctx.JSON(http.StatusOK, ToExternalCharacter(character))
-		} else {
+		if err != nil {
 			ctx.JSON(404, gin.H{"error": "Character not found"})
+			return
+		} else {
+			ctx.JSON(http.StatusOK, ToExternalCharacter(character))
+			return
 		}
 	})
 }

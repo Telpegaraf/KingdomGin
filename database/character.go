@@ -1,8 +1,6 @@
 package database
 
 import (
-	"errors"
-	"gorm.io/gorm"
 	"kingdom/model"
 )
 
@@ -14,14 +12,19 @@ func (d *GormDatabase) CreateCharacter(character *model.Character) error {
 // GetCharacterByID returns Character by ID
 func (d *GormDatabase) GetCharacterByID(id uint) (*model.Character, error) {
 	character := new(model.Character)
-	err := d.DB.Find(character, id).Error
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		err = nil
+	err := d.DB.
+		Preload("Race").
+		Preload("CharacterClass").
+		Preload("Ancestry").
+		Preload("Background").
+		Preload("Attribute").
+		Preload("CharacterItem").
+		Preload("Boost").
+		First(character, id).Error
+	if err != nil {
+		return nil, err
 	}
-	if character.ID == id {
-		return character, err
-	}
-	return nil, err
+	return character, nil
 }
 
 // GetCharacters returns all characters
@@ -32,7 +35,8 @@ func (d *GormDatabase) GetCharacters(id uint) ([]*model.Character, error) {
 		Preload("CharacterClass").
 		Preload("Ancestry").
 		Preload("Background").
-		Where(&model.Character{UserID: id}).Find(&characters).Error
+		Where(&model.Character{UserID: id}).
+		Find(&characters).Error
 	return characters, err
 }
 
