@@ -267,6 +267,8 @@ func ToExternalCharacter(character *model.Character) *model.CharacterExternal {
 		AncestryName:       character.Ancestry.Name,
 		BackgroundID:       character.BackgroundID,
 		BackgroundName:     character.Background.Name,
+		CharacterDefence:   character.CharacterDefence,
+		CharacterSkill:     character.CharacterSkill,
 	}
 }
 

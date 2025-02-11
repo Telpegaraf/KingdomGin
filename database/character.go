@@ -20,6 +20,9 @@ func (d *GormDatabase) GetCharacterByID(id uint) (*model.Character, error) {
 		Preload("Attribute").
 		Preload("CharacterItem").
 		Preload("Boost").
+		Preload("CharacterDefence").
+		Preload("Attribute").
+		Preload("CharacterSkill").
 		First(character, id).Error
 	if err != nil {
 		return nil, err
