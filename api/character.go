@@ -118,7 +118,7 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 
 		ancestry, err := a.DB.GetAncestryByID(character.AncestryID)
 		if err != nil || ancestry.RaceID != character.RaceID {
-			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong Ancestry or Race ID"})
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Wrong Ancestry or Race ID"})
 			return
 		}
 

@@ -38,6 +38,8 @@ func New(
 		new(model.Tradition),
 		new(model.Skill),
 		new(model.CharacterClass),
+		new(model.ClassFeature),
+		new(model.ClassSkillFeature),
 		new(model.Character),
 		new(model.Domain),
 		new(model.God),
