@@ -21,7 +21,7 @@ type Character struct {
 	Slot             []Slot           `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Boost            CharacterBoost   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CharacterDefence CharacterDefence `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	CharacterFeat    CharacterFeat    `gorm:"constraint:OnUpdate:CASCADE,onDelete:CASCADE;"`
+	CharacterFeat    []CharacterFeat  `gorm:"constraint:OnUpdate:CASCADE,onDelete:CASCADE;"`
 	CharacterSkill   []CharacterSkill `gorm:"constraint:OnUpdate:CASCADE,onDelete:CASCADE;"`
 	CharacterInfo    CharacterInfo    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
@@ -64,4 +64,6 @@ type CharacterExternal struct {
 	CharacterBoost     CharacterBoost   `json:"character_boost" query:"character_boost" form:"character_boost"`
 	CharacterDefence   CharacterDefence `json:"character_defence"`
 	CharacterSkill     []CharacterSkill `json:"character_skill"`
+	CharacterFeat      []CharacterFeat  `json:"character_feat"`
+	CharacterInfo      CharacterInfo    `json:"character_info"`
 }
