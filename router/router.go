@@ -203,11 +203,9 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	g.GET("/class", characterClassHandler.GetCharacterClasses).Use(authentication.RequireJWT)
 	g.GET("/class/:id", characterClassHandler.GetCharacterClassByID).Use(authentication.RequireJWT)
 
-	classFeatureGroup := g.Group("/class-feature").Use(authentication.RequireAdmin)
-	{
-		classFeatureGroup.GET("/:id", classFeatureHandler.GetClassFeatureByID)
-		classFeatureGroup.GET("/class/:id", classFeatureHandler.GetClassFeatureByID)
-	}
+	g.GET("/class-feature/:id", classFeatureHandler.GetClassFeatureByID).Use(authentication.RequireAdmin)
+	g.GET("/class-feature/all/:id", classFeatureHandler.GetAllFeature).Use(authentication.RequireAdmin)
+	g.GET("/skill-feature/:id", classFeatureHandler.GetClassSkillFeatureByID).Use(authentication.RequireJWT)
 	itemGroup := g.Group("/item").Use(authentication.RequireJWT)
 	{
 		itemGroup.GET("", itemHandler.GetItems)

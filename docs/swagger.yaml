@@ -2785,11 +2785,11 @@ paths:
       summary: Returns Class Feature by id
       tags:
       - Class Feature
-  /class-feature/class/{id}:
+  /class-feature/all/{id}:
     get:
       consumes:
       - application/json
-      description: Retrieve Class Feature for certain level details using its ID
+      description: Retrieve All Class Feature details using its ID
       parameters:
       - description: Class Feature id
         in: path
@@ -2800,14 +2800,14 @@ paths:
       - application/json
       responses:
         "200":
-          description: Class Feature details
+          description: All Class Feature details
           schema:
-            $ref: '#/definitions/model.SkillFeature'
+            $ref: '#/definitions/model.ClassFeatureExternal'
         "404":
           description: Class Feature not found
           schema:
             type: string
-      summary: Returns Class Feature for certain level by id
+      summary: Returns All Class Feature by id
       tags:
       - Class Feature
   /class/{id}:
@@ -3886,6 +3886,31 @@ paths:
       summary: Create and returns Skill or nil
       tags:
       - Skill
+  /skill-feature/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Class Feature for certain level details using its ID
+      parameters:
+      - description: Class Feature id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Class Feature details
+          schema:
+            $ref: '#/definitions/model.SkillFeature'
+        "404":
+          description: Class Feature not found
+          schema:
+            type: string
+      summary: Returns Class Feature for certain level by id
+      tags:
+      - Class Feature
   /skill/{id}:
     delete:
       consumes:

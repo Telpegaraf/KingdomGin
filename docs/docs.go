@@ -1484,9 +1484,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/class-feature/class/{id}": {
+        "/class-feature/all/{id}": {
             "get": {
-                "description": "Retrieve Class Feature for certain level details using its ID",
+                "description": "Retrieve All Class Feature details using its ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -1496,7 +1496,7 @@ const docTemplate = `{
                 "tags": [
                     "Class Feature"
                 ],
-                "summary": "Returns Class Feature for certain level by id",
+                "summary": "Returns All Class Feature by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1508,9 +1508,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Class Feature details",
+                        "description": "All Class Feature details",
                         "schema": {
-                            "$ref": "#/definitions/model.SkillFeature"
+                            "$ref": "#/definitions/model.ClassFeatureExternal"
                         }
                     },
                     "404": {
@@ -3181,6 +3181,44 @@ const docTemplate = `{
                     },
                     "403": {
                         "description": "You can't access for this API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/skill-feature/{id}": {
+            "get": {
+                "description": "Retrieve Class Feature for certain level details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class Feature"
+                ],
+                "summary": "Returns Class Feature for certain level by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Class Feature id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Class Feature details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SkillFeature"
+                        }
+                    },
+                    "404": {
+                        "description": "Class Feature not found",
                         "schema": {
                             "type": "string"
                         }

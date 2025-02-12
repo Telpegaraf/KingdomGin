@@ -17,12 +17,16 @@ func (d *GormDatabase) GetClassFeatureByID(id uint) (*model.ClassFeature, error)
 // GetClassFeatureByClassID returns all Feature for certain class
 func (d *GormDatabase) GetClassFeatureByClassID(classID uint) ([]model.ClassFeature, error) {
 	var classFeature []model.ClassFeature
-	err := d.DB.Where("id = ?", classID).Find(&classFeature).Error
+	err := d.DB.
+		Order("level").
+		Preload("SkillFeatures").
+		Where("character_class_id = ?", classID).
+		Find(&classFeature).Error
 	return classFeature, err
 }
 
-// GetAllClassSkillFeatureByID returns all skills for class for certain level
-func (d *GormDatabase) GetAllClassSkillFeatureByID(classFeatureID uint) ([]model.SkillFeature, error) {
+// GetSkillFeatureByID returns all skills for class for certain level
+func (d *GormDatabase) GetSkillFeatureByID(classFeatureID uint) ([]model.SkillFeature, error) {
 	var classSkillFeatures []model.SkillFeature
 	err := d.DB.Where("class_feature_id = ?", classFeatureID).Find(&classSkillFeatures).Error
 	return classSkillFeatures, err

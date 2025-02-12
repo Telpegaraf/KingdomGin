@@ -8,12 +8,38 @@ import (
 
 type ClassFeatureDatabase interface {
 	GetClassFeatureByID(id uint) (*model.ClassFeature, error)
-	GetAllClassSkillFeatureByID(classFeatureID uint) ([]model.SkillFeature, error)
+	GetSkillFeatureByID(classFeatureID uint) ([]model.SkillFeature, error)
 	GetClassFeatureByClassID(classID uint) ([]model.ClassFeature, error)
 }
 
 type ClassFeatureApi struct {
 	DB ClassFeatureDatabase
+}
+
+// GetAllFeature godoc
+//
+// @Summary Returns All Class Feature by id
+// @Description Retrieve All Class Feature details using its ID
+// @Tags Class Feature
+// @Accept json
+// @Produce json
+// @Param id path int true "Class Feature id"
+// @Success 200 {object} model.ClassFeatureExternal "All Class Feature details"
+// @Failure 404 {string} string "Class Feature not found"
+// @Router /class-feature/all/{id} [get]
+func (a *ClassFeatureApi) GetAllFeature(ctx *gin.Context) {
+	withID(ctx, "id", func(id uint) {
+		features, err := a.DB.GetClassFeatureByClassID(id)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "features for this class not found"})
+			return
+		}
+		var resp []*model.ClassFeatureExternal
+		for _, feature := range features {
+			resp = append(resp, toExternalClassFeature(&feature))
+		}
+		ctx.JSON(http.StatusOK, gin.H{"data": resp})
+	})
 }
 
 // GetClassFeatureByID godoc
@@ -38,7 +64,7 @@ func (a *ClassFeatureApi) GetClassFeatureByID(ctx *gin.Context) {
 	})
 }
 
-// GetAllClassSkillFeatureByID godoc
+// GetClassSkillFeatureByID godoc
 //
 // @Summary Returns Class Feature for certain level by id
 // @Description Retrieve Class Feature for certain level details using its ID
@@ -48,15 +74,19 @@ func (a *ClassFeatureApi) GetClassFeatureByID(ctx *gin.Context) {
 // @Param id path int true "Class Feature id"
 // @Success 200 {object} model.SkillFeature "Class Feature details"
 // @Failure 404 {string} string "Class Feature not found"
-// @Router /class-feature/class/{id} [get]
-func (a *ClassFeatureApi) GetAllClassSkillFeatureByID(ctx *gin.Context) {
+// @Router /skill-feature/{id} [get]
+func (a *ClassFeatureApi) GetClassSkillFeatureByID(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
-		classFeature, err := a.DB.GetAllClassSkillFeatureByID(id)
+		skillFeatures, err := a.DB.GetSkillFeatureByID(id)
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Class Feature not found"})
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Class Skill Feature not found"})
 			return
 		}
-		ctx.JSON(http.StatusOK, classFeature)
+		var resp []*model.SkillFeatureExternal
+		for _, feature := range skillFeatures {
+			resp = append(resp, toExternalSkillFeature(feature))
+		}
+		ctx.JSON(http.StatusOK, resp)
 	})
 }
 
