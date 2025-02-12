@@ -16,8 +16,6 @@ type CharacterClass struct {
 	CommonWeapon  MasteryLevel `gorm:"type:mastery_level;default:None"`
 	MartialWeapon MasteryLevel `gorm:"type:mastery_level;default:None"`
 	TraditionID   *uint
-
-	//Character Character `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type CharacterClassCreate struct {

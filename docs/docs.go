@@ -1484,6 +1484,82 @@ const docTemplate = `{
                 }
             }
         },
+        "/class-feature/class/{id}": {
+            "get": {
+                "description": "Retrieve Class Feature for certain level details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class Feature"
+                ],
+                "summary": "Returns Class Feature for certain level by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Class Feature id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Class Feature details",
+                        "schema": {
+                            "$ref": "#/definitions/model.SkillFeature"
+                        }
+                    },
+                    "404": {
+                        "description": "Class Feature not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/class-feature/{id}": {
+            "get": {
+                "description": "Retrieve Class Feature details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class Feature"
+                ],
+                "summary": "Returns Class Feature by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Class Feature id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Class Feature details",
+                        "schema": {
+                            "$ref": "#/definitions/model.ClassFeatureExternal"
+                        }
+                    },
+                    "404": {
+                        "description": "Class Feature not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/class/{id}": {
             "get": {
                 "description": "Retrieve Character class details using its ID",
@@ -4550,17 +4626,26 @@ const docTemplate = `{
                 "alias": {
                     "type": "string"
                 },
+                "ancestry": {
+                    "$ref": "#/definitions/model.Ancestry"
+                },
                 "ancestryID": {
                     "type": "integer"
                 },
                 "attribute": {
                     "$ref": "#/definitions/model.Attribute"
                 },
+                "background": {
+                    "$ref": "#/definitions/model.Background"
+                },
                 "backgroundID": {
                     "type": "integer"
                 },
                 "boost": {
                     "$ref": "#/definitions/model.CharacterBoost"
+                },
+                "characterClass": {
+                    "$ref": "#/definitions/model.CharacterClass"
                 },
                 "characterClassID": {
                     "type": "integer"
@@ -4569,7 +4654,10 @@ const docTemplate = `{
                     "$ref": "#/definitions/model.CharacterDefence"
                 },
                 "characterFeat": {
-                    "$ref": "#/definitions/model.CharacterFeat"
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterFeat"
+                    }
                 },
                 "characterInfo": {
                     "$ref": "#/definitions/model.CharacterInfo"
@@ -4603,6 +4691,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "race": {
+                    "$ref": "#/definitions/model.Race"
                 },
                 "raceID": {
                     "type": "integer"
@@ -4655,9 +4746,6 @@ const docTemplate = `{
         "model.CharacterClass": {
             "type": "object",
             "properties": {
-                "character": {
-                    "$ref": "#/definitions/model.Character"
-                },
                 "commonWeapon": {
                     "$ref": "#/definitions/model.MasteryLevel"
                 },
@@ -4877,11 +4965,17 @@ const docTemplate = `{
                 "ancestry_id": {
                     "type": "integer"
                 },
+                "ancestry_name": {
+                    "type": "string"
+                },
                 "attribute": {
                     "$ref": "#/definitions/model.Attribute"
                 },
                 "background_id": {
                     "type": "integer"
+                },
+                "background_name": {
+                    "type": "string"
                 },
                 "character_boost": {
                     "$ref": "#/definitions/model.CharacterBoost"
@@ -4889,10 +4983,31 @@ const docTemplate = `{
                 "character_class_id": {
                     "type": "integer"
                 },
+                "character_class_name": {
+                    "type": "string"
+                },
+                "character_defence": {
+                    "$ref": "#/definitions/model.CharacterDefence"
+                },
+                "character_feat": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterFeat"
+                    }
+                },
+                "character_info": {
+                    "$ref": "#/definitions/model.CharacterInfo"
+                },
                 "character_item": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.CharacterItem"
+                    }
+                },
+                "character_skill": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterSkill"
                     }
                 },
                 "id": {
@@ -4909,6 +5024,9 @@ const docTemplate = `{
                 },
                 "race_id": {
                     "type": "integer"
+                },
+                "race_name": {
+                    "type": "string"
                 },
                 "slot": {
                     "type": "array",
@@ -5055,8 +5173,8 @@ const docTemplate = `{
                 "mastery": {
                     "$ref": "#/definitions/model.MasteryLevel"
                 },
-                "skillID": {
-                    "type": "integer"
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -5064,8 +5182,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "character_id",
-                "mastery",
-                "skill_id"
+                "mastery"
             ],
             "properties": {
                 "character_id": {
@@ -5079,8 +5196,8 @@ const docTemplate = `{
                     ],
                     "example": "None"
                 },
-                "skill_id": {
-                    "type": "integer"
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -5096,8 +5213,8 @@ const docTemplate = `{
                 "mastery": {
                     "$ref": "#/definitions/model.MasteryLevel"
                 },
-                "skill_id": {
-                    "type": "integer"
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -5137,6 +5254,121 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "model.ClassFeature": {
+            "type": "object",
+            "properties": {
+                "armorMastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "characterClass": {
+                    "$ref": "#/definitions/model.CharacterClass"
+                },
+                "characterClassID": {
+                    "type": "integer"
+                },
+                "fortitudeMastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isAncestryFeat": {
+                    "type": "boolean"
+                },
+                "isCharacterBoost": {
+                    "type": "boolean"
+                },
+                "isClassFeat": {
+                    "type": "boolean"
+                },
+                "isGeneralFeat": {
+                    "type": "boolean"
+                },
+                "isSkillFeat": {
+                    "type": "boolean"
+                },
+                "isSkillIncrease": {
+                    "type": "boolean"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "perceptionMastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "reflexMastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "skillFeatures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SkillFeature"
+                    }
+                },
+                "weaponMastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "willMastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                }
+            }
+        },
+        "model.ClassFeatureExternal": {
+            "type": "object",
+            "properties": {
+                "armor_mastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "character_class_id": {
+                    "type": "integer"
+                },
+                "class_skill_feature": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SkillFeatureExternal"
+                    }
+                },
+                "fortitude_mastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_ancestry_feat": {
+                    "type": "boolean"
+                },
+                "is_character_boost": {
+                    "type": "boolean"
+                },
+                "is_class_feat": {
+                    "type": "boolean"
+                },
+                "is_general_feat": {
+                    "type": "boolean"
+                },
+                "is_skill_feat": {
+                    "type": "boolean"
+                },
+                "is_skill_increase": {
+                    "type": "boolean"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "perception_mastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "reflex_mastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "weapon_mastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
+                },
+                "will_mastery": {
+                    "$ref": "#/definitions/model.MasteryLevel"
                 }
             }
         },
@@ -6000,6 +6232,40 @@ const docTemplate = `{
                 "ability": {
                     "$ref": "#/definitions/model.Ability"
                 },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SkillFeature": {
+            "type": "object",
+            "properties": {
+                "classFeature": {
+                    "$ref": "#/definitions/model.ClassFeature"
+                },
+                "classFeatureID": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SkillFeatureExternal": {
+            "type": "object",
+            "properties": {
                 "description": {
                     "type": "string"
                 },

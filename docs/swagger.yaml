@@ -205,20 +205,28 @@ definitions:
     properties:
       alias:
         type: string
+      ancestry:
+        $ref: '#/definitions/model.Ancestry'
       ancestryID:
         type: integer
       attribute:
         $ref: '#/definitions/model.Attribute'
+      background:
+        $ref: '#/definitions/model.Background'
       backgroundID:
         type: integer
       boost:
         $ref: '#/definitions/model.CharacterBoost'
+      characterClass:
+        $ref: '#/definitions/model.CharacterClass'
       characterClassID:
         type: integer
       characterDefence:
         $ref: '#/definitions/model.CharacterDefence'
       characterFeat:
-        $ref: '#/definitions/model.CharacterFeat'
+        items:
+          $ref: '#/definitions/model.CharacterFeat'
+        type: array
       characterInfo:
         $ref: '#/definitions/model.CharacterInfo'
       characterItem:
@@ -241,6 +249,8 @@ definitions:
         type: integer
       name:
         type: string
+      race:
+        $ref: '#/definitions/model.Race'
       raceID:
         type: integer
       slot:
@@ -274,8 +284,6 @@ definitions:
     type: object
   model.CharacterClass:
     properties:
-      character:
-        $ref: '#/definitions/model.Character'
       commonWeapon:
         $ref: '#/definitions/model.MasteryLevel'
       fortitude:
@@ -405,17 +413,35 @@ definitions:
         type: string
       ancestry_id:
         type: integer
+      ancestry_name:
+        type: string
       attribute:
         $ref: '#/definitions/model.Attribute'
       background_id:
         type: integer
+      background_name:
+        type: string
       character_boost:
         $ref: '#/definitions/model.CharacterBoost'
       character_class_id:
         type: integer
+      character_class_name:
+        type: string
+      character_defence:
+        $ref: '#/definitions/model.CharacterDefence'
+      character_feat:
+        items:
+          $ref: '#/definitions/model.CharacterFeat'
+        type: array
+      character_info:
+        $ref: '#/definitions/model.CharacterInfo'
       character_item:
         items:
           $ref: '#/definitions/model.CharacterItem'
+        type: array
+      character_skill:
+        items:
+          $ref: '#/definitions/model.CharacterSkill'
         type: array
       id:
         type: integer
@@ -427,6 +453,8 @@ definitions:
         type: string
       race_id:
         type: integer
+      race_name:
+        type: string
       slot:
         items:
           $ref: '#/definitions/model.Slot'
@@ -524,8 +552,8 @@ definitions:
         type: integer
       mastery:
         $ref: '#/definitions/model.MasteryLevel'
-      skillID:
-        type: integer
+      name:
+        type: string
     type: object
   model.CharacterSkillCreate:
     properties:
@@ -535,12 +563,11 @@ definitions:
         allOf:
         - $ref: '#/definitions/model.MasteryLevel'
         example: None
-      skill_id:
-        type: integer
+      name:
+        type: string
     required:
     - character_id
     - mastery
-    - skill_id
     type: object
   model.CharacterSkillExternal:
     properties:
@@ -550,8 +577,8 @@ definitions:
         type: integer
       mastery:
         $ref: '#/definitions/model.MasteryLevel'
-      skill_id:
-        type: integer
+      name:
+        type: string
     type: object
   model.CharacterSkillUpdate:
     properties:
@@ -577,6 +604,82 @@ definitions:
         type: integer
       name:
         type: string
+    type: object
+  model.ClassFeature:
+    properties:
+      armorMastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      characterClass:
+        $ref: '#/definitions/model.CharacterClass'
+      characterClassID:
+        type: integer
+      fortitudeMastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      id:
+        type: integer
+      isAncestryFeat:
+        type: boolean
+      isCharacterBoost:
+        type: boolean
+      isClassFeat:
+        type: boolean
+      isGeneralFeat:
+        type: boolean
+      isSkillFeat:
+        type: boolean
+      isSkillIncrease:
+        type: boolean
+      level:
+        type: integer
+      perceptionMastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      reflexMastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      skillFeatures:
+        items:
+          $ref: '#/definitions/model.SkillFeature'
+        type: array
+      weaponMastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      willMastery:
+        $ref: '#/definitions/model.MasteryLevel'
+    type: object
+  model.ClassFeatureExternal:
+    properties:
+      armor_mastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      character_class_id:
+        type: integer
+      class_skill_feature:
+        items:
+          $ref: '#/definitions/model.SkillFeatureExternal'
+        type: array
+      fortitude_mastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      id:
+        type: integer
+      is_ancestry_feat:
+        type: boolean
+      is_character_boost:
+        type: boolean
+      is_class_feat:
+        type: boolean
+      is_general_feat:
+        type: boolean
+      is_skill_feat:
+        type: boolean
+      is_skill_increase:
+        type: boolean
+      level:
+        type: integer
+      perception_mastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      reflex_mastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      weapon_mastery:
+        $ref: '#/definitions/model.MasteryLevel'
+      will_mastery:
+        $ref: '#/definitions/model.MasteryLevel'
     type: object
   model.CreateAction:
     properties:
@@ -1166,6 +1269,28 @@ definitions:
     properties:
       ability:
         $ref: '#/definitions/model.Ability'
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.SkillFeature:
+    properties:
+      classFeature:
+        $ref: '#/definitions/model.ClassFeature'
+      classFeatureID:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.SkillFeatureExternal:
+    properties:
       description:
         type: string
       id:
@@ -2635,6 +2760,56 @@ paths:
       summary: Create and returns new Character Class or nil
       tags:
       - Character Class
+  /class-feature/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Class Feature details using its ID
+      parameters:
+      - description: Class Feature id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Class Feature details
+          schema:
+            $ref: '#/definitions/model.ClassFeatureExternal'
+        "404":
+          description: Class Feature not found
+          schema:
+            type: string
+      summary: Returns Class Feature by id
+      tags:
+      - Class Feature
+  /class-feature/class/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Class Feature for certain level details using its ID
+      parameters:
+      - description: Class Feature id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Class Feature details
+          schema:
+            $ref: '#/definitions/model.SkillFeature'
+        "404":
+          description: Class Feature not found
+          schema:
+            type: string
+      summary: Returns Class Feature for certain level by id
+      tags:
+      - Class Feature
   /class/{id}:
     delete:
       consumes:

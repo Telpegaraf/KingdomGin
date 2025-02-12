@@ -17,7 +17,10 @@ import (
 func Create(db *database.GormDatabase, conf *config.Configuration, consumer *consumer.RMQConsumer) (*gin.Engine, func()) {
 	g := gin.New()
 	g.RemoteIPHeaders = []string{"X-Forwarded-For"}
-	g.SetTrustedProxies(conf.Server.TrustedProxies)
+	err := g.SetTrustedProxies(conf.Server.TrustedProxies)
+	if err != nil {
+		return nil, nil
+	}
 	g.ForwardedByClientIP = true
 	g.Use(func(ctx *gin.Context) {
 		if ctx.Request.RemoteAddr == "@" {
@@ -35,6 +38,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 
 	characterHandler := api.CharacterApi{DB: db}
 	characterClassHandler := api.CharacterClassApi{DB: db}
+	classFeatureHandler := api.ClassFeatureApi{DB: db}
 	itemHandler := api.ItemApi{DB: db}
 	characterItemHandler := api.CharacterItemApi{DB: db}
 	slotHandler := api.SlotApi{DB: db}
@@ -198,6 +202,12 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	}
 	g.GET("/class", characterClassHandler.GetCharacterClasses).Use(authentication.RequireJWT)
 	g.GET("/class/:id", characterClassHandler.GetCharacterClassByID).Use(authentication.RequireJWT)
+
+	classFeatureGroup := g.Group("/class-feature").Use(authentication.RequireAdmin)
+	{
+		classFeatureGroup.GET("/:id", classFeatureHandler.GetClassFeatureByID)
+		classFeatureGroup.GET("/class/:id", classFeatureHandler.GetClassFeatureByID)
+	}
 	itemGroup := g.Group("/item").Use(authentication.RequireJWT)
 	{
 		itemGroup.GET("", itemHandler.GetItems)
