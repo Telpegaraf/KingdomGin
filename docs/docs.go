@@ -1047,33 +1047,6 @@ const docTemplate = `{
             }
         },
         "/character-skill": {
-            "get": {
-                "description": "Return all Character Skills",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Character Skill"
-                ],
-                "summary": "Returns all Character Skills",
-                "responses": {
-                    "200": {
-                        "description": "Character Skill details",
-                        "schema": {
-                            "$ref": "#/definitions/model.CharacterSkill"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "Permissions for Admin",
                 "consumes": [
@@ -1120,6 +1093,42 @@ const docTemplate = `{
             }
         },
         "/character-skill/{id}": {
+            "get": {
+                "description": "Return all Character Skills",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character Skill"
+                ],
+                "summary": "Returns all Character Skills",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Character Skill id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Character Skill details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterSkill"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "description": "Permissions for Admin",
                 "consumes": [

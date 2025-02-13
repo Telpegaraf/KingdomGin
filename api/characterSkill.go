@@ -49,15 +49,17 @@ func (a *CharacterSkillApi) CharacterSkillCreate(ctx *gin.Context) {
 // @Summary Returns all Character Skills
 // @Description Return all Character Skills
 // @Tags Character Skill
+// @Param id path int true "Character Skill id"
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.CharacterSkill "Character Skill details"
-// @Failure 401 {string} string ""Unauthorized"
-// @Router /character-skill [get]
+// @Failure 401 {string} string "Unauthorized"
+// @Router /character-skill/{id} [get]
 func (a *CharacterSkillApi) GetCharacterSkills(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		characterSkills, err := a.DB.GetCharacterSkills(id)
-		if success := SuccessOrAbort(ctx, 500, err); success {
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}
 		var resp []*model.CharacterSkillExternal

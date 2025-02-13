@@ -237,7 +237,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 	characterSkillGroup := g.Group("/character-skill").Use(authentication.RequireJWT)
 	{
 		characterSkillGroup.POST("", characterSkillHandler.CharacterSkillCreate)
-		characterSkillGroup.GET("", characterSkillHandler.GetCharacterSkills)
+		characterSkillGroup.GET("/:id", characterSkillHandler.GetCharacterSkills)
 		characterSkillGroup.PATCH("/:id", characterSkillHandler.UpdateCharacterSkill)
 	}
 
