@@ -3,7 +3,10 @@ FROM golang:1.23-bookworm AS builder
 WORKDIR /app
 
 COPY go.* ./
+
 RUN go mod download
+
+RUN go mod tidy
 
 COPY .. .
 
