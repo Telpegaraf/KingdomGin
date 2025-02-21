@@ -3,7 +3,7 @@ FROM golang:1.23-bookworm AS builder
 WORKDIR /app
 
 # Скопируйте файлы go.mod и go.sum
-COPY go.mod go.sum ./
+COPY go.mod ./
 
 # Обновите и очистите зависимости
 RUN go mod tidy
