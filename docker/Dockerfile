@@ -2,16 +2,6 @@ FROM golang:1.23-bookworm AS builder
 
 WORKDIR /app
 
-# Скопируйте файлы go.mod и go.sum
-COPY go.mod ./
-
-# Обновите и очистите зависимости
-RUN go mod tidy
-
-# Скачайте все зависимости
-RUN go mod download
-
-# Скопируйте все файлы проекта
 COPY . .
 
 # Соберите бинарный файл
@@ -22,6 +12,12 @@ FROM debian:bookworm-slim
 WORKDIR /app
 
 COPY --from=builder /app/server /app/server
+
+COPY . .
+
+RUN go mod tidy
+
+RUN go mod download
 
 RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     ca-certificates postgresql-client && \
