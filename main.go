@@ -5,7 +5,6 @@ import (
 	"github.com/joho/godotenv"
 	"io"
 	"kingdom/config"
-	userConsumer "kingdom/consumer"
 	"kingdom/database"
 	"kingdom/router"
 	"log"
@@ -50,13 +49,7 @@ func main() {
 		panic(err)
 	}
 
-	consumer, err := userConsumer.New(os.Getenv("RMQ_URL"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	consumer.DB = db
-
-	engine, _ := router.Create(db, conf, consumer)
+	engine, _ := router.Create(db, conf)
 
 	err = engine.Run(":8080")
 	if err != nil {

@@ -8,13 +8,12 @@ import (
 	"kingdom/api"
 	"kingdom/auth"
 	"kingdom/config"
-	"kingdom/consumer"
 	"kingdom/database"
 	"kingdom/docs"
 	gerror "kingdom/error"
 )
 
-func Create(db *database.GormDatabase, conf *config.Configuration, consumer *consumer.RMQConsumer) (*gin.Engine, func()) {
+func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine, func()) {
 	g := gin.New()
 	g.RemoteIPHeaders = []string{"X-Forwarded-For"}
 	err := g.SetTrustedProxies(conf.Server.TrustedProxies)
@@ -33,7 +32,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration, consumer *con
 		DB:               db,
 		PasswordStrength: conf.PassStrength,
 		Registration:     conf.Registration,
-		Consumer:         consumer,
 	}
 
 	characterHandler := api.CharacterApi{DB: db}
