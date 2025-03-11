@@ -91,6 +91,12 @@ func (a *Auth) userFromBasicAuth(ctx *gin.Context) (*model.User, error) {
 
 func (a *Auth) requireToken(auth authenticate) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+
+		if strings.HasPrefix(ctx.Request.URL.Path, "/swagger/") {
+			ctx.Next()
+			return
+		}
+
 		token := a.tokenFromKingdomHeader(ctx)
 		user, err := a.userFromBasicAuth(ctx)
 		if err != nil {
