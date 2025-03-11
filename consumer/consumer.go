@@ -24,6 +24,11 @@ type RMQConsumer struct {
 
 func New(connectionString string) (rmg *RMQConsumer, err error) {
 	conn, err := amqp091.Dial(connectionString)
+	if connectionString == "" {
+		log.Fatal("RMQ_URL is not set")
+	}
+
+	log.Printf("Connecting to RabbitMQ at %s", connectionString)
 	if err != nil {
 		log.Println("Failed to connect to RabbitMQ")
 		panic(err)
