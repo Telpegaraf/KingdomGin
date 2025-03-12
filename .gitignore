@@ -39,3 +39,6 @@ Thumbs.db
 .env.*.local
 /docker/.env_docker
 /csv/
+
+# Certificates
+/certs

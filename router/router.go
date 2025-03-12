@@ -15,12 +15,17 @@ import (
 
 func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine, func()) {
 	g := gin.New()
-	g.RemoteIPHeaders = []string{"X-Forwarded-For", "X-Real-IP"}
+	g.RemoteIPHeaders = []string{"X-Forwarded-For"}
 	err := g.SetTrustedProxies(conf.Server.TrustedProxies)
 	if err != nil {
 		return nil, nil
 	}
 	g.ForwardedByClientIP = true
+	g.Use(func(ctx *gin.Context) {
+		if ctx.Request.RemoteAddr == "@" {
+			ctx.Request.RemoteAddr = "localhost:8080"
+		}
+	})
 	authentication := auth.Auth{DB: db}
 
 	userHandler := api.UserApi{
