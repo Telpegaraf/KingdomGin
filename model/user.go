@@ -7,6 +7,7 @@ import (
 
 type User struct {
 	ID           uint           `gorm:"primaryKey; AUTO_INCREMENT; UNIQUE_INDEX;"`
+	TgID         uint           `gorm:"unique; UNIQUE_INDEX;"`
 	Username     string         `gorm:"unique;"`
 	Email        string         `gorm:"unique;type:varchar(100)"`
 	Password     []byte         `gorm:"not null"`
@@ -20,6 +21,7 @@ type User struct {
 
 type UserExternal struct {
 	ID           uint        `json:"id"`
+	TgID         uint        `json:"tg_id"`
 	Username     string      `binding:"required" json:"username" query:"username" form:"username"`
 	Admin        bool        `json:"admin" query:"admin" form:"admin"`
 	Email        string      `json:"email"`
@@ -28,6 +30,7 @@ type UserExternal struct {
 }
 
 type CreateUser struct {
+	TgID     uint   `json:"tg_id"`
 	Password string `json:"password,omitempty" query:"password" form:"password" binding:"required"`
 	Email    string `binding:"required" json:"email" query:"email" form:"email"`
 }
