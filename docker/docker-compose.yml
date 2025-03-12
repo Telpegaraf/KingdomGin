@@ -10,8 +10,6 @@ services:
     depends_on:
       - db
     restart: always
-    networks:
-      - webnet
 
   db:
     image: postgres:16-alpine
@@ -22,8 +20,6 @@ services:
       - pg_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    networks:
-      - webnet
 
   nginx:
     image: nginx:latest
@@ -31,15 +27,12 @@ services:
     restart: always
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/default.conf
+      - ./certs:/certs:ro
     depends_on:
       - web
-    networks:
-      - webnet
 
 volumes:
   pg_data: {}
-
-networks:
-  webnet:
