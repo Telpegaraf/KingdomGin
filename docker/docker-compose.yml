@@ -29,8 +29,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx.conf:/etc/nginx/default.conf
-      - ./certs:/certs:ro
+      - ../nginx.conf:/etc/nginx/default.conf
+      - ../certs:/certs:ro
     depends_on:
       - web
 
