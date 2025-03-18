@@ -71,13 +71,13 @@ func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 // @Failure 401 {string} string ""Unauthorized"
 // @Router /character [get]
 func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
-	userID, exists := ctx.Get("userID")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
+	//userID, exists := ctx.Get("userID")
+	//if !exists {
+	//	ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+	//	return
+	//}
 
-	characters, err := a.DB.GetCharacters(userID.(uint))
+	characters, err := a.DB.GetCharacters(3)
 
 	if success := SuccessOrAbort(ctx, 500, err); !success {
 		return
