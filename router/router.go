@@ -65,7 +65,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 
 	g.POST("/user", userHandler.CreateUser)
 
-	adminGroup := g.Group("/admin").Use(authentication.RequireAdmin)
+	adminGroup := g.Group("/admin")
 	{
 		adminGroup.POST("/csv", loadCSVHandler.LoadCSV)
 	}
