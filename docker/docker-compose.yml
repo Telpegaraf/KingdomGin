@@ -7,19 +7,7 @@ services:
       - "8080:8080"
     env_file: .env_docker
     container_name: kingdom
-    depends_on:
-      - db
     restart: always
-
-  db:
-    image: postgres:16-alpine
-    container_name: db
-    restart: always
-    env_file: .env_docker
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
 
   nginx:
     image: nginx:latest
@@ -33,6 +21,3 @@ services:
       - ../certs:/certs:ro
     depends_on:
       - backend
-
-volumes:
-  pg_data: {}
