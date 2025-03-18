@@ -19,19 +19,6 @@ func (d *GormDatabase) GetUserByUsername(name string) (*model.User, error) {
 	return nil, err
 }
 
-// GetUserByEmail returns the user by the given name or nil.
-func (d *GormDatabase) GetUserByEmail(email string) (*model.User, error) {
-	user := new(model.User)
-	err := d.DB.Where("email = ?", email).First(user).Error
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, err
-	}
-	if user.Email == email {
-		return user, err
-	}
-	return nil, err
-}
-
 // GetUserByID returns the user by the given id or nil.
 func (d *GormDatabase) GetUserByID(id uint) (*model.User, error) {
 	user := new(model.User)

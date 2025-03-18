@@ -3,7 +3,6 @@ package database
 import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"kingdom/auth/password"
 	"kingdom/model"
 	"os"
 )
@@ -73,8 +72,6 @@ func New(
 	if createDefaultUserIfNotExist && userCount == 0 {
 		db.Create(&model.User{
 			Username: defaultUser,
-			Password: password.CreatePassword(defaultPass, strength),
-			Email:    defaultEmail,
 			Admin:    true})
 	}
 

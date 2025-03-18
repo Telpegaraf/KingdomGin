@@ -56,8 +56,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	spellHandler := api.SpellAPI{DB: db}
 	loadCSVHandler := api.LoadCSVApi{DB: db}
 
-	authHandler := api.Controller{DB: db}
-
 	g.NoRoute(gerror.NotFound())
 
 	g.Use(cors.New(auth.CorsConfig(conf)))
@@ -66,9 +64,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	g.POST("/user", userHandler.CreateUser)
-	g.POST("/user/verification", userHandler.VerificationUser)
-	g.POST("/auth/login", authHandler.Login)
-	g.GET("/validate", authHandler.Validate)
 
 	adminGroup := g.Group("/admin").Use(authentication.RequireAdmin)
 	{
@@ -80,8 +75,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		userGroup.GET("", userHandler.GetUsers)
 		userGroup.GET("/:id", userHandler.GetUserByID)
 		userGroup.DELETE("/:id", userHandler.DeleteUserByID)
-		userGroup.PATCH("/:id", userHandler.UpdateUser)
-		userGroup.PATCH("/password", userHandler.ChangePassword)
 	}
 	characterGroup := g.Group("/character").Use(authentication.RequireJWT)
 	{

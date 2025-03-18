@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"kingdom/auth/password"
 	"kingdom/model"
 	"net/http"
 	"os"
@@ -79,11 +78,9 @@ func (a *Auth) tokenFromAuthorizationHeader(ctx *gin.Context) string {
 }
 
 func (a *Auth) userFromBasicAuth(ctx *gin.Context) (*model.User, error) {
-	if name, pass, ok := ctx.Request.BasicAuth(); ok {
-		if user, err := a.DB.GetUserByUsername(name); err != nil {
+	if name, _, ok := ctx.Request.BasicAuth(); ok {
+		if _, err := a.DB.GetUserByUsername(name); err != nil {
 			return nil, err
-		} else if user != nil && password.ComparePassword(user.Password, []byte(pass)) {
-			return user, nil
 		}
 	}
 	return nil, nil
