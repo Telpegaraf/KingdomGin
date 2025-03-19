@@ -76,7 +76,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		userGroup.GET("/:id", userHandler.GetUserByID)
 		userGroup.DELETE("/:id", userHandler.DeleteUserByID)
 	}
-	characterGroup := g.Group("/character")
+	characterGroup := g.Group("/api/character")
 	{
 		characterGroup.POST("", characterHandler.CreateCharacter)
 		characterGroup.GET("/:id", characterHandler.GetCharacterByID)
