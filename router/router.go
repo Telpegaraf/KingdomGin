@@ -11,6 +11,7 @@ import (
 	"kingdom/database"
 	"kingdom/docs"
 	gerror "kingdom/error"
+	"time"
 )
 
 func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine, func()) {
@@ -26,6 +27,16 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 			ctx.Request.RemoteAddr = "localhost:8080"
 		}
 	})
+
+	g.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "x-initdata"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
 	authentication := auth.Auth{DB: db}
 
 	userHandler := api.UserApi{
