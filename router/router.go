@@ -31,7 +31,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	})
 
 	g.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowOrigins:     []string{"http://localhost:3000", "https://kingdom-p2e.ru"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "x-initData"},
 		ExposeHeaders:    []string{"Content-Length"},
