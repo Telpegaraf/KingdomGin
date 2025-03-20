@@ -11,6 +11,7 @@ import (
 	"kingdom/database"
 	"kingdom/docs"
 	gerror "kingdom/error"
+	"kingdom/middleware"
 	"time"
 )
 
@@ -78,7 +79,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.POST("/user", userHandler.CreateUser)
 
 	apiGroup := g.Group("/api")
-	//apiGroup.Use(middleware.CheckWebAppSignatureMiddleware())
+	apiGroup.Use(middleware.CheckWebAppSignatureMiddleware())
 
 	adminGroup := apiGroup.Group("/admin")
 	{
