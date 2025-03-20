@@ -25,5 +25,6 @@ type UserExternal struct {
 }
 
 type CreateUser struct {
-	TgID uint `json:"tg_id"`
+	TgID     uint   `json:"tg_id"`
+	Username string `json:"username"`
 }

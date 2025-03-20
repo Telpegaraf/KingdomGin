@@ -66,6 +66,7 @@ func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 // @Description Return all characters for current user
 // @Tags Character
 // @Accept json
+// @Param x-initData header string true "Init data for WebApp"
 // @Produce json
 // @Success 200 {object} model.CharacterExternal "Character details"
 // @Failure 401 {string} string ""Unauthorized"

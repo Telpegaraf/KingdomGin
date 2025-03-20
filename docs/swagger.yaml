@@ -818,6 +818,8 @@ definitions:
     properties:
       tg_id:
         type: integer
+      username:
+        type: string
     type: object
   model.CreateWeapon:
     properties:
@@ -2039,6 +2041,12 @@ paths:
       consumes:
       - application/json
       description: Return all characters for current user
+      parameters:
+      - description: Init data for WebApp
+        in: header
+        name: x-initData
+        required: true
+        type: string
       produces:
       - application/json
       responses:

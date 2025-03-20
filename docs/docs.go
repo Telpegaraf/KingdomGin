@@ -459,6 +459,15 @@ const docTemplate = `{
                     "Character"
                 ],
                 "summary": "Returns all characters",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Init data for WebApp",
+                        "name": "x-initData",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Character details",
@@ -5454,6 +5463,9 @@ const docTemplate = `{
             "properties": {
                 "tg_id": {
                     "type": "integer"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },

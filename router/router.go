@@ -11,11 +11,13 @@ import (
 	"kingdom/database"
 	"kingdom/docs"
 	gerror "kingdom/error"
+	"kingdom/middleware"
 	"time"
 )
 
 func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine, func()) {
 	g := gin.New()
+
 	g.RemoteIPHeaders = []string{"X-Forwarded-For"}
 	err := g.SetTrustedProxies(conf.Server.TrustedProxies)
 	if err != nil {
@@ -76,18 +78,21 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 
 	g.POST("/user", userHandler.CreateUser)
 
-	adminGroup := g.Group("/admin")
+	apiGroup := g.Group("/api")
+	apiGroup.Use(middleware.CheckWebAppSignatureMiddleware())
+
+	adminGroup := apiGroup.Group("/admin")
 	{
 		adminGroup.POST("/csv", loadCSVHandler.LoadCSV)
 	}
 
-	userGroup := g.Group("/user").Use(authentication.RequireJWT)
+	userGroup := apiGroup.Group("/user").Use(authentication.RequireJWT)
 	{
 		userGroup.GET("", userHandler.GetUsers)
 		userGroup.GET("/:id", userHandler.GetUserByID)
 		userGroup.DELETE("/:id", userHandler.DeleteUserByID)
 	}
-	characterGroup := g.Group("/api/character")
+	characterGroup := apiGroup.Group("/character")
 	{
 		characterGroup.POST("", characterHandler.CreateCharacter)
 		characterGroup.GET("/:id", characterHandler.GetCharacterByID)
@@ -96,7 +101,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		characterGroup.DELETE("/:id", characterHandler.DeleteCharacter)
 	}
 	g.POST("/character_feat", characterHandler.AddCharacterFeat)
-	godGroup := g.Group("/god").Use(authentication.RequireAdmin)
+	godGroup := apiGroup.Group("/god").Use(authentication.RequireAdmin)
 	{
 		godGroup.POST("", godHandler.CreateGod)
 		godGroup.PATCH("/:id", godHandler.UpdateGod)
@@ -105,7 +110,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	godGroup.GET("/:id", godHandler.GetGodById).Use(authentication.RequireJWT)
 	godGroup.GET("", godHandler.GetGods).Use(authentication.RequireJWT)
 
-	domainGroup := g.Group("/domain").Use(authentication.RequireAdmin)
+	domainGroup := apiGroup.Group("/domain").Use(authentication.RequireAdmin)
 	{
 		domainGroup.POST("", domainHandler.CreateDomain)
 		domainGroup.POST("/load", domainHandler.LoadDomain)
@@ -115,7 +120,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/domain/:id", domainHandler.GetDomainByID).Use(authentication.RequireJWT)
 	g.GET("/domain", domainHandler.GetDomains).Use(authentication.RequireJWT)
 
-	skillGroup := g.Group("/skill").Use(authentication.RequireAdmin)
+	skillGroup := apiGroup.Group("/skill").Use(authentication.RequireAdmin)
 	{
 		skillGroup.POST("", skillHandler.CreateSkill)
 		skillGroup.PATCH("/:id", skillHandler.UpdateSkill)
@@ -124,7 +129,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/skill", skillHandler.GetSkills).Use(authentication.RequireJWT)
 	g.GET("/skill/:id", skillHandler.GetSkillByID).Use(authentication.RequireJWT)
 
-	featGroup := g.Group("/feat").Use(authentication.RequireAdmin)
+	featGroup := apiGroup.Group("/feat").Use(authentication.RequireAdmin)
 	{
 		featGroup.POST("", featHandler.CreateFeat)
 		featGroup.PATCH("/:id", featHandler.UpdateFeat)
@@ -133,7 +138,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/feat", featHandler.GetFeats).Use(authentication.RequireJWT)
 	g.GET("/feat/:id", featHandler.GetFeatByID).Use(authentication.RequireJWT)
 
-	raceGroup := g.Group("/race").Use(authentication.RequireAdmin)
+	raceGroup := apiGroup.Group("/race").Use(authentication.RequireAdmin)
 	{
 		raceGroup.POST("", raceHandler.CreateRace)
 		raceGroup.PATCH("/:id", raceHandler.UpdateRace)
@@ -142,7 +147,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/race", raceHandler.GetRaces).Use(authentication.RequireJWT)
 	g.GET("/race/:id", raceHandler.GetRaceByID).Use(authentication.RequireJWT)
 
-	spellGroup := g.Group("/spell").Use(authentication.RequireAdmin)
+	spellGroup := apiGroup.Group("/spell").Use(authentication.RequireAdmin)
 	{
 		spellGroup.POST("", spellHandler.CreateSpell)
 		spellGroup.PATCH("/:id", spellHandler.UpdateSpell)
@@ -151,7 +156,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/spell", spellHandler.GetSpells).Use(authentication.RequireJWT)
 	g.GET("/spell/:id", spellHandler.GetSpellByID).Use(authentication.RequireJWT)
 
-	ancestryGroup := g.Group("/ancestry").Use(authentication.RequireAdmin)
+	ancestryGroup := apiGroup.Group("/ancestry").Use(authentication.RequireAdmin)
 	{
 		ancestryGroup.POST("", ancestryHandler.CreateAncestry)
 		ancestryGroup.PATCH("/:id", ancestryHandler.UpdateAncestry)
@@ -160,7 +165,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/ancestry", ancestryHandler.GetAncestries).Use(authentication.RequireJWT)
 	g.GET("/ancestry/:id", ancestryHandler.GetAncestryByID).Use(authentication.RequireJWT)
 
-	actionGroup := g.Group("/action").Use(authentication.RequireAdmin)
+	actionGroup := apiGroup.Group("/action").Use(authentication.RequireAdmin)
 	{
 		actionGroup.POST("", actionHandler.CreateAction)
 		actionGroup.PATCH("/:id", actionHandler.UpdateAction)
@@ -169,7 +174,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/action", actionHandler.GetActions).Use(authentication.RequireJWT)
 	g.GET("/action/:id", actionHandler.GetActionByID).Use(authentication.RequireJWT)
 
-	backgroundGroup := g.Group("/background").Use(authentication.RequireAdmin)
+	backgroundGroup := apiGroup.Group("/background").Use(authentication.RequireAdmin)
 	{
 		backgroundGroup.POST("", backgroundHandler.CreateBackground)
 		backgroundGroup.PATCH("/:id", backgroundHandler.UpdateBackground)
@@ -178,7 +183,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/background", backgroundHandler.GetBackgrounds).Use(authentication.RequireJWT)
 	g.GET("/background/:id", backgroundHandler.GetBackgroundByID).Use(authentication.RequireJWT)
 
-	traditionGroup := g.Group("/tradition").Use(authentication.RequireAdmin)
+	traditionGroup := apiGroup.Group("/tradition").Use(authentication.RequireAdmin)
 	{
 		traditionGroup.POST("", traditionHandler.CreateTradition)
 		traditionGroup.PATCH("/:id", traditionHandler.UpdateTradition)
@@ -187,7 +192,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/tradition", traditionHandler.GetTraditions).Use(authentication.RequireJWT)
 	g.GET("/tradition/:id", traditionHandler.GetTraditionByID).Use(authentication.RequireJWT)
 
-	traitGroup := g.Group("/trait").Use(authentication.RequireAdmin)
+	traitGroup := apiGroup.Group("/trait").Use(authentication.RequireAdmin)
 	{
 		traitGroup.POST("", traitHandler.CreateTrait)
 		traitGroup.PATCH("/:id", traitHandler.UpdateTrait)
@@ -196,7 +201,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/trait", traitHandler.GetTraits).Use(authentication.RequireJWT)
 	g.GET("/trait/:id", traitHandler.GetTraitByID).Use(authentication.RequireJWT)
 
-	characterClassGroup := g.Group("/class").Use(authentication.RequireAdmin)
+	characterClassGroup := apiGroup.Group("/class").Use(authentication.RequireAdmin)
 	{
 		characterClassGroup.POST("", characterClassHandler.CreateCharacterClass)
 		characterClassGroup.PATCH("/:id", characterClassHandler.UpdateCharacterClass)
@@ -208,7 +213,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/class-feature/:id", classFeatureHandler.GetClassFeatureByID).Use(authentication.RequireAdmin)
 	g.GET("/class-feature/all/:id", classFeatureHandler.GetAllFeature).Use(authentication.RequireAdmin)
 	g.GET("/skill-feature/:id", classFeatureHandler.GetClassSkillFeatureByID).Use(authentication.RequireJWT)
-	itemGroup := g.Group("/item").Use(authentication.RequireJWT)
+	itemGroup := apiGroup.Group("/item").Use(authentication.RequireJWT)
 	{
 		itemGroup.GET("", itemHandler.GetItems)
 		itemGroup.GET(":id", itemHandler.GetItemByID)
@@ -227,7 +232,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	itemGroup.POST("/gear", itemHandler.CreateGear).Use(authentication.RequireAdmin)
 	itemGroup.PATCH("/gear/:id", itemHandler.UpdateGear).Use(authentication.RequireAdmin)
 
-	characterItemGroup := g.Group("/character-item").Use(authentication.RequireJWT)
+	characterItemGroup := apiGroup.Group("/character-item").Use(authentication.RequireJWT)
 	{
 		characterItemGroup.POST("", characterItemHandler.CreateCharacterItem)
 		characterItemGroup.GET("/:id", characterItemHandler.GetCharacterItemByID)
@@ -236,7 +241,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		characterItemGroup.PATCH("/:id", characterItemHandler.UpdateCharacterItem)
 	}
 
-	characterSkillGroup := g.Group("/character-skill").Use(authentication.RequireJWT)
+	characterSkillGroup := apiGroup.Group("/character-skill").Use(authentication.RequireJWT)
 	{
 		characterSkillGroup.POST("", characterSkillHandler.CharacterSkillCreate)
 		characterSkillGroup.GET("/:id", characterSkillHandler.GetCharacterSkills)
