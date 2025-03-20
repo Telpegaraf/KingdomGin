@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -13,6 +14,11 @@ import (
 
 func CheckWebAppSignatureMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		for name, values := range c.Request.Header {
+			for _, value := range values {
+				log.Printf("Header: %s = %s\n", name, value)
+			}
+		}
 		xInitData := c.GetHeader("x-initData")
 		if xInitData == "" {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Missing init data"})
