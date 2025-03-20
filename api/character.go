@@ -69,7 +69,7 @@ func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {object} model.CharacterExternal "Character details"
 // @Failure 401 {string} string ""Unauthorized"
-// @Router /character [get]
+// @Router /api/character [get]
 func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
 	//userID, exists := ctx.Get("userID")
 	//if !exists {
@@ -99,7 +99,7 @@ func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
 // @Param character body model.CreateCharacter true "Character data"
 // @Success 201 {object} model.CharacterExternal "Character details"
 // @Failure 401 {string} string "Unauthorized"
-// @Router /character [post]
+// @Router /api/character [post]
 func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 	userID, _ := ctx.Get("userID")
 
