@@ -33,7 +33,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "x-initdata"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "x-initData"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
