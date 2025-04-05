@@ -38,8 +38,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		MaxAge:           12 * time.Hour,
 	}))
 
-	authentication := auth.Auth{DB: db}
-
 	userHandler := api.UserApi{
 		DB:               db,
 		PasswordStrength: conf.PassStrength,
@@ -85,7 +83,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		adminGroup.POST("/csv", loadCSVHandler.LoadCSV)
 	}
 
-	userGroup := apiGroup.Group("/user").Use(authentication.RequireJWT)
+	userGroup := apiGroup.Group("/user")
 	{
 		userGroup.GET("", userHandler.GetUsers)
 		userGroup.GET("/:id", userHandler.GetUserByID)
@@ -100,119 +98,119 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		characterGroup.DELETE("/:id", characterHandler.DeleteCharacter)
 	}
 	g.POST("/character_feat", characterHandler.AddCharacterFeat)
-	godGroup := apiGroup.Group("/god").Use(authentication.RequireAdmin)
+	godGroup := apiGroup.Group("/god")
 	{
 		godGroup.POST("", godHandler.CreateGod)
 		godGroup.PATCH("/:id", godHandler.UpdateGod)
 		godGroup.DELETE("/:id", godHandler.DeleteGod)
 	}
-	godGroup.GET("/:id", godHandler.GetGodById).Use(authentication.RequireJWT)
-	godGroup.GET("", godHandler.GetGods).Use(authentication.RequireJWT)
+	godGroup.GET("/:id", godHandler.GetGodById)
+	godGroup.GET("", godHandler.GetGods)
 
-	domainGroup := apiGroup.Group("/domain").Use(authentication.RequireAdmin)
+	domainGroup := apiGroup.Group("/domain")
 	{
 		domainGroup.POST("", domainHandler.CreateDomain)
 		domainGroup.POST("/load", domainHandler.LoadDomain)
 		domainGroup.PATCH("/:id", domainHandler.UpdateDomain)
 		domainGroup.DELETE("/:id", domainHandler.DeleteDomain)
 	}
-	g.GET("/domain/:id", domainHandler.GetDomainByID).Use(authentication.RequireJWT)
-	g.GET("/domain", domainHandler.GetDomains).Use(authentication.RequireJWT)
+	g.GET("/domain/:id", domainHandler.GetDomainByID)
+	g.GET("/domain", domainHandler.GetDomains)
 
-	skillGroup := apiGroup.Group("/skill").Use(authentication.RequireAdmin)
+	skillGroup := apiGroup.Group("/skill")
 	{
 		skillGroup.POST("", skillHandler.CreateSkill)
 		skillGroup.PATCH("/:id", skillHandler.UpdateSkill)
 		skillGroup.DELETE("/:id", skillHandler.DeleteSkill)
 	}
-	g.GET("/skill", skillHandler.GetSkills).Use(authentication.RequireJWT)
-	g.GET("/skill/:id", skillHandler.GetSkillByID).Use(authentication.RequireJWT)
+	g.GET("/skill", skillHandler.GetSkills)
+	g.GET("/skill/:id", skillHandler.GetSkillByID)
 
-	featGroup := apiGroup.Group("/feat").Use(authentication.RequireAdmin)
+	featGroup := apiGroup.Group("/feat")
 	{
 		featGroup.POST("", featHandler.CreateFeat)
 		featGroup.PATCH("/:id", featHandler.UpdateFeat)
 		featGroup.DELETE("/:id", featHandler.DeleteFeat)
 	}
-	g.GET("/feat", featHandler.GetFeats).Use(authentication.RequireJWT)
-	g.GET("/feat/:id", featHandler.GetFeatByID).Use(authentication.RequireJWT)
+	g.GET("/feat", featHandler.GetFeats)
+	g.GET("/feat/:id", featHandler.GetFeatByID)
 
-	raceGroup := apiGroup.Group("/race").Use(authentication.RequireAdmin)
+	raceGroup := apiGroup.Group("/race")
 	{
 		raceGroup.POST("", raceHandler.CreateRace)
 		raceGroup.PATCH("/:id", raceHandler.UpdateRace)
 		raceGroup.DELETE("/:id", raceHandler.DeleteRace)
 	}
-	g.GET("/race", raceHandler.GetRaces).Use(authentication.RequireJWT)
-	g.GET("/race/:id", raceHandler.GetRaceByID).Use(authentication.RequireJWT)
+	g.GET("/race", raceHandler.GetRaces)
+	g.GET("/race/:id", raceHandler.GetRaceByID)
 
-	spellGroup := apiGroup.Group("/spell").Use(authentication.RequireAdmin)
+	spellGroup := apiGroup.Group("/spell")
 	{
 		spellGroup.POST("", spellHandler.CreateSpell)
 		spellGroup.PATCH("/:id", spellHandler.UpdateSpell)
 		spellGroup.DELETE("/:id", spellHandler.DeleteSpell)
 	}
-	g.GET("/spell", spellHandler.GetSpells).Use(authentication.RequireJWT)
-	g.GET("/spell/:id", spellHandler.GetSpellByID).Use(authentication.RequireJWT)
+	g.GET("/spell", spellHandler.GetSpells)
+	g.GET("/spell/:id", spellHandler.GetSpellByID)
 
-	ancestryGroup := apiGroup.Group("/ancestry").Use(authentication.RequireAdmin)
+	ancestryGroup := apiGroup.Group("/ancestry")
 	{
 		ancestryGroup.POST("", ancestryHandler.CreateAncestry)
 		ancestryGroup.PATCH("/:id", ancestryHandler.UpdateAncestry)
 		ancestryGroup.DELETE("/:id", ancestryHandler.DeleteAncestry)
 	}
-	g.GET("/ancestry", ancestryHandler.GetAncestries).Use(authentication.RequireJWT)
-	g.GET("/ancestry/:id", ancestryHandler.GetAncestryByID).Use(authentication.RequireJWT)
+	g.GET("/ancestry", ancestryHandler.GetAncestries)
+	g.GET("/ancestry/:id", ancestryHandler.GetAncestryByID)
 
-	actionGroup := apiGroup.Group("/action").Use(authentication.RequireAdmin)
+	actionGroup := apiGroup.Group("/action")
 	{
 		actionGroup.POST("", actionHandler.CreateAction)
 		actionGroup.PATCH("/:id", actionHandler.UpdateAction)
 		actionGroup.DELETE("/:id", actionHandler.DeleteAction)
 	}
-	g.GET("/action", actionHandler.GetActions).Use(authentication.RequireJWT)
-	g.GET("/action/:id", actionHandler.GetActionByID).Use(authentication.RequireJWT)
+	g.GET("/action", actionHandler.GetActions)
+	g.GET("/action/:id", actionHandler.GetActionByID)
 
-	backgroundGroup := apiGroup.Group("/background").Use(authentication.RequireAdmin)
+	backgroundGroup := apiGroup.Group("/background")
 	{
 		backgroundGroup.POST("", backgroundHandler.CreateBackground)
 		backgroundGroup.PATCH("/:id", backgroundHandler.UpdateBackground)
 		backgroundGroup.DELETE("/:id", backgroundHandler.DeleteBackground)
 	}
-	g.GET("/background", backgroundHandler.GetBackgrounds).Use(authentication.RequireJWT)
-	g.GET("/background/:id", backgroundHandler.GetBackgroundByID).Use(authentication.RequireJWT)
+	g.GET("/background", backgroundHandler.GetBackgrounds)
+	g.GET("/background/:id", backgroundHandler.GetBackgroundByID)
 
-	traditionGroup := apiGroup.Group("/tradition").Use(authentication.RequireAdmin)
+	traditionGroup := apiGroup.Group("/tradition")
 	{
 		traditionGroup.POST("", traditionHandler.CreateTradition)
 		traditionGroup.PATCH("/:id", traditionHandler.UpdateTradition)
 		traditionGroup.DELETE("/:id", traditionHandler.DeleteTradition)
 	}
-	g.GET("/tradition", traditionHandler.GetTraditions).Use(authentication.RequireJWT)
-	g.GET("/tradition/:id", traditionHandler.GetTraditionByID).Use(authentication.RequireJWT)
+	g.GET("/tradition", traditionHandler.GetTraditions)
+	g.GET("/tradition/:id", traditionHandler.GetTraditionByID)
 
-	traitGroup := apiGroup.Group("/trait").Use(authentication.RequireAdmin)
+	traitGroup := apiGroup.Group("/trait")
 	{
 		traitGroup.POST("", traitHandler.CreateTrait)
 		traitGroup.PATCH("/:id", traitHandler.UpdateTrait)
 		traitGroup.DELETE("/:id", traitHandler.DeleteTrait)
 	}
-	g.GET("/trait", traitHandler.GetTraits).Use(authentication.RequireJWT)
-	g.GET("/trait/:id", traitHandler.GetTraitByID).Use(authentication.RequireJWT)
+	g.GET("/trait", traitHandler.GetTraits)
+	g.GET("/trait/:id", traitHandler.GetTraitByID)
 
-	characterClassGroup := apiGroup.Group("/class").Use(authentication.RequireAdmin)
+	characterClassGroup := apiGroup.Group("/class")
 	{
 		characterClassGroup.POST("", characterClassHandler.CreateCharacterClass)
 		characterClassGroup.PATCH("/:id", characterClassHandler.UpdateCharacterClass)
 		characterClassGroup.DELETE("/:id", characterClassHandler.DeleteCharacterClass)
 	}
-	g.GET("/class", characterClassHandler.GetCharacterClasses).Use(authentication.RequireJWT)
-	g.GET("/class/:id", characterClassHandler.GetCharacterClassByID).Use(authentication.RequireJWT)
+	g.GET("/class", characterClassHandler.GetCharacterClasses)
+	g.GET("/class/:id", characterClassHandler.GetCharacterClassByID)
 
-	g.GET("/class-feature/:id", classFeatureHandler.GetClassFeatureByID).Use(authentication.RequireAdmin)
-	g.GET("/class-feature/all/:id", classFeatureHandler.GetAllFeature).Use(authentication.RequireAdmin)
-	g.GET("/skill-feature/:id", classFeatureHandler.GetClassSkillFeatureByID).Use(authentication.RequireJWT)
-	itemGroup := apiGroup.Group("/item").Use(authentication.RequireJWT)
+	g.GET("/class-feature/:id", classFeatureHandler.GetClassFeatureByID)
+	g.GET("/class-feature/all/:id", classFeatureHandler.GetAllFeature)
+	g.GET("/skill-feature/:id", classFeatureHandler.GetClassSkillFeatureByID)
+	itemGroup := apiGroup.Group("/item")
 	{
 		itemGroup.GET("", itemHandler.GetItems)
 		itemGroup.GET(":id", itemHandler.GetItemByID)
@@ -223,15 +221,15 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		itemGroup.GET("/gear", itemHandler.GetGears)
 		itemGroup.GET("/gear/:id", itemHandler.GetGearByID)
 	}
-	itemGroup.DELETE("/:id", itemHandler.DeleteItem).Use(authentication.RequireAdmin)
-	itemGroup.POST("/armor", itemHandler.CreateArmor).Use(authentication.RequireAdmin)
-	itemGroup.PATCH("/armor/:id", itemHandler.UpdateArmor).Use(authentication.RequireAdmin)
-	itemGroup.POST("/weapon", itemHandler.CreateWeapon).Use(authentication.RequireAdmin)
-	itemGroup.PATCH("/weapon/:id", itemHandler.UpdateWeapon).Use(authentication.RequireAdmin)
-	itemGroup.POST("/gear", itemHandler.CreateGear).Use(authentication.RequireAdmin)
-	itemGroup.PATCH("/gear/:id", itemHandler.UpdateGear).Use(authentication.RequireAdmin)
+	itemGroup.DELETE("/:id", itemHandler.DeleteItem)
+	itemGroup.POST("/armor", itemHandler.CreateArmor)
+	itemGroup.PATCH("/armor/:id", itemHandler.UpdateArmor)
+	itemGroup.POST("/weapon", itemHandler.CreateWeapon)
+	itemGroup.PATCH("/weapon/:id", itemHandler.UpdateWeapon)
+	itemGroup.POST("/gear", itemHandler.CreateGear)
+	itemGroup.PATCH("/gear/:id", itemHandler.UpdateGear)
 
-	characterItemGroup := apiGroup.Group("/character-item").Use(authentication.RequireJWT)
+	characterItemGroup := apiGroup.Group("/character-item")
 	{
 		characterItemGroup.POST("", characterItemHandler.CreateCharacterItem)
 		characterItemGroup.GET("/:id", characterItemHandler.GetCharacterItemByID)
@@ -240,21 +238,21 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		characterItemGroup.PATCH("/:id", characterItemHandler.UpdateCharacterItem)
 	}
 
-	characterSkillGroup := apiGroup.Group("/character-skill").Use(authentication.RequireJWT)
+	characterSkillGroup := apiGroup.Group("/character-skill")
 	{
 		characterSkillGroup.POST("", characterSkillHandler.CharacterSkillCreate)
 		characterSkillGroup.GET("/:id", characterSkillHandler.GetCharacterSkills)
 		characterSkillGroup.PATCH("/:id", characterSkillHandler.UpdateCharacterSkill)
 	}
 
-	g.GET("/slot/:id", slotHandler.GetSlotByID).Use(authentication.RequireJWT)
-	g.PATCH("/slot/:id", slotHandler.UpdateSlot).Use(authentication.RequireJWT)
+	g.GET("/slot/:id", slotHandler.GetSlotByID)
+	g.PATCH("/slot/:id", slotHandler.UpdateSlot)
 
-	g.GET("/attribute/:id", attributeHandler.GetAttributeByID).Use(authentication.RequireJWT)
-	g.PATCH("/attribute/:id", attributeHandler.UpdateAttribute).Use(authentication.RequireJWT)
+	g.GET("/attribute/:id", attributeHandler.GetAttributeByID)
+	g.PATCH("/attribute/:id", attributeHandler.UpdateAttribute)
 
-	g.GET("/character_boost/:id", characterBoostHandler.GetCharacterBoostByID).Use(authentication.RequireJWT)
-	g.PATCH("/character_boost/:id", characterBoostHandler.UpdateCharacterBoost).Use(authentication.RequireJWT)
+	g.GET("/character_boost/:id", characterBoostHandler.GetCharacterBoostByID)
+	g.PATCH("/character_boost/:id", characterBoostHandler.UpdateCharacterBoost)
 
 	return g, func() {}
 }
