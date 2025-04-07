@@ -459,15 +459,6 @@ const docTemplate = `{
                     "Character"
                 ],
                 "summary": "Returns all characters",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Init data for WebApp",
-                        "name": "x-initData",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Character details",
@@ -515,6 +506,44 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/character/{id}": {
+            "get": {
+                "description": "Retrieve Character details using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Character"
+                ],
+                "summary": "Returns Character by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "character id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "character details",
+                        "schema": {
+                            "$ref": "#/definitions/model.CharacterExternal"
+                        }
+                    },
+                    "404": {
+                        "description": "Character not found",
                         "schema": {
                             "type": "string"
                         }
@@ -1154,42 +1183,6 @@ const docTemplate = `{
             }
         },
         "/character/{id}": {
-            "get": {
-                "description": "Retrieve Character details using its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Character"
-                ],
-                "summary": "Returns Character by id",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "character id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "character details",
-                        "schema": {
-                            "$ref": "#/definitions/model.CharacterExternal"
-                        }
-                    },
-                    "404": {
-                        "description": "Character not found",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "delete": {
                 "description": "Permissions for Character's User or Admin",
                 "consumes": [

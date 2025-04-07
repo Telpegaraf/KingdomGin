@@ -2041,12 +2041,6 @@ paths:
       consumes:
       - application/json
       description: Return all characters for current user
-      parameters:
-      - description: Init data for WebApp
-        in: header
-        name: x-initData
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -2084,6 +2078,31 @@ paths:
           schema:
             type: string
       summary: Create and returns character or nil
+      tags:
+      - Character
+  /api/character/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve Character details using its ID
+      parameters:
+      - description: character id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: character details
+          schema:
+            $ref: '#/definitions/model.CharacterExternal'
+        "404":
+          description: Character not found
+          schema:
+            type: string
+      summary: Returns Character by id
       tags:
       - Character
   /attribute/{id}:
@@ -2528,30 +2547,6 @@ paths:
           schema:
             type: string
       summary: Deletes Character by ID or returns nil
-      tags:
-      - Character
-    get:
-      consumes:
-      - application/json
-      description: Retrieve Character details using its ID
-      parameters:
-      - description: character id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: character details
-          schema:
-            $ref: '#/definitions/model.CharacterExternal'
-        "404":
-          description: Character not found
-          schema:
-            type: string
-      summary: Returns Character by id
       tags:
       - Character
     patch:

@@ -14,9 +14,6 @@ type GormDatabase struct {
 func New(
 	dsn,
 	defaultUser string,
-	defaultPass string,
-	defaultEmail string,
-	strength int,
 	createDefaultUserIfNotExist bool) (*GormDatabase, error) {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -37,6 +34,7 @@ func New(
 		new(model.Tradition),
 		new(model.Skill),
 		new(model.CharacterClass),
+		new(model.SpellCharacterClass),
 		new(model.ClassFeature),
 		new(model.SkillFeature),
 		new(model.Character),

@@ -16,13 +16,13 @@ type AttributeApi struct {
 }
 
 func (a *CharacterApi) CreateAttribute(
-	ctx *gin.Context,
 	characterID uint,
 	race *model.Race,
 ) {
 	internal := &model.Attribute{
 		CharacterID: characterID,
 	}
+
 	switch *race.AttributeFlaw {
 	case model.Strength:
 		internal.Strength = 8
@@ -37,7 +37,38 @@ func (a *CharacterApi) CreateAttribute(
 	case model.Charisma:
 		internal.Charisma = 8
 	}
-	a.DB.CreateAttribute(internal)
+	switch *race.FirstAttributeBoost {
+	case model.Strength:
+		internal.Strength = 12
+	case model.Dexterity:
+		internal.Dexterity = 12
+	case model.Constitution:
+		internal.Constitution = 12
+	case model.Intelligence:
+		internal.Intelligence = 12
+	case model.Wisdom:
+		internal.Wisdom = 12
+	case model.Charisma:
+		internal.Charisma = 12
+	}
+	switch *race.SecondAttributeBoost {
+	case model.Strength:
+		internal.Strength = 12
+	case model.Dexterity:
+		internal.Dexterity = 12
+	case model.Constitution:
+		internal.Constitution = 12
+	case model.Intelligence:
+		internal.Intelligence = 12
+	case model.Wisdom:
+		internal.Wisdom = 12
+	case model.Charisma:
+		internal.Charisma = 12
+	}
+	err := a.DB.CreateAttribute(internal)
+	if err != nil {
+		return
+	}
 	go func() {
 		a.CreateCharacterInfo(characterID, internal.Strength)
 	}()

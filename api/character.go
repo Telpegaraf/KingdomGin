@@ -46,12 +46,12 @@ type CharacterApi struct {
 // @Param id path int true "character id"
 // @Success 200 {object} model.CharacterExternal "character details"
 // @Failure 404 {string} string "Character not found"
-// @Router /character/{id} [get]
+// @Router /api/character/{id} [get]
 func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 	withID(ctx, "id", func(id uint) {
 		character, err := a.DB.GetCharacterByID(id)
 		if err != nil {
-			ctx.JSON(404, gin.H{"error": "Character not found"})
+			ctx.JSON(404, gin.H{"error": err.Error()})
 			return
 		} else {
 			ctx.JSON(http.StatusOK, ToExternalCharacter(character))
@@ -66,7 +66,6 @@ func (a *CharacterApi) GetCharacterByID(ctx *gin.Context) {
 // @Description Return all characters for current user
 // @Tags Character
 // @Accept json
-// @Param x-initData header string true "Init data for WebApp"
 // @Produce json
 // @Success 200 {object} model.CharacterExternal "Character details"
 // @Failure 401 {string} string ""Unauthorized"
@@ -78,11 +77,13 @@ func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
 	//	return
 	//}
 
-	characters, err := a.DB.GetCharacters(3)
+	characters, err := a.DB.GetCharacters(1)
 
-	if success := SuccessOrAbort(ctx, 500, err); !success {
+	if err != nil {
+		ctx.JSON(404, gin.H{"error": "Character not found"})
 		return
 	}
+
 	var resp []*model.CharacterExternal
 	for _, character := range characters {
 		resp = append(resp, ToExternalCharacter(character))
@@ -102,7 +103,7 @@ func (a *CharacterApi) GetCharacters(ctx *gin.Context) {
 // @Failure 401 {string} string "Unauthorized"
 // @Router /api/character [post]
 func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
-	userID, _ := ctx.Get("userID")
+	//userID, _ := ctx.Get("userID")
 
 	character := &model.CreateCharacter{}
 	if err := ctx.Bind(character); err == nil {
@@ -110,7 +111,7 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 			Name:             character.Name,
 			Alias:            character.Alias,
 			LastName:         character.LastName,
-			UserID:           userID.(uint),
+			UserID:           1,
 			CharacterClassID: character.CharacterClassID,
 			AncestryID:       character.AncestryID,
 			BackgroundID:     character.BackgroundID,
@@ -131,7 +132,7 @@ func (a *CharacterApi) CreateCharacter(ctx *gin.Context) {
 			race, _ := a.DB.GetRaceByID(character.RaceID)
 			characterClass, _ := a.DB.GetCharacterClassByID(character.CharacterClassID)
 			background, _ := a.DB.GetBackgroundByID(character.BackgroundID)
-			a.CreateAttribute(ctx, newCharacter.ID, race)
+			a.CreateAttribute(newCharacter.ID, race)
 			a.CreateSlot(ctx, internal.ID)
 			a.CreateCharacterBoost(ctx, newCharacter.ID, race)
 			a.CreateSkills(newCharacter)
