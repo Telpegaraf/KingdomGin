@@ -8,13 +8,15 @@ import (
 	"kingdom/api"
 	"kingdom/auth"
 	"kingdom/config"
+	"kingdom/consumer"
 	"kingdom/database"
 	"kingdom/docs"
 	gerror "kingdom/error"
 )
 
-func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine, func()) {
+func Create(db *database.GormDatabase, conf *config.Configuration, consumer *consumer.RMQConsumer) (*gin.Engine, func()) {
 	g := gin.New()
+	g.Static("/static", "./static")
 	g.RemoteIPHeaders = []string{"X-Forwarded-For"}
 	err := g.SetTrustedProxies(conf.Server.TrustedProxies)
 	if err != nil {
@@ -32,11 +34,11 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		DB:               db,
 		PasswordStrength: conf.PassStrength,
 		Registration:     conf.Registration,
+		Consumer:         consumer,
 	}
 
 	characterHandler := api.CharacterApi{DB: db}
 	characterClassHandler := api.CharacterClassApi{DB: db}
-	classFeatureHandler := api.ClassFeatureApi{DB: db}
 	itemHandler := api.ItemApi{DB: db}
 	characterItemHandler := api.CharacterItemApi{DB: db}
 	slotHandler := api.SlotApi{DB: db}
@@ -56,6 +58,8 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	spellHandler := api.SpellAPI{DB: db}
 	loadCSVHandler := api.LoadCSVApi{DB: db}
 
+	authHandler := api.Controller{DB: db}
+
 	g.NoRoute(gerror.NotFound())
 
 	g.Use(cors.New(auth.CorsConfig(conf)))
@@ -64,6 +68,10 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	g.POST("/user", userHandler.CreateUser)
+	g.POST("/user/verification", userHandler.VerificationUser)
+	g.GET("/auth/login", authHandler.LoginPage)
+	g.POST("/auth/login", authHandler.Login)
+	g.GET("/validate", authHandler.Validate)
 
 	adminGroup := g.Group("/admin").Use(authentication.RequireAdmin)
 	{
@@ -75,10 +83,12 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 		userGroup.GET("", userHandler.GetUsers)
 		userGroup.GET("/:id", userHandler.GetUserByID)
 		userGroup.DELETE("/:id", userHandler.DeleteUserByID)
+		userGroup.PATCH("/:id", userHandler.UpdateUser)
+		userGroup.PATCH("/password", userHandler.ChangePassword)
 	}
 	characterGroup := g.Group("/character").Use(authentication.RequireJWT)
 	{
-		characterGroup.POST("", characterHandler.CreateCharacter)
+		characterGroup.POST("/create", characterHandler.CreateCharacter)
 		characterGroup.GET("/:id", characterHandler.GetCharacterByID)
 		characterGroup.GET("", characterHandler.GetCharacters)
 		characterGroup.PATCH("/:id", characterHandler.UpdateCharacter)
@@ -193,10 +203,6 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	}
 	g.GET("/class", characterClassHandler.GetCharacterClasses).Use(authentication.RequireJWT)
 	g.GET("/class/:id", characterClassHandler.GetCharacterClassByID).Use(authentication.RequireJWT)
-
-	g.GET("/class-feature/:id", classFeatureHandler.GetClassFeatureByID).Use(authentication.RequireAdmin)
-	g.GET("/class-feature/all/:id", classFeatureHandler.GetAllFeature).Use(authentication.RequireAdmin)
-	g.GET("/skill-feature/:id", classFeatureHandler.GetClassSkillFeatureByID).Use(authentication.RequireJWT)
 	itemGroup := g.Group("/item").Use(authentication.RequireJWT)
 	{
 		itemGroup.GET("", itemHandler.GetItems)
@@ -228,7 +234,7 @@ func Create(db *database.GormDatabase, conf *config.Configuration) (*gin.Engine,
 	characterSkillGroup := g.Group("/character-skill").Use(authentication.RequireJWT)
 	{
 		characterSkillGroup.POST("", characterSkillHandler.CharacterSkillCreate)
-		characterSkillGroup.GET("/:id", characterSkillHandler.GetCharacterSkills)
+		characterSkillGroup.GET("", characterSkillHandler.GetCharacterSkills)
 		characterSkillGroup.PATCH("/:id", characterSkillHandler.UpdateCharacterSkill)
 	}
 
